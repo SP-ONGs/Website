@@ -129,7 +129,7 @@ public class OngService {
 	}
 
 	@Transactional
-	public Ong registerOng(OngRegistrationRequest request) {
+	public Ong registerOng(OngRegistrationRequest request, String imageUrl) {
 
 		// Normalize and validate basic fields
 		String normalizedEmail = normalizeEmail(request.email());
@@ -196,7 +196,7 @@ public class OngService {
 				request.cep(),
 				request.houseNumber().trim(),
 				normalizedCnpj,
-				request.imageUrl());
+				imageUrl);
 
 		ong.setStatus(OngStatus.IN_REVIEW);
 

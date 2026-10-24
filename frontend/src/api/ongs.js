@@ -1,5 +1,5 @@
 import { apiRequest } from "./api";
-import { apiMutation } from "./auth";
+import { getCsrfToken } from "./auth";
 
 export function getPublicOngs() {
 	return apiRequest("/api/ongs");
@@ -17,6 +17,18 @@ export function getSocialMediaTypes() {
 	return apiRequest("/api/social-media");
 }
 
-export function registerOng(data) {
-	return apiMutation("/api/ongs", "POST", data);
-}
+export async function registerOng(data, imageFile) {
+	const csrfToken = await getCsrfToken();
+	const formData = new FormData();
+
+	formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
+	formData.append("image", imageFile);
+
+	return apiRequest("/api/ongs", {
+		method: "POST",
+		headers: {
+			"X-CSRF-TOKEN": csrfToken
+		},
+		body: formData
+	});
+};

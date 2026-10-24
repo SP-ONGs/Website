@@ -17,7 +17,6 @@ public record OngRegistrationRequest(
 		@NotBlank(message = "CEP is required.") @Pattern(regexp = "\\d{5}-?\\d{3}", message = "CEP must contain 8 digits, optionally with a hyphen.") String cep,
 		@NotBlank(message = "House number is required.") @Size(max = 30) String houseNumber,
 		@Size(max = 18, message = "CNPJ is too long.") String cnpj,
-		String imageUrl,
 
 		@NotNull(message = "Social media list is required.") @Size(min = 1, max = 3) List<@Valid SocialMediaEntry> socialMedia,
 		@NotNull(message = "Tag list is required.") @Size(max = 20) List<@NotNull @Positive Long> tagIds) {
