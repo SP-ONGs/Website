@@ -1,27 +1,22 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
+import { apiRequest } from "./api";
+import { apiMutation } from "./auth";
 
-async function request(path) {
-	const response = await fetch(`${API_URL}${path}`);
-
-	if (!response.ok) {
-		throw new Error(`Request failed: ${response.status}`);
-	}
-
-	return response.json();
-}
-
-export function getApprovedOngs() {
-	return request("/api/ongs");
+export function getPublicOngs() {
+	return apiRequest("/api/ongs");
 }
 
 export function getOngById(id) {
-	return request(`/api/ongs/${id}`);
+	return apiRequest(`/api/ongs/${id}`);
 }
 
 export function getTags() {
-	return request("/api/tags");
+	return apiRequest("/api/tags");
 }
 
 export function getSocialMediaTypes() {
-	return request("/api/social-media");
+	return apiRequest("/api/social-media");
+}
+
+export function registerOng(data) {
+	return apiMutation("/api/ongs", "POST", data);
 }
