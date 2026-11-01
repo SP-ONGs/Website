@@ -1,9 +1,9 @@
 .ongCard_container {
 	width: 300px;
+	height: fit-content;
 
 	display: flex;
 	flex-direction: column;
-	gap: 5px;
 
 	cursor: pointer;
 	border-radius: 10px;
@@ -19,15 +19,14 @@
 
 	background: rgb(0, 0, 0);
 	border-radius: 5px;
-	margin: 3px;
 
 	position: relative;
 }
 
 .ongCard_photo_BG,
 .ongCard_photo img {
-	width: 98%;
-	height: 97%;
+	width: calc(100% - 7.5px);
+	height: calc(100% - 6.5px);
 
 	position: absolute;
 	transform: translate(-50%, -50%);
@@ -44,7 +43,9 @@
 
 .ongCard_title_container {
 	width: 100%;
+
 	position: relative;
+	margin-top: 5px;
 }
 
 .ongCard_title_container h1 {
@@ -76,8 +77,60 @@
 	font-weight: 600;
 }
 
+.ongCard_socialmedia_container {
+	width: 100%;
+	height: fit-content;
+
+	margin-top: 2px;
+
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
+
+.socialmedia_card {
+	width: 90px;
+	height: 22px;
+
+	background: #2198D4;
+	border-radius: 5px;
+
+	position: relative;
+
+	user-select: none;
+}
+
+.socialmedia_card img {
+	width: 16px;
+	height: 16px;
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+	left: 3px;
+}
+
+.socialmedia_card h1 {
+	font-size: 12px;
+	font-weight: 700;
+	color: rgb(255, 255, 255);
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+	left: 25px;
+}
+
+.socialmedia_big_icon img {
+	width: 18px;
+	height: 18px;
+}
+
 .ongCard_tag_container {
 	width: 100%;
+	height: fit-content;
+
+	margin-top: 5px;
 
 	display: flex;
 	flex-wrap: wrap;

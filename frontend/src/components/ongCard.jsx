@@ -7,6 +7,10 @@ import "../styles/tagsONG.css";
 // Images
 import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png';
 
+import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
+import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
+import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
+
 import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png";
 import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png";
 import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png";
@@ -32,6 +36,21 @@ function ongCardComponent() {
 				<div className={ongCardStyle.ongCard_rate_container}>
 					<img src={blackRateIconImage} />
 					<h1>4,7</h1>
+				</div>
+			</div>
+
+			<div className={ongCardStyle.ongCard_socialmedia_container}>
+				<div className={ongCardStyle.socialmedia_card}>
+					<img src={instagramIconImage} />
+					<h1>Instagram</h1>
+				</div>
+				<div className={ongCardStyle.socialmedia_card}>
+					<img src={whatsappIconImage} />
+					<h1>Whatsapp</h1>
+				</div>
+				<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
+					<img src={websiteIconImage} />
+					<h1>Website</h1>
 				</div>
 			</div>
 
