@@ -18,6 +18,7 @@ import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.
 // Functions 1: ONG card component //
 function ongCardComponent() {
 	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ");
+	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
 	return (
 		<div className={ongCardStyle.ongCard_container}>
@@ -37,19 +38,19 @@ function ongCardComponent() {
 			<div className={ongCardStyle.ongCard_tag_container}>
 				<div className={tagContainerStyle}>
 					<img src={petTagIconImage} alt="Pet" />
-					<div className="tag_divider_bar"></div>
+					<div className={tagDividerStyle}></div>
 					<label>Animais</label>
 				</div>
 
 				<div className={tagContainerStyle}>
 					<img src={voluntarioTagIconImage} alt="Voluntário" />
-					<div className="tag_divider_bar"></div>
+					<div className={tagDividerStyle}></div>
 					<label>Voluntário</label>
 				</div>
 
 				<div className={tagContainerStyle}>
 					<img src={donationTagIconImage} alt="Doação" />
-					<div className="tag_divider_bar"></div>
+					<div className={tagDividerStyle}></div>
 					<label>Doação</label>
 				</div>
 			</div>

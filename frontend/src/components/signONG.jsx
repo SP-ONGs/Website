@@ -138,7 +138,7 @@ function SignButtonComponent({ ongCEP, socialMediaList, tagList }) {
 
 
 // Functions 2: Left-side (ONG information) //
-function AddNameContainer({ setOngCEP }) {
+function AddNameContainer({ setOngCEP, setImageFile }) {
 	const [cepIsInvalid, setCepIsInvalid] = useState(false);
 
 	let lastUpdatedCEP;
@@ -235,12 +235,54 @@ function AddNameContainer({ setOngCEP }) {
 		setOngCEP(cep);
 	}
 
+	const [imagePreview, setImagePreview] = useState("");
+
+	function updateImage() {
+		const imageInputElement = document.getElementById("signOng_image_input")
+
+		const file = imageInputElement.files?.[0];
+
+		setImageFile(null);
+		setImagePreview("");
+
+		if (!file) return;
+
+		if (file.size > 5 * 1024 * 1024) {
+			imageInputElement.value = "";
+			return;
+		}
+
+		const previewUrl = URL.createObjectURL(file);
+		const previewImage = new Image();
+
+		previewImage.onload = () => {
+			const ratio = previewImage.width / previewImage.height
+
+			if (Math.abs(ratio - 16 / 9) > 0.01) {
+				URL.revokeObjectURL(previewUrl);
+				imageInputElement.value = "";
+				return
+			}
+
+			setImageFile(file);
+			setImagePreview(previewUrl);
+		}
+
+		previewImage.onerror = () => {
+			URL.revokeObjectURL(previewUrl);
+			imageInputElement.value = "";
+		}
+
+		previewImage.src = previewUrl;
+	}
+
 	return (
 		<div className={signStyle.left_upper_container}>
 			<div className={signStyle.photo_bg}>
-				<img src={addPhotoIconImage} alt="Adicionar foto" />
+				<img src={addPhotoIconImage} alt="Adicionar foto" className={signStyle.photo_add_icon} />
+				{imagePreview && (<img src={imagePreview} className={signStyle.photo_preview} />)}
 				<label>FOTO DA ONG</label>
-				<button></button>
+				<input type="file" accept="image/jpeg,image/png" id="signOng_image_input" />
 			</div>
 
 			<div className={signStyle.name_container}>
@@ -616,6 +658,8 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 	const [socialMediaList, setSocialMediaList] = useState({});
 	const [tagList, setTagList] = useState({});
 
+	const [imageFile, setImageFile] = useState(null);
+
 	return (
 		currentModal === "signONG" && (
 			<>
@@ -623,7 +667,7 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 
 				<div className={signStyle.signONG_modal}>
 					<div className={signStyle.left_box}>
-						<AddNameContainer setOngCEP={setOngCEP} />
+						<AddNameContainer setOngCEP={setOngCEP} setImageFile={setImageFile} />
 						<AddSocialMediaContainer setMediaModal={setMediaModal} socialMediaList={socialMediaList} setSocialMediaList={setSocialMediaList} />
 						<AddTagContainer tagList={tagList} setTagList={setTagList} />
 					</div>

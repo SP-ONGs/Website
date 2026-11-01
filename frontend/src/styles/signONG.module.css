@@ -121,14 +121,21 @@
 
 .photo_bg img {
 	position: absolute;
-	width: 50px;
-	height: 50px;
-
 	pointer-events: none;
 
 	transform: translate(-50%, -50%);
 	left: 50%;
 	top: 50%;
+}
+
+.photo_add_icon {
+	width: 50px;
+	height: 50px;
+}
+
+.photo_preview {
+	width: 100%;
+	height: 100%;
 }
 
 .photo_bg label {
@@ -146,7 +153,7 @@
 	color: rgba(0, 0, 0, .75)
 }
 
-.photo_bg button {
+.photo_bg input {
 	width: 100%;
 	height: 100%;
 
@@ -155,6 +162,11 @@
 	border: 0px;
 	background: rgba(0, 0, 0, 0);
 }
+
+input[type="file"] {
+	opacity: 0;
+}
+
 
 .name_container {
 	width: 386px;

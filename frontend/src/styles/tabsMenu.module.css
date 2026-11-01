@@ -3,7 +3,7 @@
 	background: rgba(255, 255, 255, 0);
 
 	position: absolute;
-	margin-top: 30px;
+	margin-top: 25px;
 	margin-left: 17px;
 
 	display: flex;
@@ -38,6 +38,8 @@
 	transform: translateY(-50%);
 	top: 50%;
 	left: 11px;
+
+	user-select: none;
 }
 
 .menu_option_container h1 {

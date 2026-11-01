@@ -1,5 +1,5 @@
 .ongBoard_container {
-	width: 950px;
+	width: fit-content;
 	height: 500px;
 	display: flex;
 	flex-wrap: wrap;
@@ -7,8 +7,9 @@
 	border: none;
 
 	position: absolute;
-	top: 160px;
+	top: 150px;
 	left: 291px;
 
-	gap: 10px 10px;
+	gap: 10px 15px;
+	transition: gap 0.1s ease;
 }

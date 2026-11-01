@@ -42,12 +42,17 @@ public class ImageStorageService {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The uploaded file is not a supported image.");
 			}
 
-			int width = image.getWidth();
-			int height = image.getHeight();
-
-			if (width <= 0 || height <= 0 || Math.abs((double) width / height - (16.0 / 9.0)) > 0.01) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The image must have a 16:9 aspect ratio.");
-			}
+			/*
+			 * Check image aspect ratio (16:9)
+			 * int width = image.getWidth();
+			 * int height = image.getHeight();
+			 * 
+			 * if (width <= 0 || height <= 0 || Math.abs((double) width / height - (16.0 /
+			 * 9.0)) > 0.01) {
+			 * throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+			 * "The image must have a 16:9 aspect ratio.");
+			 * }
+			 */
 
 			String format = detectFormat(file);
 
