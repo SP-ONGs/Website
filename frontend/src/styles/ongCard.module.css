@@ -143,12 +143,15 @@
 }
 
 .tag_container_size img {
-	height: 14px;
-	width: 14px;
+	height: 13px;
+	width: 13px;
+
+	margin-left: 5px;
 }
 
 .tag_container_size label {
 	font-size: 14px;
+	margin-right: 8px;
 }
 
 .tag_divider_size {
@@ -164,6 +167,6 @@
 	outline: 5px solid #D9D9D9;
 }
 
-:has(> .ongCard_container:hover) {
+/*:has(> .ongCard_container:hover) {
 	gap: 13px 15px;
-}
+}*/
