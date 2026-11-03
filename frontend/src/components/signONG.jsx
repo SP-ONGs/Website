@@ -43,7 +43,55 @@ import closeIconImage from "../../images/elements_vectors/CloseIcon.png";
 
 // --> Functions <-- //
 
-// Functions 1: Sign button component //
+// Functions 1: Sign ONG component //
+function SignONGComponent({ currentModal, setCurrentModal }) {
+	const [currentMediaModal, setMediaModal] = useState(null);
+	const [currentAddMedia, setAddMedia] = useState(null);
+
+	const [ongCEP, setOngCEP] = useState(undefined);
+	const [socialMediaList, setSocialMediaList] = useState({});
+	const [tagList, setTagList] = useState({});
+
+	const [imageFile, setImageFile] = useState(undefined);
+
+	return (
+		currentModal === "signONG" && (
+			<>
+				<div className="focus_BG"></div>
+
+				<div className={signStyle.signONG_modal}>
+					<div className={signStyle.left_box}>
+						<AddNameContainer setOngCEP={setOngCEP} setImageFile={setImageFile} />
+						<AddSocialMediaContainer setMediaModal={setMediaModal} socialMediaList={socialMediaList} setSocialMediaList={setSocialMediaList} />
+						<AddTagContainer tagList={tagList} setTagList={setTagList} />
+					</div>
+
+					<div className={signStyle.divide_bar}></div>
+
+					<div className={signStyle.right_box}>
+						<CloseModalButton setCurrentModal={setCurrentModal} />
+
+						<SPONGS_Brand />
+
+						<h2 className={signStyle.sign_text}>Adicione as informações para cadastrar a sua ONG</h2>
+						<SignInputsContainer />
+						<SignButtonComponent ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} imageFile={imageFile} />
+					</div>
+				</div>
+
+				{currentMediaModal === "options" && (
+					<SocialMediaOptions setMediaModal={setMediaModal} setAddMedia={setAddMedia} />
+				)}
+
+				{currentMediaModal === "add_media" && (
+					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} setSocialMediaList={setSocialMediaList} />
+				)}
+			</>
+		)
+	);
+}
+
+// Functions 2: Sign button component //
 function setError(element, isError) {
 	if (isError) {
 		element.classList.add(signStyle.error_outline);
@@ -171,7 +219,7 @@ function SignButtonComponent({ ongCEP, socialMediaList, tagList, imageFile }) {
 
 
 
-// Functions 2: Left-side (ONG information) //
+// Functions 3: Left-side (ONG information) //
 function AddNameContainer({ setOngCEP, setImageFile }) {
 	const [cepIsInvalid, setCepIsInvalid] = useState(false);
 
@@ -273,30 +321,31 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 
 	function updateImage() {
 		const imageInputElement = document.getElementById("signOng_image_input")
-
 		const file = imageInputElement.files?.[0];
 
 		setImageFile(null);
 		setImagePreview("");
+		ResetErrors()
 
 		if (!file) return;
 
 		if (file.size > 5 * 1024 * 1024) {
-			imageInputElement.value = "";
+			// Error: too big
 			return;
 		}
 
 		const previewUrl = URL.createObjectURL(file);
-		const previewImage = new Image();
+		const previewImage = document.getElementById("signONG_preview_image");
 
 		previewImage.onload = () => {
-			const ratio = previewImage.width / previewImage.height
+			/*const ratio = previewImage.width / previewImage.height
 
 			if (Math.abs(ratio - 16 / 9) > 0.01) {
+				// error: wrong format
 				URL.revokeObjectURL(previewUrl);
 				imageInputElement.value = "";
 				return
-			}
+			}*/
 
 			setImageFile(file);
 			setImagePreview(previewUrl);
@@ -307,16 +356,17 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 			imageInputElement.value = "";
 		}
 
+		setImagePreview(previewUrl);
 		previewImage.src = previewUrl;
 	}
 
 	return (
 		<div className={signStyle.left_upper_container}>
 			<div className={signStyle.photo_bg}>
-				<img src={addPhotoIconImage} alt="Adicionar foto" className={signStyle.photo_add_icon} />
-				{imagePreview && (<img src={imagePreview} className={signStyle.photo_preview} />)}
-				<label>FOTO DA ONG</label>
-				<input type="file" accept="image/jpeg,image/png" id="signOng_image_input" />
+				<img className={signStyle.photo_preview} id="signONG_preview_image" />
+				{!imagePreview && (<img src={addPhotoIconImage} className={signStyle.photo_add_icon} />)}
+				{!imagePreview && (<label>FOTO DA ONG</label>)}
+				<input type="file" accept="image/jpeg,image/png" id="signOng_image_input" onChange={updateImage} />
 			</div>
 
 			<div className={signStyle.name_container}>
@@ -465,7 +515,7 @@ function AddTagContainer({ tagList, setTagList }) {
 
 
 
-// Functions 3: Right side (Email & password) //
+// Functions 4: Right side (Email & password) //
 function CloseModalButton({ setCurrentModal }) {
 	return (
 		<div className={signStyle.close_button} onClick={() => { setCurrentModal("loginONG") }}>
@@ -528,56 +578,6 @@ function SignInputsContainer() {
 			</div>
 		</div>
 	)
-}
-
-
-
-// Functions 4: Sign ONG component //
-function SignONGComponent({ currentModal, setCurrentModal }) {
-	const [currentMediaModal, setMediaModal] = useState(null);
-	const [currentAddMedia, setAddMedia] = useState(null);
-
-	const [ongCEP, setOngCEP] = useState(undefined);
-	const [socialMediaList, setSocialMediaList] = useState({});
-	const [tagList, setTagList] = useState({});
-
-	const [imageFile, setImageFile] = useState(null);
-
-	return (
-		currentModal === "signONG" && (
-			<>
-				<div className="focus_BG"></div>
-
-				<div className={signStyle.signONG_modal}>
-					<div className={signStyle.left_box}>
-						<AddNameContainer setOngCEP={setOngCEP} setImageFile={setImageFile} />
-						<AddSocialMediaContainer setMediaModal={setMediaModal} socialMediaList={socialMediaList} setSocialMediaList={setSocialMediaList} />
-						<AddTagContainer tagList={tagList} setTagList={setTagList} />
-					</div>
-
-					<div className={signStyle.divide_bar}></div>
-
-					<div className={signStyle.right_box}>
-						<CloseModalButton setCurrentModal={setCurrentModal} />
-
-						<SPONGS_Brand />
-
-						<h2 className={signStyle.sign_text}>Adicione as informações para cadastrar a sua ONG</h2>
-						<SignInputsContainer />
-						<SignButtonComponent ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} imageFile={imageFile} />
-					</div>
-				</div>
-
-				{currentMediaModal === "options" && (
-					<SocialMediaOptions setMediaModal={setMediaModal} setAddMedia={setAddMedia} />
-				)}
-
-				{currentMediaModal === "add_media" && (
-					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} setSocialMediaList={setSocialMediaList} />
-				)}
-			</>
-		)
-	);
 }
 
 
