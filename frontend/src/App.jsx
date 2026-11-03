@@ -16,7 +16,7 @@ function App() {
 
 	return (
 		<>
-			<HomepageComponent setCurrentModal={setCurrentModal} />
+			<HomepageComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
 			<LoginONGComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
 			<SignONGComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
 		</>

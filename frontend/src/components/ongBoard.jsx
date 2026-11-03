@@ -15,16 +15,16 @@ import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow
 // --> Functions <-- //
 
 // Functions 1: ONGs board component //
-function ONGsBoardComponent() {
+function ONGsBoardComponent({ setCurrentModal }) {
 	return (
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
-				<OngCard />
-				<OngCard />
-				<OngCard />
-				<OngCard />
-				<OngCard />
-				<OngCard />
+				<OngCard setCurrentModal={setCurrentModal} />
+				<OngCard setCurrentModal={setCurrentModal} />
+				<OngCard setCurrentModal={setCurrentModal} />
+				<OngCard setCurrentModal={setCurrentModal} />
+				<OngCard setCurrentModal={setCurrentModal} />
+				<OngCard setCurrentModal={setCurrentModal} />
 				<BoardIndexBarComponent />
 			</div>
 		</>

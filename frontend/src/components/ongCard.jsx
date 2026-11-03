@@ -20,12 +20,16 @@ import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function ongCardComponent() {
+function ongCardComponent({ setCurrentModal }) {
+	function onViewONG() {
+		setCurrentModal("viewONG")
+	}
+
 	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ");
 	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
 	return (
-		<div className={ongCardStyle.ongCard_container}>
+		<div className={ongCardStyle.ongCard_container} onClick={onViewONG}>
 			<div className={ongCardStyle.ongCard_photo}>
 				<div className={ongCardStyle.ongCard_photo_BG}></div>
 				<img />

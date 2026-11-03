@@ -50,7 +50,7 @@ body {
 }
 
 .selectable_arrow:hover {
-	transform: translateX(25%) scaleX(1.15);
+	transform: translateX(12.5%) scaleX(1.15);
 }
 
 .index_numbers_container {
@@ -75,8 +75,8 @@ body {
 	height: 35px;
 
 	transition:
-		color 0.2s cubic-bezier(.22, 1, 0.35, 1),
-		background 0.2s ease;
+		color 0.125s cubic-bezier(.22, 1, 0.35, 1),
+		background 0.125s ease;
 }
 
 .selectable_index {
