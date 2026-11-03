@@ -3,12 +3,17 @@
 // React
 import { useState } from "react";
 
+// API
+import { registerOng } from "../api/ongs.js"
+
 // Controllers
 import { getCepData } from "../controllers/locationController.js"
 
+// Components
+import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
+
 // CSS
 import signStyle from "../styles/signONG.module.css";
-import signMediaStyle from "../styles/signONG_social-media.module.css";
 import "../styles/social-media.css";
 import "../styles/modals.css";
 import "../styles/tagsONG.css";
@@ -51,19 +56,23 @@ function setError(element, isError) {
 function ResetErrors() {
 	const nameInput = document.getElementById("signONG_name");
 	const cepInput = document.getElementById("signONG_cep");
+	const imageInput = document.getElementById("signOng_image_input")
+
 	const midiaContainer = document.getElementsByClassName(signStyle.midia_container)[0];
 
 	const confirmPasswordInput = document.getElementById("signONG_confirm_password");
 
 	setError(nameInput.parentElement, false)
 	setError(cepInput.parentElement, false)
+	setError(imageInput.parentElement, false)
 	setError(midiaContainer, false)
 	setError(confirmPasswordInput.parentElement, false)
 }
 
-function OnSign(ongCEP, socialMediaList, tagList) {
+function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 	const nameInput = document.getElementById("signONG_name");
 	const cepInput = document.getElementById("signONG_cep");
+	const imageInput = document.getElementById("signOng_image_input")
 
 	const midiaContainer = document.getElementsByClassName(signStyle.midia_container)[0];
 
@@ -94,6 +103,9 @@ function OnSign(ongCEP, socialMediaList, tagList) {
 	const IS_SAME_PASSWORD = passwordInput.value === confirmPasswordInput.value;
 	setError(confirmPasswordInput.parentElement, !IS_SAME_PASSWORD);
 
+	const IMAGE_IS_VALID = imageFile !== undefined
+	setError(imageInput.parentElement, !IMAGE_IS_VALID)
+
 	// Check if can sign ONG
 	const CAN_SIGN_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA && IS_SAME_PASSWORD;
 
@@ -101,7 +113,29 @@ function OnSign(ongCEP, socialMediaList, tagList) {
 		return
 	}
 
+	// Convert relations IDs (tags and social media)
+	const ongTagsIds = []
+	const ongSocialMedia = []
+
 	// Send sign request to backend
+	const payload = {
+		"email": emailInput.value,
+		"password": passwordInput.value,
+		"name": ongName,
+		"cep": ongCEP,
+		"houseNumber": "100",
+		"cnpj": null,
+		"imageUrl": null,
+		"socialMedia": [
+			{
+				"socialMediaId": 1,
+				"description": "https://instagram.com/example"
+			}
+		],
+		"tagIds": [1, 3]
+	}
+
+	registerOng()
 }
 
 function UpdateSignButtonEnabled() {
@@ -125,11 +159,11 @@ function UpdateSignButtonEnabled() {
 	signButton.classList.remove(signStyle.signin_button_disabled);
 }
 
-function SignButtonComponent({ ongCEP, socialMediaList, tagList }) {
+function SignButtonComponent({ ongCEP, socialMediaList, tagList, imageFile }) {
 	return (
 		<button
 			className={[signStyle.signin_button, signStyle.signin_button_disabled].join(" ")}
-			onClick={() => OnSign(ongCEP, socialMediaList, tagList)}
+			onClick={() => OnSign(ongCEP, socialMediaList, tagList, imageFile)}
 			id="signONG_sign_button"
 		>Cadastrar</button>
 	)
@@ -431,158 +465,7 @@ function AddTagContainer({ tagList, setTagList }) {
 
 
 
-// Functions 3: Add social media options //
-function SocialMediaOptions({ setMediaModal, setAddMedia }) {
-	function onCloseOptions() {
-		setMediaModal(null)
-	}
-
-	function onInstagramOption() {
-		setAddMedia("instagram")
-		setMediaModal("add_media")
-	}
-
-	function onWhatsappOption() {
-		setAddMedia("whatsapp")
-		setMediaModal("add_media")
-	}
-
-	function onWebsiteOption() {
-		setAddMedia("website")
-		setMediaModal("add_media")
-	}
-
-	return (
-		<>
-			<div className="focus_BG"></div>
-
-			<div className={signMediaStyle.options_modal}>
-				<div className={signMediaStyle.close_button} onClick={onCloseOptions}>
-					<img src={closeIconImage} alt="Close button" />
-				</div>
-
-				<div className={signMediaStyle.options_brand}>
-					<img src={logoImage} alt="SP ONGS logo" />
-					<span>SP ONGS</span>
-				</div>
-
-				<h1>Selecione a Rede Social</h1>
-
-				<div className={signMediaStyle.options_container}>
-					<div className={[signMediaStyle.media_option, "instagram"].join(" ")} onClick={onInstagramOption} >
-						<img src={instagramIconImage} className={signMediaStyle.media_icon} />
-						<h2>Instagram</h2>
-						<img src={addPhotoIconImage} className={signMediaStyle.add_icon} />
-					</div>
-
-					<div className={[signMediaStyle.media_option, "whatsapp"].join(" ")} onClick={onWhatsappOption} >
-						<div className={signMediaStyle.option_fade}></div>
-						<img src={whatsappIconImage} className={signMediaStyle.media_icon} />
-						<h2>Whatsapp</h2>
-						<img src={addPhotoIconImage} className={signMediaStyle.add_icon} />
-					</div>
-
-					<div className={[signMediaStyle.media_option, "website"].join(" ")} onClick={onWebsiteOption} >
-						<div className={signMediaStyle.option_fade}></div>
-						<img src={websiteIconImage} className={signMediaStyle.media_icon} />
-						<h2>Website</h2>
-						<img src={addPhotoIconImage} className={signMediaStyle.add_icon} />
-					</div>
-				</div>
-			</div>
-		</>
-	)
-}
-
-function UpdateAddMediaButtonEnabled() {
-	const addMediaButton = document.getElementById("signONG_addMidiaButton");
-	const addMediaInput = document.getElementById("signONG_addMidiaInput");
-
-	const CAN_ADD = addMediaInput.value !== "";
-
-	if (!CAN_ADD) {
-		addMediaButton.classList.add(signMediaStyle.add_media_button_disabled);
-		return;
-	}
-
-	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled);
-}
-
-function SocialMediaInputModal({ setMediaModal, currentAddMedia, socialMediaList, setSocialMediaList }) {
-	const iconsList = {
-		["instagram"]: instagramIconImage,
-		["whatsapp"]: whatsappIconImage,
-		["website"]: websiteIconImage,
-	}
-	const mediaTextList = {
-		["instagram"]: "NOME DE USUÁRIO",
-		["whatsapp"]: "NÚMERO DE TELEFONE",
-		["website"]: "URL DO WEBSITE",
-	}
-
-	const mediaIcon = iconsList[currentAddMedia] || ""
-	const titleText = mediaTextList[currentAddMedia] || ""
-
-	function onCloseSignMedia() {
-		setMediaModal(null)
-	}
-
-	function onAddMedia() {
-		const addMediaInput = document.getElementById("signONG_addMidiaInput");
-		const mediaValue = addMediaInput.value;
-
-		const IS_EMPTY = mediaValue === ""
-
-		if (IS_EMPTY) {
-			return
-		}
-
-		setSocialMediaList(previous => ({
-			...previous,
-			[currentAddMedia]: mediaValue
-		}))
-		setMediaModal(null);
-	}
-
-	return (
-		<>
-			<div className="focus_BG"></div>
-
-			<div className={signMediaStyle.sign_media_modal}>
-				<div className={signMediaStyle.big_close_button} onClick={onCloseSignMedia}>
-					<img src={closeIconImage} alt="Close button" />
-				</div>
-
-				<div className={signMediaStyle.add_media_brand}>
-					<img src={logoImage} alt="SP ONGS logo" />
-					<span>SP ONGS</span>
-				</div>
-
-				<div className={signMediaStyle.sign_media_container}>
-					<div className={[signMediaStyle.media_icon_view, currentAddMedia].join(" ")}>
-						<img src={mediaIcon} />
-					</div>
-
-					<div className={signMediaStyle.media_input_container}>
-						<h1>{titleText}</h1>
-						<div className={signMediaStyle.media_input}>
-							<input id="signONG_addMidiaInput" type="text" onChange={UpdateAddMediaButtonEnabled} />
-						</div>
-					</div>
-				</div>
-
-				<div id="signONG_addMidiaButton" onClick={onAddMedia}
-					className={[signMediaStyle.add_media_button, signMediaStyle.add_media_button_disabled].join(" ")}>
-					<label>Adicionar</label>
-				</div>
-			</div >
-		</>
-	)
-}
-
-
-
-// Functions 4: Right side (Email & password) //
+// Functions 3: Right side (Email & password) //
 function CloseModalButton({ setCurrentModal }) {
 	return (
 		<div className={signStyle.close_button} onClick={() => { setCurrentModal("loginONG") }}>
@@ -649,7 +532,7 @@ function SignInputsContainer() {
 
 
 
-// Functions 5: Sign ONG component //
+// Functions 4: Sign ONG component //
 function SignONGComponent({ currentModal, setCurrentModal }) {
 	const [currentMediaModal, setMediaModal] = useState(null);
 	const [currentAddMedia, setAddMedia] = useState(null);
@@ -681,7 +564,7 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 
 						<h2 className={signStyle.sign_text}>Adicione as informações para cadastrar a sua ONG</h2>
 						<SignInputsContainer />
-						<SignButtonComponent ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} />
+						<SignButtonComponent ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} imageFile={imageFile} />
 					</div>
 				</div>
 
@@ -690,7 +573,7 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 				)}
 
 				{currentMediaModal === "add_media" && (
-					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} socialMediaList={socialMediaList} setSocialMediaList={setSocialMediaList} />
+					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} setSocialMediaList={setSocialMediaList} />
 				)}
 			</>
 		)
