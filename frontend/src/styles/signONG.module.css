@@ -403,6 +403,9 @@ input[type="file"] {
 	gap: 3px 7px;
 
 	padding: 8px;
+
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .tag_container_size {

@@ -6,8 +6,13 @@ import { useState } from "react";
 // API
 import { registerOng } from "../api/ongs.js"
 
+// Data
+import tagsData from "../data/tagsData.json"
+
 // Controllers
 import { getCepData } from "../controllers/locationController.js"
+import { getSocialMediaId } from "../controllers/socialMediaController.js"
+import { getTagId } from "../controllers/tagController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -28,10 +33,6 @@ import cancelMediaIconImage from "../../images/elements_vectors/CancelMediaIcon.
 import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
 import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
 import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
-
-import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png";
-import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png";
-import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png";
 
 import hideIconImage from "../../images/elements_vectors/HideIcon.png";
 import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png";
@@ -162,8 +163,38 @@ function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 	}
 
 	// Convert relations IDs (tags and social media)
-	const ongTagsIds = []
 	const ongSocialMedia = []
+	const ongTagsIds = []
+
+	Object.entries(socialMediaList).forEach(([socialMediaName, description]) => {
+		const socialMediaId = getSocialMediaId(socialMediaName)
+
+		if (!socialMediaId) {
+			console.log(`Failed to find ${key} id!!!`)
+			return
+		}
+
+		ongSocialMedia.append({
+			"socialMediaId": socialMediaId,
+			"description": description
+		})
+	})
+
+	tagList.forEach(([tagName, tagIsActive]) => {
+		if (!tagIsActive) {
+			return
+		}
+
+		const tagId = getTagId(tagName)
+
+		if (!tagId) {
+			console.log(`Failed to find ${key} id!!!`)
+			return
+		}
+
+		ongTagsIds.append(tagId)
+	})
+
 
 	// Send sign request to backend
 	const payload = {
@@ -173,17 +204,11 @@ function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 		"cep": ongCEP,
 		"houseNumber": "100",
 		"cnpj": null,
-		"imageUrl": null,
-		"socialMedia": [
-			{
-				"socialMediaId": 1,
-				"description": "https://instagram.com/example"
-			}
-		],
-		"tagIds": [1, 3]
+		"socialMedia": ongSocialMedia,
+		"tagIds": ongTagsIds
 	}
 
-	registerOng()
+	registerOng(payload, imageFile)
 }
 
 function UpdateSignButtonEnabled() {
@@ -457,9 +482,25 @@ function AddSocialMediaContainer({ setMediaModal, socialMediaList, setSocialMedi
 	)
 }
 
-function AddTagContainer({ tagList, setTagList }) {
-	const tagContainerStyle = ["tag_container", "selectable_tag", signStyle.tag_container_size].join(" ");
+function TagContainer({ tagName, description, image, isSelected, onToggle }) {
+	let tagContainerStyle = ["tag_container", "selectable_tag", signStyle.tag_container_size].join(" ");
+	let tagDividerStyle = "tag_divider_bar"
 
+	if (isSelected) {
+		tagContainerStyle += " selected_tag_container"
+		tagDividerStyle += " selected_tag_divider_bar"
+	}
+
+	return (
+		<button className={tagContainerStyle} id={"signONG_tag_" + tagName} onClick={() => onToggle(tagName)}>
+			<img src={image} />
+			<div className={tagDividerStyle}></div>
+			<label>{description}</label>
+		</button>
+	)
+}
+
+function AddTagContainer({ tagList, setTagList }) {
 	function setTagValue(tagName, value) {
 		setTagList(previous => ({
 			...previous,
@@ -467,23 +508,10 @@ function AddTagContainer({ tagList, setTagList }) {
 		}));
 	}
 
-	function toggleTagSelected(tagName) {
-		const tagElement = document.getElementById("signONG_tag_" + tagName);
-		const tagDividerLement = tagElement.querySelector(":scope > div");
+	function toggleTag(tagName) {
+		const newValue = !tagList[tagName]
 
-		const SELECT_TAG = !tagList[tagName];
-
-		if (SELECT_TAG) {
-			tagElement.classList.add("selected_tag_container");
-			tagDividerLement.classList.add("selected_tag_divider_bar")
-
-			setTagValue(tagName, true);
-		} else {
-			tagElement.classList.remove("selected_tag_container");
-			tagDividerLement.classList.remove("selected_tag_divider_bar")
-
-			setTagValue(tagName, false);
-		}
+		setTagValue(tagName, newValue);
 	}
 
 	return (
@@ -491,23 +519,15 @@ function AddTagContainer({ tagList, setTagList }) {
 			<h2 className={signStyle.social_midia_title}>TAGS DA ONG</h2>
 
 			<div className={signStyle.select_tags_container}>
-				<button className={tagContainerStyle} id="signONG_tag_pet" onClick={() => toggleTagSelected("pet")}>
-					<img src={petTagIconImage} alt="Pet" />
-					<div className="tag_divider_bar"></div>
-					<label>Animais</label>
-				</button>
-
-				<button className={tagContainerStyle} id="signONG_tag_voluntario" onClick={() => toggleTagSelected("voluntario")}>
-					<img src={voluntarioTagIconImage} alt="Voluntário" />
-					<div className="tag_divider_bar"></div>
-					<label>Voluntário</label>
-				</button>
-
-				<button className={tagContainerStyle} id="signONG_tag_doacao" onClick={() => toggleTagSelected("doacao")}>
-					<img src={donationTagIconImage} alt="Doação" />
-					<div className="tag_divider_bar"></div>
-					<label>Doação</label>
-				</button>
+				{tagsData.map(({ name, description, image }) => (
+					<TagContainer
+						tagName={name}
+						description={description}
+						image={image}
+						isSelected={!!tagList[name]}
+						onToggle={toggleTag}
+					/>
+				))}
 			</div>
 		</div>
 	)

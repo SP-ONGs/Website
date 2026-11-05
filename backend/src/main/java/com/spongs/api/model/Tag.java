@@ -17,9 +17,6 @@ public class Tag {
 	@Column(nullable = false, unique = true, length = 100)
 	private String description;
 
-	@Column(name = "image_url", columnDefinition = "TEXT")
-	private String imageUrl;
-
 	protected Tag() {
 	}
 
@@ -29,9 +26,5 @@ public class Tag {
 
 	public String getDescription() {
 		return description;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
 	}
 }

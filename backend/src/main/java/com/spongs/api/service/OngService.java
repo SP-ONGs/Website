@@ -99,8 +99,7 @@ public class OngService {
 
 		List<TagResponse> tags = ongTagRepository.findAllByOng_Id(id).stream().map(entry -> new TagResponse(
 				entry.getTag().getId(),
-				entry.getTag().getDescription(),
-				entry.getTag().getImageUrl())).toList();
+				entry.getTag().getDescription())).toList();
 
 		return new OngPublicResponse(
 				ong.getId(),
@@ -117,8 +116,7 @@ public class OngService {
 	public List<TagResponse> getAvailableTags() {
 		return tagRepository.findAllByOrderByDescriptionAsc().stream().map(tag -> new TagResponse(
 				tag.getId(),
-				tag.getDescription(),
-				tag.getImageUrl())).toList();
+				tag.getDescription())).toList();
 	}
 
 	@Transactional(readOnly = true)
@@ -387,8 +385,7 @@ public class OngService {
 
 		var tags = ongTagRepository.findAllByOng_Id(ong.getId()).stream().map(entry -> new TagResponse(
 				entry.getTag().getId(),
-				entry.getTag().getDescription(),
-				entry.getTag().getImageUrl())).toList();
+				entry.getTag().getDescription())).toList();
 
 		return new OngOwnerResponse(
 				ong.getId(),
@@ -437,8 +434,7 @@ public class OngService {
 
 		List<TagResponse> tags = ongTagRepository.findAllByOng_Id(ongId).stream().map(entry -> new TagResponse(
 				entry.getTag().getId(),
-				entry.getTag().getDescription(),
-				entry.getTag().getImageUrl())).toList();
+				entry.getTag().getDescription())).toList();
 
 		return new OngAdminResponse(
 				ong.getId(),
