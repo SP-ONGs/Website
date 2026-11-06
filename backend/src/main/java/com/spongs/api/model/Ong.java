@@ -36,9 +36,12 @@ public class Ong {
 	@Column(name = "image_url", columnDefinition = "TEXT")
 	private String imageUrl;
 
+	@Column(name = "image_public_id")
+	private String imagePublicId;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 20)
-	private OngStatus status = OngStatus.IN_REVIEW;
+	private OngStatus status = OngStatus.PENDING_REVIEW;
 
 	@CreationTimestamp
 	@Column(name = "created_at", nullable = false, updatable = false)
@@ -51,13 +54,14 @@ public class Ong {
 	protected Ong() {
 	}
 
-	public Ong(String name, String cep, String houseNumber, String cnpj, String imageUrl) {
+	public Ong(String name, String cep, String houseNumber, String cnpj, String imageUrl, String imagePublicId) {
 		this.name = name;
 		this.cep = cep;
 		this.houseNumber = houseNumber;
 		this.cnpj = cnpj;
 		this.imageUrl = imageUrl;
-		this.status = OngStatus.IN_REVIEW;
+		this.imagePublicId = imagePublicId;
+		this.status = OngStatus.PENDING_REVIEW;
 	}
 
 	public Long getId() {
@@ -102,6 +106,14 @@ public class Ong {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getImagePublicId() {
+		return imagePublicId;
+	}
+
+	public void setImagePublicId(String imagePublicId) {
+		this.imagePublicId = imagePublicId;
 	}
 
 	public OngStatus getStatus() {

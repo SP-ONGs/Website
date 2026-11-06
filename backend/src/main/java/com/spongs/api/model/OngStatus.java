@@ -1,7 +1,7 @@
 package com.spongs.api.model;
 
 public enum OngStatus {
-	IN_REVIEW,
+	PENDING_REVIEW,
 	APPROVED,
 	REJECTED,
 	REMOVAL_REQUESTED,

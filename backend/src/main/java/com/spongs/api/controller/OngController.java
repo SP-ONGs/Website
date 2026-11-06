@@ -1,7 +1,8 @@
 package com.spongs.api.controller;
 
-import com.spongs.api.service.ImageStorageService;
 import com.spongs.api.service.OngService;
+import com.spongs.api.service.CloudinaryService;
+
 import com.spongs.api.model.Ong;
 
 import com.spongs.api.dto.OngPublicSummary;
@@ -29,11 +30,11 @@ import java.util.List;
 @RequestMapping("/api/ongs")
 public class OngController {
 	private final OngService ongService;
-	private final ImageStorageService imageStorageService;
+	private final CloudinaryService cloudinaryService;
 
-	public OngController(OngService ongService, ImageStorageService imageStorageService) {
+	public OngController(OngService ongService, CloudinaryService cloudinaryService) {
 		this.ongService = ongService;
-		this.imageStorageService = imageStorageService;
+		this.cloudinaryService = cloudinaryService;
 	}
 
 	@GetMapping
@@ -47,12 +48,30 @@ public class OngController {
 	}
 
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public OngRegistrationResponse registerOng(
-			@Valid @RequestPart("data") OngRegistrationRequest request, @RequestPart("image") MultipartFile image) {
-		String imageUrl = imageStorageService.storeOngImage(image);
+	public ResponseEntity<OngRegistrationResponse> registerOng(
+			@Valid @RequestPart("data") OngRegistrationRequest request,
+			@RequestPart("image") MultipartFile image) {
+		CloudinaryService.UploadedImage uploaded = cloudinaryService.uploadOngImage(image);
 
-		Ong ong = ongService.registerOng(request, imageUrl);
+		try {
+			Ong ong = ongService.registerOng(
+					request,
+					uploaded.url(),
+					uploaded.publicId());
 
-		return OngRegistrationResponse.from(ong, request.email());
+			return ResponseEntity.status(HttpStatus.CREATED)
+					.body(OngRegistrationResponse.from(ong, request.email()));
+
+		} catch (RuntimeException e) {
+			// The database registration failed after the upload.
+			// Remove the image to avoid leaving an orphaned asset.
+			try {
+				cloudinaryService.deleteImage(uploaded.publicId());
+			} catch (RuntimeException cleanupError) {
+				e.addSuppressed(cleanupError);
+			}
+
+			throw e;
+		}
 	}
 }

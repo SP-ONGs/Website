@@ -26,7 +26,7 @@ export async function getSocialMediaId(socialMediaName) {
 	const options = await getSocialMediaOptions()
 
 	for (const socialMediaOption of options) {
-		if (socialMediaOption.name === socialMediaName) {
+		if (socialMediaOption.name.toLowerCase() === socialMediaName) {
 			return socialMediaOption.id
 		}
 	}

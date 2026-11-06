@@ -127,7 +127,7 @@ public class OngService {
 	}
 
 	@Transactional
-	public Ong registerOng(OngRegistrationRequest request, String imageUrl) {
+	public Ong registerOng(OngRegistrationRequest request, String imageUrl, String imagePublicId) {
 
 		// Normalize and validate basic fields
 		String normalizedEmail = normalizeEmail(request.email());
@@ -194,9 +194,10 @@ public class OngService {
 				request.cep(),
 				request.houseNumber().trim(),
 				normalizedCnpj,
-				imageUrl);
+				imageUrl,
+				imagePublicId);
 
-		ong.setStatus(OngStatus.IN_REVIEW);
+		ong.setStatus(OngStatus.PENDING_REVIEW);
 
 		Ong savedOng = ongRepository.save(ong);
 
@@ -331,7 +332,7 @@ public class OngService {
 		/*
 		 * Changing cnpj requires another review
 		 * if (CNPJ_CHANGED) {
-		 * ong.setStatus(OngStatus.IN_REVIEW);
+		 * ong.setStatus(OngStatus.PENDING_REVIEW);
 		 * }
 		 */
 
@@ -358,6 +359,36 @@ public class OngService {
 
 		return toOwnerResponse(savedOng);
 	}
+
+	/*
+	 * @Transactional
+	 * public String updateOwnerOngImage(String imageUrl, String imagePublicId) {
+	 * 
+	 * UserAccount owner = accountAccessService.requireCurrentOwner();
+	 * Ong ong = owner.getOng();
+	 * 
+	 * if (ong == null) {
+	 * throw new IllegalStateException("Owner does not have an associated ONG.");
+	 * }
+	 * 
+	 * if (ong.getStatus() == OngStatus.REMOVAL_REQUESTED
+	 * || ong.getStatus() == OngStatus.ADMIN_REMOVED) {
+	 * throw new IllegalStateException(
+	 * "This ONG cannot update its image in its current status.");
+	 * }
+	 * 
+	 * String oldPublicId = ong.getImagePublicId();
+	 * 
+	 * ong.setImageUrl(imageUrl);
+	 * ong.setImagePublicId(imagePublicId);
+	 * 
+	 * ongRepository.save(ong);
+	 * 
+	 * // Returned to the controller, which deletes it after this
+	 * // transactional method has successfully committed.
+	 * return oldPublicId;
+	 * }
+	 */
 
 	@Transactional
 	public OngOwnerResponse requestOngRemoval(Long ongId) {
@@ -402,7 +433,7 @@ public class OngService {
 	// Administrator methods
 	@Transactional(readOnly = true)
 	public List<OngAdminSummary> getPedingOngs() {
-		return ongRepository.findAllByStatusOrderByCreatedAtAsc(OngStatus.IN_REVIEW).stream().map(ong -> {
+		return ongRepository.findAllByStatusOrderByCreatedAtAsc(OngStatus.PENDING_REVIEW).stream().map(ong -> {
 			UserAccount account = userAccountRepository.findByOng_Id(ong.getId())
 					.orElseThrow(() -> new IllegalStateException("ONG has no associated owner account"));
 
@@ -452,7 +483,7 @@ public class OngService {
 
 	@Transactional
 	public OngAdminResponse reviewOng(Long ongId, OngStatus newStatus) {
-		if (newStatus != OngStatus.APPROVED && newStatus != OngStatus.REJECTED && newStatus != OngStatus.IN_REVIEW) {
+		if (newStatus != OngStatus.APPROVED && newStatus != OngStatus.REJECTED && newStatus != OngStatus.PENDING_REVIEW) {
 			throw new IllegalArgumentException("Invalid review status");
 		}
 

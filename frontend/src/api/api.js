@@ -14,7 +14,7 @@ async function parseResponse(response) {
 	return null;
 }
 
-export async function apiRequest(path, options = {}) {
+/*export async function apiRequest(path, options = {}) {
 	const response = await fetch(`${API_BASE_URL}${path}`, {
 		...options,
 		credentials: "include",
@@ -34,4 +34,36 @@ export async function apiRequest(path, options = {}) {
 	}
 
 	return parseResponse(response);
+}*/
+
+export async function apiRequest(endpoint, options = {}) {
+	const isFormData = options.body instanceof FormData;
+
+	const headers = {
+		...options.headers
+	};
+
+	if (!isFormData && options.body !== undefined) {
+		headers["Content-Type"] ??= "application/json";
+	}
+
+	const response = await fetch(
+		`http://localhost:8080${endpoint}`,
+		{
+			...options,
+			headers,
+			credentials: "include"
+		}
+	);
+
+	if (!response.ok) {
+		const error = await response.text();
+		throw new Error(error || `Request failed with status ${response.status}`);
+	}
+
+	if (response.status === 204) {
+		return null;
+	}
+
+	return response.json();
 }

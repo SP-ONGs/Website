@@ -118,7 +118,7 @@ function ResetErrors() {
 	setError(confirmPasswordInput.parentElement, false)
 }
 
-function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
+async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 	const nameInput = document.getElementById("signONG_name");
 	const cepInput = document.getElementById("signONG_cep");
 	const imageInput = document.getElementById("signOng_image_input")
@@ -166,34 +166,35 @@ function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 	const ongSocialMedia = []
 	const ongTagsIds = []
 
-	Object.entries(socialMediaList).forEach(([socialMediaName, description]) => {
-		const socialMediaId = getSocialMediaId(socialMediaName)
+	for (const socialMediaName in socialMediaList) {
+		const socialMediaId = await getSocialMediaId(socialMediaName)
+		const description = socialMediaList[socialMediaName]
 
 		if (!socialMediaId) {
-			console.log(`Failed to find ${key} id!!!`)
+			console.log(`Failed to find ${socialMediaName} id!!!`)
 			return
 		}
 
-		ongSocialMedia.append({
+		ongSocialMedia.push({
 			"socialMediaId": socialMediaId,
 			"description": description
 		})
-	})
+	}
 
-	tagList.forEach(([tagName, tagIsActive]) => {
-		if (!tagIsActive) {
+	for (const tagName in tagList) {
+		if (!tagList[tagName]) {
 			return
 		}
 
-		const tagId = getTagId(tagName)
+		const tagId = await getTagId(tagName)
 
 		if (!tagId) {
-			console.log(`Failed to find ${key} id!!!`)
+			console.log(`Failed to find ${tagName} id!!!`)
 			return
 		}
 
-		ongTagsIds.append(tagId)
-	})
+		ongTagsIds.push(tagId)
+	}
 
 
 	// Send sign request to backend
@@ -207,6 +208,11 @@ function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 		"socialMedia": ongSocialMedia,
 		"tagIds": ongTagsIds
 	}
+
+	//console.log(payload)
+	console.log(imageFile.name);
+	console.log(imageFile.type);
+	console.log(imageFile.size);
 
 	registerOng(payload, imageFile)
 }
@@ -342,46 +348,31 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 		setOngCEP(cep);
 	}
 
-	const [imagePreview, setImagePreview] = useState("");
+	const [useImagePreview, setImagePreview] = useState(false);
 
 	function updateImage() {
 		const imageInputElement = document.getElementById("signOng_image_input")
 		const file = imageInputElement.files?.[0];
 
-		setImageFile(null);
-		setImagePreview("");
 		ResetErrors()
 
-		if (!file) return;
+		if (!file) {
+			setImageFile(false);
+			setImagePreview();
+			return
+		};
 
 		if (file.size > 5 * 1024 * 1024) {
-			// Error: too big
+			console.log("Image too big!!!")
 			return;
 		}
 
 		const previewUrl = URL.createObjectURL(file);
 		const previewImage = document.getElementById("signONG_preview_image");
 
-		previewImage.onload = () => {
-			/*const ratio = previewImage.width / previewImage.height
+		setImageFile(file);
+		setImagePreview(true);
 
-			if (Math.abs(ratio - 16 / 9) > 0.01) {
-				// error: wrong format
-				URL.revokeObjectURL(previewUrl);
-				imageInputElement.value = "";
-				return
-			}*/
-
-			setImageFile(file);
-			setImagePreview(previewUrl);
-		}
-
-		previewImage.onerror = () => {
-			URL.revokeObjectURL(previewUrl);
-			imageInputElement.value = "";
-		}
-
-		setImagePreview(previewUrl);
 		previewImage.src = previewUrl;
 	}
 
@@ -389,8 +380,8 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 		<div className={signStyle.left_upper_container}>
 			<div className={signStyle.photo_bg}>
 				<img className={signStyle.photo_preview} id="signONG_preview_image" />
-				{!imagePreview && (<img src={addPhotoIconImage} className={signStyle.photo_add_icon} />)}
-				{!imagePreview && (<label>FOTO DA ONG</label>)}
+				{!useImagePreview && (<img src={addPhotoIconImage} className={signStyle.photo_add_icon} />)}
+				{!useImagePreview && (<label>FOTO DA ONG</label>)}
 				<input type="file" accept="image/jpeg,image/png" id="signOng_image_input" onChange={updateImage} />
 			</div>
 

@@ -44,7 +44,7 @@ public class AdminController {
 
 	@PostMapping("/{id}/reopen")
 	public OngAdminResponse reopenOng(@PathVariable Long id) {
-		return ongService.reviewOng(id, OngStatus.IN_REVIEW);
+		return ongService.reviewOng(id, OngStatus.PENDING_REVIEW);
 	}
 
 	@PostMapping("/{id}/remove")
