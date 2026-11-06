@@ -14,28 +14,6 @@ async function parseResponse(response) {
 	return null;
 }
 
-/*export async function apiRequest(path, options = {}) {
-	const response = await fetch(`${API_BASE_URL}${path}`, {
-		...options,
-		credentials: "include",
-		headers: {
-			...options.headers
-		}
-	});
-
-	if (!response.ok) {
-		const body = await parseResponse(response);
-
-		const message = body?.message || body?.detail || `Request failed with status ${response.status}`;
-		const error = new Error(message);
-
-		error.status = response.status;
-		throw error;
-	}
-
-	return parseResponse(response);
-}*/
-
 export async function apiRequest(endpoint, options = {}) {
 	const isFormData = options.body instanceof FormData;
 
@@ -48,7 +26,7 @@ export async function apiRequest(endpoint, options = {}) {
 	}
 
 	const response = await fetch(
-		`http://localhost:8080${endpoint}`,
+		`${API_BASE_URL}${endpoint}`,
 		{
 			...options,
 			headers,
