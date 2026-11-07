@@ -238,4 +238,115 @@
 		"etiquetas": ["acolhimento"],
 		"imagem": "images/ONGs/larVinicius.png"
 	}
+	,
+{
+    "nome": "Amigos do Bem",
+    "CEP": "03350005",
+    "endereco": "Rua Dr. Gabriel de Resende, 122",
+    "email": "informacoes@amigosdobem.org",
+    "whatsapp": "11 3019-0100",
+    "instagram": "https://www.instagram.com/amigosdobem/",
+    "website": "https://amigosdobem.org/sobre-nos/",
+    "etiquetas": ["acolhimento"],
+    "imagem": "images/ONGs/amigosdobem.png"
+},
+{
+    "nome": "ONGF - Futorong Ação",
+    "CEP": "04832090",
+    "endereco": "Av. Orfeo Paravente, 327",
+    "email": null,
+    "whatsapp": "11 5526-3355",
+    "instagram": null,
+    "website": "https://futurong.org.br/",
+    "etiquetas": ["desenvolvimentoSocial"],
+    "imagem": "images/ONGs/futorongAção.jpg"
+},
+{
+    "nome": "Ong Nova Mulher",
+    "CEP": "02882050",
+    "endereco": "Rua Adollfo Kurt Bohem, 43",
+    "email": null,
+    "whatsapp": "11 3859-3411",
+    "instagram": "https://www.instagram.com/ongnovamulher/",
+    "website": "https://www.ongnovamulher.org/",
+    "etiquetas": ["mulheres"],
+    "imagem": "images/ONGs/ongNovamulher.jpg"
+},
+{
+    "nome": "Ong Social Care",
+    "CEP": "04039030",
+    "endereco": "Rua Pedro de Toledo, 130",
+    "email": null,
+    "whatsapp": "11 96358-2018",
+    "instagram": "https://www.instagram.com/socialcareong/",
+    "website": "https://socialcare.com.br/",
+    "etiquetas": ["comunidade"],
+    "imagem": "images/ONGs/ongSocialCare.png"
+},
+{
+    "nome": "Ong Zoé",
+    "CEP": "01308000",
+    "endereco": "Viaduto Nove de Julho, 160",
+    "email": "contato@ongzoe.org",
+    "whatsapp": null,
+    "instagram": "https://www.instagram.com/ongzoe.oficial/",
+    "website": "https://ongzoe.org/",
+    "etiquetas": ["comunidade"],
+    "imagem": "images/ONGs/ongzoe.jpg"
+},
+{
+    "nome": "Eu Resolvo-Ong",
+    "CEP": "01311914",
+    "endereco": "Av. Paulista, 777",
+    "email": "lais.galhardi@euresolvo.org.br",
+    "whatsapp": null,
+    "instagram": null,
+    "website": null,
+    "etiquetas": ["comunidade"],
+    "imagem": "images/ONGs/euresolvo.png"
+},
+{
+    "nome": "AMPARA Animal",
+    "CEP": "01037010",
+    "endereco": "São Paulo, 1",
+    "email": "contato@amparanimal.org.br",
+    "whatsapp": null,
+    "instagram": "https://www.instagram.com/amparanimal/",
+    "website": "https://institutoamparanimal.org.br/",
+    "etiquetas": ["animais"],
+    "imagem": "images/ONGs/amparaAnimal.png"
+},
+{
+    "nome": "Instituição Nossas Crianças",
+    "CEP": "03320001",
+    "endereco": "R. Emílio Mallet, 1740",
+    "email": null,
+    "whatsapp": null,
+    "instagram": "https://www.instagram.com/institutonossascriancas/",
+    "website": null,
+    "etiquetas": ["criancas"],
+    "imagem": "images/ONGs/instituiçãoNossasCrianças.png"
+},
+{
+    "nome": "Instituto Bem Viver CEMPEC",
+    "CEP": "07142700",
+    "endereco": "Estrada do Elenco, 4614",
+    "email": "institutobemviver84@gmail.com",
+    "whatsapp": "11 5197-9526",
+    "instagram": "https://www.instagram.com/bemvivergru/",
+    "website": "https://institutobemvivercempec.com.br/",
+    "etiquetas": ["desenvolvimentoSocial"],
+    "imagem": "images/ONGs/institutoBemViver.jpg"
+},
+{
+    "nome": "Irmãos da Vila",
+    "CEP": "02129060",
+    "endereco": "R. Porangatu",
+    "email": "contato@irmaosdavila.com",
+    "whatsapp": "11 98161-5642",
+    "instagram": "https://www.instagram.com/associacao_irmaosdavila/",
+    "website": "https://www.irmaosdavila.com/",
+    "etiquetas": ["criancas"],
+    "imagem": "images/ONGs/irmaosdaVila.png"
+}
 ]
