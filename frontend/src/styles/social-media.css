@@ -30,7 +30,8 @@
 	height: 33px;
 
 	position: absolute;
-	top: 6px;
+	transform: translateY(-50%);
+	top: 50%;
 	left: 6px;
 }
 
@@ -45,7 +46,7 @@
 	cursor: pointer;
 }
 
-.add_midia_container h2 {
+.add_midia_container h1 {
 	font-size: 18px;
 	font-weight: 700;
 	color: white;
@@ -55,7 +56,7 @@
 	left: 43px;
 }
 
-.add_midia_container label {
+.add_midia_container h2 {
 	font-size: 10px;
 	font-weight: 500;
 	color: #EDEDED;

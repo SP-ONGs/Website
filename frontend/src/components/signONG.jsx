@@ -420,8 +420,8 @@ function AddSocialMediaContainer({ setMediaModal, socialMediaList, setSocialMedi
 		return (
 			<div className="add_midia_container instagram" id="signONG_instagram">
 				<img src={instagramIconImage} className="add_midia_icon" alt="Instagram" />
-				<h2>Instagram</h2>
-				<label>@{socialMediaList["instagram"]}</label>
+				<h1>Instagram</h1>
+				<h2>@{socialMediaList["instagram"]}</h2>
 				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("instagram")} />
 			</div>
 		)
@@ -432,8 +432,8 @@ function AddSocialMediaContainer({ setMediaModal, socialMediaList, setSocialMedi
 			<div className="add_midia_container whatsapp" id="signONG_whatsapp">
 				<div className="midia_bg_fade"></div>
 				<img src={whatsappIconImage} className="add_midia_icon" alt="Whatsapp" />
-				<h2>Whatsapp</h2>
-				<label>{socialMediaList["whatsapp"]}</label>
+				<h1>Whatsapp</h1>
+				<h2>{socialMediaList["whatsapp"]}</h2>
 				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("whatsapp")} />
 			</div>
 		)
@@ -444,8 +444,8 @@ function AddSocialMediaContainer({ setMediaModal, socialMediaList, setSocialMedi
 			<div className="add_midia_container website" id="signONG_website">
 				<div className="midia_bg_fade"></div>
 				<img src={websiteIconImage} className="add_midia_icon" alt="Website" />
-				<h2>Website</h2>
-				<label>{socialMediaList["website"]}</label>
+				<h1>Website</h1>
+				<h2>{socialMediaList["website"]}</h2>
 				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("website")} />
 			</div>
 		)
