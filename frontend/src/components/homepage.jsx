@@ -6,6 +6,7 @@ import TabsMenuComponent from './tabsMenu.jsx';
 import FilterBarComponent from './filterBar.jsx';
 import OngBoardComponent from './ongBoard.jsx';
 import ViewOngComponent from './viewONG.jsx';
+import WelcomeModalComponent from './welcomeModal.jsx';
 
 
 
@@ -20,6 +21,7 @@ function HomepageComponent({ currentModal, setCurrentModal }) {
 			<FilterBarComponent />
 			<OngBoardComponent setCurrentModal={setCurrentModal} />
 			{currentModal === "viewONG" && (<ViewOngComponent setCurrentModal={setCurrentModal} />)}
+			{currentModal === "welcome" && (<WelcomeModalComponent setCurrentModal={setCurrentModal} />)}
 		</>
 	);
 }

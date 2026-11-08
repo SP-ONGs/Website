@@ -507,6 +507,7 @@ function AddTagContainer({ tagList, setTagList }) {
 			<div className={signStyle.select_tags_container}>
 				{tagsData.map(({ name, description, image }) => (
 					<TagContainer
+						key={name}
 						tagName={name}
 						description={description}
 						image={image}

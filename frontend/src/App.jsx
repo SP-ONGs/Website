@@ -13,7 +13,7 @@ import OngDashboardComponent from './components/ongDashboard.jsx'
 
 // --> Functions <-- //
 function App() {
-	const [currentModal, setCurrentModal] = useState() //useState("loginONG");
+	const [currentModal, setCurrentModal] = useState("welcome")
 
 	return (
 		<>

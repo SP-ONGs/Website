@@ -17,6 +17,10 @@ import addOngIconImage from '../../images/elements_vectors/AddONGIcon.png';
 function TabsMenuComponent({ setCurrentModal }) {
 	const selectedOptionStyle = [tabsMenuStyle.menu_option_container, tabsMenuStyle.selected_option].join(" ")
 
+	function onAboutUsClick() {
+		setCurrentModal("welcome");
+	}
+
 	function onAddONGClick() {
 		setCurrentModal("loginONG");
 	}
@@ -33,7 +37,7 @@ function TabsMenuComponent({ setCurrentModal }) {
 				<h1>Ver mapa</h1>
 			</div>
 
-			<div className={tabsMenuStyle.menu_option_container}>
+			<div className={tabsMenuStyle.menu_option_container} onClick={onAboutUsClick}>
 				<img src={infoIconImage} />
 				<h1>Sobre nós</h1>
 			</div>
