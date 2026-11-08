@@ -1,11 +1,11 @@
 // --> Variables <-- //
 
 // CSS
-import navbarStyles from '../styles/navbar.module.css';
+import navbarStyles from '../styles/navbar.module.css'
 
 // Images
-import logoImage from "../../images/SPONGs_icon-nobg.png";
-import searchIconImage from "../../images/elements_vectors/SearchIcon.png";
+import logoImage from "../../images/SPONGs_icon-nobg.png"
+import searchIconImage from "../../images/elements_vectors/SearchIcon.png"
 
 
 
@@ -48,4 +48,4 @@ function NavbarComponent() {
 
 
 
-export default NavbarComponent;
+export default NavbarComponent

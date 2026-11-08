@@ -1,13 +1,13 @@
 // --> Variables <-- //
 
 // CSS
-import tabsMenuStyle from '../styles/tabsMenu.module.css';
+import tabsMenuStyle from '../styles/tabsMenu.module.css'
 
 // Images
-import homepageIconImage from '../../images/elements_vectors/HomepageIcon.png';
-import mapIconImage from '../../images/elements_vectors/MapIcon.png';
-import infoIconImage from '../../images/elements_vectors/InfoIcon.png';
-import addOngIconImage from '../../images/elements_vectors/AddONGIcon.png';
+import homepageIconImage from '../../images/elements_vectors/HomepageIcon.png'
+import mapIconImage from '../../images/elements_vectors/MapIcon.png'
+import infoIconImage from '../../images/elements_vectors/InfoIcon.png'
+import addOngIconImage from '../../images/elements_vectors/AddONGIcon.png'
 
 
 
@@ -18,11 +18,11 @@ function TabsMenuComponent({ setCurrentModal }) {
 	const selectedOptionStyle = [tabsMenuStyle.menu_option_container, tabsMenuStyle.selected_option].join(" ")
 
 	function onAboutUsClick() {
-		setCurrentModal("welcome");
+		setCurrentModal("welcome")
 	}
 
 	function onAddONGClick() {
-		setCurrentModal("loginONG");
+		setCurrentModal("loginONG")
 	}
 
 	return (
@@ -52,4 +52,4 @@ function TabsMenuComponent({ setCurrentModal }) {
 
 
 
-export default TabsMenuComponent;
+export default TabsMenuComponent

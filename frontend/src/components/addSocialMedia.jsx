@@ -1,19 +1,19 @@
 // --> Variables <-- //
 
 // CSS
-import signMediaStyle from "../styles/add_social_media.module.css";
-import "../styles/social-media.css";
-import "../styles/modals.css";
+import signMediaStyle from "../styles/add_social_media.module.css"
+import "../styles/social-media.css"
+import "../styles/modals.css"
 
 // Images
-import addPhotoIconImage from "../../images/elements_vectors/AddPhotoIcon.png";
+import addPhotoIconImage from "../../images/elements_vectors/AddPhotoIcon.png"
 
-import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
-import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
-import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
+import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
+import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
+import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
-import logoImage from "../../images/SPONGs_icon-nobg.png";
-import closeIconImage from "../../images/elements_vectors/CloseIcon.png";
+import logoImage from "../../images/SPONGs_icon-nobg.png"
+import closeIconImage from "../../images/elements_vectors/CloseIcon.png"
 
 
 
@@ -83,17 +83,17 @@ export function SocialMediaOptions({ setMediaModal, setAddMedia }) {
 }
 
 function UpdateAddMediaButtonEnabled() {
-	const addMediaButton = document.getElementById("signONG_addMidiaButton");
-	const addMediaInput = document.getElementById("signONG_addMidiaInput");
+	const addMediaButton = document.getElementById("signONG_addMidiaButton")
+	const addMediaInput = document.getElementById("signONG_addMidiaInput")
 
-	const CAN_ADD = addMediaInput.value !== "";
+	const CAN_ADD = addMediaInput.value !== ""
 
 	if (!CAN_ADD) {
-		addMediaButton.classList.add(signMediaStyle.add_media_button_disabled);
-		return;
+		addMediaButton.classList.add(signMediaStyle.add_media_button_disabled)
+		return
 	}
 
-	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled);
+	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled)
 }
 
 export function SocialMediaInputModal({ setMediaModal, currentAddMedia, setSocialMediaList }) {
@@ -116,8 +116,8 @@ export function SocialMediaInputModal({ setMediaModal, currentAddMedia, setSocia
 	}
 
 	function onAddMedia() {
-		const addMediaInput = document.getElementById("signONG_addMidiaInput");
-		const mediaValue = addMediaInput.value;
+		const addMediaInput = document.getElementById("signONG_addMidiaInput")
+		const mediaValue = addMediaInput.value
 
 		const IS_EMPTY = mediaValue === ""
 
@@ -129,7 +129,7 @@ export function SocialMediaInputModal({ setMediaModal, currentAddMedia, setSocia
 			...previous,
 			[currentAddMedia]: mediaValue
 		}))
-		setMediaModal(null);
+		setMediaModal(null)
 	}
 
 	return (

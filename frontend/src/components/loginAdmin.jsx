@@ -4,23 +4,23 @@
 import { useState } from "react"
 
 // CSS
-import "../styles/modals.css";
-import "../styles/social-media.css";
+import "../styles/modals.css"
+import "../styles/social-media.css"
 import loginStyle from '../styles/loginAdmin.module.css'
 
 // Images
-import logoImage from "../../images/SPONGs_icon-nobg.png";
-import closeIconImage from "../../images/elements_vectors/CloseIcon.png";
+import logoImage from "../../images/SPONGs_icon-nobg.png"
+import closeIconImage from "../../images/elements_vectors/CloseIcon.png"
 
-import hideIconImage from "../../images/elements_vectors/HideIcon.png";
-import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png";
+import hideIconImage from "../../images/elements_vectors/HideIcon.png"
+import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png"
 
 
 
 // --> Functions <-- //
 
 // Functions 1: Admin login component //
-export default function LoginAdminComponent({ currentModal, setCurrentModal }) {
+function LoginAdminComponent({ setLayout, currentModal, setCurrentModal }) {
 	function CloseModal() {
 		setCurrentModal("")
 	}
@@ -37,7 +37,7 @@ export default function LoginAdminComponent({ currentModal, setCurrentModal }) {
 					<h2>Conecte a sua conta de administrador</h2>
 
 					<InputContainerComponent />
-					<LoginButton />
+					<LoginButton setLayout={setLayout} setCurrentModal={setCurrentModal} />
 				</div>
 			</>
 		)
@@ -95,10 +95,19 @@ function InputContainerComponent() {
 	);
 }
 
-function LoginButton() {
+function LoginButton({ setLayout, setCurrentModal }) {
+	function SignIn() {
+		setCurrentModal("")
+		setLayout("homepage")
+	}
+
 	return (
-		<button className={loginStyle.login_button}>
+		<button className={loginStyle.login_button} onClick={SignIn}>
 			Conectar
 		</button>
-	);
+	)
 }
+
+
+
+export default LoginAdminComponent

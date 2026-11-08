@@ -1,31 +1,35 @@
 // -->  Variables <-- //
 
 // CSS
-import ongCardStyle from '../styles/ongCard.module.css';
-import "../styles/tagsONG.css";
+import ongCardStyle from '../styles/ongCard.module.css'
+import "../styles/tagsONG.css"
 
 // Images
-import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png';
+import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png'
 
-import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
-import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
-import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
+import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
+import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
+import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
-import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png";
-import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png";
-import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png";
+import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png"
+import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png"
+import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png"
 
 
 
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function ongCardComponent({ setCurrentModal }) {
+function ongCardComponent({ setCurrentModal, isAdmin }) {
 	function onViewONG() {
+		if (isAdmin) {
+			return
+		}
+
 		setCurrentModal("viewONG")
 	}
 
-	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ");
+	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
 	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
 	return (
@@ -83,4 +87,4 @@ function ongCardComponent({ setCurrentModal }) {
 
 
 
-export default ongCardComponent;
+export default ongCardComponent

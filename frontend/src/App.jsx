@@ -10,6 +10,7 @@ import LoginONGComponent from './components/loginONG.jsx'
 import SignONGComponent from './components/signONG.jsx'
 import OngDashboardComponent from './components/ongDashboard.jsx'
 import LoginAdminComponent from './components/loginAdmin.jsx'
+import AdminHomepageComponent from './components/adminHomepage.jsx'
 
 
 
@@ -28,11 +29,13 @@ function PublicSite() {
 }
 
 function AdminSite() {
+	const [layout, setLayout] = useState("")
 	const [currentModal, setCurrentModal] = useState("loginAdmin")
 
 	return (
 		<>
-			<LoginAdminComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
+			<LoginAdminComponent setLayout={setLayout} currentModal={currentModal} setCurrentModal={setCurrentModal} />
+			<AdminHomepageComponent layout={layout} currentModal={currentModal} setCurrentModal={setCurrentModal} />
 		</>
 	)
 }

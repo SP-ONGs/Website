@@ -1,23 +1,23 @@
 // --> Variables <-- //
 
 // CSS
-import "../styles/modals.css";
-import "../styles/social-media.css";
+import "../styles/modals.css"
+import "../styles/social-media.css"
 import viewOngStyle from '../styles/viewONG.module.css'
 
 // Images
-import backToHomeIconImage from '../../images/elements_vectors/BackToHomeIcon.png';
-import locationIconImage from "../../images/elements_vectors/OngView_LocationIcon.png";
+import backToHomeIconImage from '../../images/elements_vectors/BackToHomeIcon.png'
+import locationIconImage from "../../images/elements_vectors/OngView_LocationIcon.png"
 
-import spongsLogoImage from "../../images/SPONGs_icon-nobg.png";
+import spongsLogoImage from "../../images/SPONGs_icon-nobg.png"
 
-import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
-import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
-import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
+import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
+import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
+import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
-import FullStarIconImage from "../../images/elements_vectors/FullStarIcon.png";
-import HalfStarIconImage from "../../images/elements_vectors/HalfStarIcon.png";
-import EmptyStarIconImage from "../../images/elements_vectors/EmptyStarIcon.png";
+import FullStarIconImage from "../../images/elements_vectors/FullStarIcon.png"
+import HalfStarIconImage from "../../images/elements_vectors/HalfStarIcon.png"
+import EmptyStarIconImage from "../../images/elements_vectors/EmptyStarIcon.png"
 
 
 

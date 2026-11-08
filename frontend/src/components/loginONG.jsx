@@ -1,18 +1,18 @@
 // --> Variables <-- //
 
 // React
-import { useState } from "react";
+import { useState } from "react"
 
 // CSS
-import loginStyle from "../styles/loginONG.module.css";
-import "../styles/modals.css";
+import loginStyle from "../styles/loginONG.module.css"
+import "../styles/modals.css"
 
 // Images
-import logoImage from "../../images/SPONGs_icon-nobg.png";
-import closeIconImage from "../../images/elements_vectors/CloseIcon.png";
+import logoImage from "../../images/SPONGs_icon-nobg.png"
+import closeIconImage from "../../images/elements_vectors/CloseIcon.png"
 
-import hideIconImage from "../../images/elements_vectors/HideIcon.png";
-import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png";
+import hideIconImage from "../../images/elements_vectors/HideIcon.png"
+import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png"
 
 
 
@@ -25,7 +25,7 @@ function CloseModalButton({ setCurrentModal }) {
 			<img src={closeIconImage} alt="Close button" />
 			<button ></button>
 		</div>
-	);
+	)
 }
 
 function SPONGS_Brand() {
@@ -41,10 +41,10 @@ function SPONGS_Brand() {
 
 // Functions 2: Input components //
 function InputContainerComponent() {
-	const [hidePassword, setHidePassword] = useState(true);
+	const [hidePassword, setHidePassword] = useState(true)
 
 	function onHideClick(event) {
-		const element = event.currentTarget;
+		const element = event.currentTarget
 
 		const unHideClass = loginStyle.input_group_unHideButton
 		const IS_HIDE = !element.classList.contains(unHideClass)
@@ -73,7 +73,7 @@ function InputContainerComponent() {
 				<input id="password" type={hidePassword ? "password" : "text"} />
 			</div>
 		</div>
-	);
+	)
 }
 
 function LoginButton() {
@@ -81,7 +81,7 @@ function LoginButton() {
 		<button className={loginStyle.login_button}>
 			Conectar
 		</button>
-	);
+	)
 }
 
 function OrSignComponent({ setCurrentModal }) {
@@ -93,7 +93,7 @@ function OrSignComponent({ setCurrentModal }) {
 
 			<a href="#" className={loginStyle.signin_link} onClick={() => { setCurrentModal("signONG") }}>Adicionar nova ONG</a>
 		</>
-	);
+	)
 }
 
 
@@ -117,9 +117,9 @@ function LoginONGComponent({ currentModal, setCurrentModal }) {
 				</div>
 			</>
 		)
-	);
+	)
 }
 
 
 
-export default LoginONGComponent;
+export default LoginONGComponent

@@ -1,18 +1,18 @@
 // --> Variables <-- //
 
 // React
-import { useState } from 'react';
+import { useState } from 'react'
 
 // CSS
-import filterBarStyles from '../styles/filterBar.module.css';
-import "../styles/tagsONG.css";
+import filterBarStyles from '../styles/filterBar.module.css'
+import "../styles/tagsONG.css"
 
 // Images
 import filterIconImage from '../../images/elements_vectors/FilterIcon.png'
 
-import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png";
-import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png";
-import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png";
+import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png"
+import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png"
+import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png"
 
 
 
@@ -20,32 +20,32 @@ import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.
 
 // Functions 1: Filter bar component //
 function FilterBarComponent() {
-	const [tagList, setTagList] = useState({});
-	const tagContainerStyle = ["tag_container", "selectable_tag", filterBarStyles.tag_container_size].join(" ");
+	const [tagList, setTagList] = useState({})
+	const tagContainerStyle = ["tag_container", "selectable_tag", filterBarStyles.tag_container_size].join(" ")
 
 	function setTagValue(tagName, value) {
 		setTagList(previous => ({
 			...previous,
 			[tagName]: value
-		}));
+		}))
 	}
 
 	function toggleTagSelected(tagName) {
-		const tagElement = document.getElementById("filterbar_tag_" + tagName);
-		const tagDividerLement = tagElement.querySelector(":scope > div");
+		const tagElement = document.getElementById("filterbar_tag_" + tagName)
+		const tagDividerLement = tagElement.querySelector(":scope > div")
 
-		const SELECT_TAG = !tagList[tagName];
+		const SELECT_TAG = !tagList[tagName]
 
 		if (SELECT_TAG) {
-			tagElement.classList.add("selected_tag_container");
+			tagElement.classList.add("selected_tag_container")
 			tagDividerLement.classList.add("selected_tag_divider_bar")
 
-			setTagValue(tagName, true);
+			setTagValue(tagName, true)
 		} else {
-			tagElement.classList.remove("selected_tag_container");
+			tagElement.classList.remove("selected_tag_container")
 			tagDividerLement.classList.remove("selected_tag_divider_bar")
 
-			setTagValue(tagName, false);
+			setTagValue(tagName, false)
 		}
 	}
 
@@ -79,4 +79,4 @@ function FilterBarComponent() {
 
 
 
-export default FilterBarComponent;
+export default FilterBarComponent

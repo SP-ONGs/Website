@@ -1,30 +1,29 @@
 // --> Variables <-- //
 
 // Components
-import OngCard from './ongCard.jsx';
+import OngCard from './ongCard.jsx'
 
 // CSS
-import ongBoardStyle from '../styles/ongBoard.module.css';
+import ongBoardStyle from '../styles/ongBoard.module.css'
 
 // Images
-import indexBarArrowLeftImage from '../../images/elements_vectors/IndexBarArrow_Left.png';
-import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow_Right.png';
+import indexBarArrowLeftImage from '../../images/elements_vectors/IndexBarArrow_Left.png'
+import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow_Right.png'
 
 
 
 // --> Functions <-- //
 
 // Functions 1: ONGs board component //
-function ONGsBoardComponent({ setCurrentModal }) {
+function ONGsBoardComponent({ setCurrentModal, isAdmin }) {
+	const cardsAmount = 6
+
 	return (
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
-				<OngCard setCurrentModal={setCurrentModal} />
-				<OngCard setCurrentModal={setCurrentModal} />
-				<OngCard setCurrentModal={setCurrentModal} />
-				<OngCard setCurrentModal={setCurrentModal} />
-				<OngCard setCurrentModal={setCurrentModal} />
-				<OngCard setCurrentModal={setCurrentModal} />
+				{Array.from({ length: cardsAmount }, (_, index) => (
+					<OngCard key={index} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
+				))}
 				<BoardIndexBarComponent />
 			</div>
 		</>
@@ -62,4 +61,4 @@ function BoardIndexBarComponent() {
 
 
 
-export default ONGsBoardComponent;
+export default ONGsBoardComponent
