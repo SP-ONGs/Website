@@ -172,7 +172,7 @@ async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 
 		if (!socialMediaId) {
 			console.log(`Failed to find ${socialMediaName} id!!!`)
-			return
+			continue
 		}
 
 		ongSocialMedia.push({
@@ -183,14 +183,14 @@ async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 
 	for (const tagName in tagList) {
 		if (!tagList[tagName]) {
-			return
+			continue
 		}
 
 		const tagId = await getTagId(tagName)
 
 		if (!tagId) {
 			console.log(`Failed to find ${tagName} id!!!`)
-			return
+			continue
 		}
 
 		ongTagsIds.push(tagId)

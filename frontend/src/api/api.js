@@ -2,7 +2,6 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:80
 
 export async function apiRequest(endpoint, options = {}) {
 	const isFormData = options.body instanceof FormData;
-
 	const headers = {
 		...options.headers
 	};
