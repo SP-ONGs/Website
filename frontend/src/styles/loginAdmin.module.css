@@ -11,11 +11,11 @@ body {
 /* Fundo branco */
 .login_modal {
 	width: 464px;
-	height: 480px;
-	padding: 20px 35px 18px;
+	height: 450px;
+	padding: 17px 35px 18px;
 
 	background: white;
-	border-radius: 15px;
+	border-radius: 25px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
 
 	position: fixed;
@@ -80,14 +80,13 @@ body {
 
 /* Login texto */
 .login_modal h2 {
-	margin-top: 22px;
-	margin-bottom: 30px;
-
-	color: #444;
-
 	font-size: 28px;
-	font-weight: 500;
+	font-weight: medium;
+	color: rgba(0, 0, 0, .75);
+
 	text-align: center;
+
+	margin-top: 20px;
 }
 
 
@@ -97,8 +96,9 @@ body {
 
 	display: flex;
 	flex-direction: column;
-
 	gap: 10px;
+
+	margin-top: 23px;
 	padding-bottom: 20px;
 }
 

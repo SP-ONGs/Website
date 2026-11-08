@@ -34,7 +34,7 @@ export default function LoginAdminComponent({ currentModal, setCurrentModal }) {
 					<img className={loginStyle.close_button} src={closeIconImage} onClick={CloseModal} />
 					<SPONGS_Brand />
 
-					<h2>Conecte a conta de Admin</h2>
+					<h2>Conecte a sua conta de administrador</h2>
 
 					<InputContainerComponent />
 					<LoginButton />
@@ -97,8 +97,8 @@ function InputContainerComponent() {
 
 function LoginButton() {
 	return (
-		<h1 className={loginStyle.login_button}>
+		<button className={loginStyle.login_button}>
 			Conectar
-		</h1>
+		</button>
 	);
 }
