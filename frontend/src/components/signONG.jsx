@@ -209,11 +209,6 @@ async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 		"tagIds": ongTagsIds
 	}
 
-	//console.log(payload)
-	console.log(imageFile.name);
-	console.log(imageFile.type);
-	console.log(imageFile.size);
-
 	registerOng(payload, imageFile)
 }
 
