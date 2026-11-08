@@ -1,0 +1,173 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+}
+
+
+/* Fundo branco */
+.login_modal {
+	width: 464px;
+	height: 480px;
+	padding: 20px 35px 18px;
+
+	background: white;
+	border-radius: 15px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
+
+	position: fixed;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+
+	animation: modalOpen .175s cubic-bezier(.3, 1.5, .925, 1);
+}
+
+@keyframes modalOpen {
+	from {
+		transform: translate(-50%, -50%) scale(.8);
+	}
+
+	to {
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+
+/* Botão de fechar */
+.close_button {
+	position: absolute;
+
+	top: 20px;
+	right: 20px;
+
+	width: 30px;
+	height: 30px;
+
+	border: 0px;
+	cursor: pointer;
+
+	background-color: rgba(255, 255, 255, 0);
+}
+
+
+/* SP ONGS Logo */
+.brand_container {
+	height: 86px;
+
+	display: flex;
+	align-items: center;
+	gap: 7.5px;
+}
+
+.brand_container img {
+	object-fit: contain;
+
+	width: 86px;
+	height: 86px;
+}
+
+.brand_container h1 {
+	color: #007DBC;
+
+	font-size: 60px;
+	font-weight: 900;
+}
+
+
+/* Login texto */
+.login_modal h2 {
+	margin-top: 22px;
+	margin-bottom: 30px;
+
+	color: #444;
+
+	font-size: 28px;
+	font-weight: 500;
+	text-align: center;
+}
+
+
+/* Login inputs */
+.input_container {
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+
+	gap: 10px;
+	padding-bottom: 20px;
+}
+
+.input_group {
+	height: 55px;
+	width: 100%;
+
+	position: relative;
+
+	background: #ddd;
+	border-radius: 6px;
+}
+
+.input_group label {
+	color: #666;
+	font-size: 13px;
+	font-weight: 300;
+
+	position: absolute;
+	padding-top: 5px;
+	padding-left: 10px;
+}
+
+.input_group input {
+	width: 85%;
+	height: 55%;
+
+	position: absolute;
+	bottom: 0;
+	left: 0;
+
+	padding-left: 10px;
+	padding-bottom: 10px;
+
+	font-size: 20px;
+
+	border: none;
+	background: rgba(255, 255, 255, 0);
+	outline: none;
+}
+
+.input_group_hideButton {
+	width: 30px;
+	height: 30px;
+
+	cursor: pointer;
+	object-fit: contain;
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+	right: 15px;
+}
+
+
+/* Botão de login */
+.login_button {
+	height: 50px;
+	width: 100%;
+
+	border: none;
+	border-radius: 6px;
+
+	background: #007DBC;
+
+	color: white;
+
+	font-size: 24px;
+	font-weight: 500;
+
+	cursor: pointer;
+}
