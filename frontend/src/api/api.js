@@ -1,19 +1,5 @@
 export const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 
-async function parseResponse(response) {
-	if (response.status === 204) {
-		return null;
-	}
-
-	const contentType = response.headers.get("content-type");
-
-	if (contentType?.includes("application/json")) {
-		return response.json();
-	}
-
-	return null;
-}
-
 export async function apiRequest(endpoint, options = {}) {
 	const isFormData = options.body instanceof FormData;
 

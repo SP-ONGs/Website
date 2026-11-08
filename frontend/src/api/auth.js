@@ -12,13 +12,15 @@ export async function getCsrfToken() {
 
 export async function apiMutation(path, method, body) {
 	const csrfToken = await getCsrfToken();
+	const isFormData = body instanceof FormData;
 
 	return apiRequest(path, {
 		method,
 		headers: {
-			"Content-Type": "application/json",
 			"X-CSRF-TOKEN": csrfToken
 		},
-		...(body === undefined ? {} : { body: JSON.stringify(body) })
+		...(body === undefined
+			? {}
+			: { body: isFormData ? body : JSON.stringify(body) })
 	});
 }
