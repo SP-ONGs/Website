@@ -1,5 +1,6 @@
 package com.spongs.api.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,10 @@ public class AdminController {
 	}
 
 	@GetMapping("/pending")
-	public List<OngAdminSummary> getPendingOngs() {
-		return adminService.getPedingOngs();
+	public ResponseEntity<List<OngAdminSummary>> getPendingOngs(
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) List<Long> tagIds) {
+		return ResponseEntity.ok(adminService.getPendingOngs(name, tagIds));
 	}
 
 	@GetMapping("/{id}")

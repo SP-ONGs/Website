@@ -71,8 +71,17 @@ public class OngService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngPublicSummary> getPublicOngs() {
-		return ongRepository.findAllByStatusOrderByNameAsc(OngStatus.APPROVED).stream()
+	public List<OngPublicSummary> getPublicOngs(String name, List<Long> tagIds) {
+		String normalizedName = normalizeNameFilter(name);
+		List<Long> normalizedTagIds = normalizeTagFilters(tagIds);
+
+		List<Ong> ongs = ongRepository.findFilteredByStatus(
+				OngStatus.APPROVED,
+				normalizedName,
+				tagIds != null && !tagIds.isEmpty(),
+				normalizedTagIds);
+
+		return ongs.stream()
 				.map(ong -> new OngPublicSummary(
 						ong.getId(),
 						ong.getName(),
@@ -251,6 +260,27 @@ public class OngService {
 		}
 
 		return digits;
+	}
+
+	public String normalizeNameFilter(String name) {
+		if (name == null || name.isBlank()) {
+			return null;
+		}
+
+		return name.trim();
+	}
+
+	public List<Long> normalizeTagFilters(List<Long> tagIds) {
+		if (tagIds == null || tagIds.isEmpty()) {
+			return List.of(-1L);
+		}
+
+		List<Long> validIds = tagIds.stream()
+				.filter(id -> id != null && id > 0)
+				.distinct()
+				.toList();
+
+		return validIds.isEmpty() ? List.of(-1L) : validIds;
 	}
 
 	private void ensureNoDuplicates(List<Long> ids, String fieldName) {

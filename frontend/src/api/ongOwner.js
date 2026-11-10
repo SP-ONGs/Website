@@ -1,14 +1,14 @@
 import { apiRequest } from "./api";
 import { apiMutation } from "./auth";
 
-export function getMyOng() {
+export async function getMyOng() {
 	return apiRequest("/api/owner/ong");
 }
 
-export function updateMyOng(ongData) {
+export async function updateMyOng(ongData) {
 	return apiMutation("/api/owner/ong", "PUT", ongData);
 }
 
-export function requestMyOngRemoval() {
+export async function requestMyOngRemoval() {
 	return apiMutation("/api/owner/ong/removal-request", "POST");
 }

@@ -35,34 +35,40 @@ public class AdminService {
 	private final OngTagRepository ongTagRepository;
 	private final UserAccountRepository userAccountRepository;
 
+	private final OngService ongService;
+
 	public AdminService(
 			OngRepository ongRepository,
 			SocialMediaRepository socialMediaRepository,
 			TagRepository tagRepository,
 			OngSocialMediaRepository ongSocialMediaRepository,
 			OngTagRepository ongTagRepository,
-			UserAccountRepository userAccountRepository) {
+			UserAccountRepository userAccountRepository,
+			OngService ongService) {
 		this.ongRepository = ongRepository;
 		this.ongSocialMediaRepository = ongSocialMediaRepository;
 		this.ongTagRepository = ongTagRepository;
 		this.userAccountRepository = userAccountRepository;
+		this.ongService = ongService;
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngAdminSummary> getPedingOngs() {
-		return ongRepository.findAllByStatusOrderByCreatedAtAsc(OngStatus.PENDING_REVIEW).stream().map(ong -> {
-			UserAccount account = userAccountRepository.findByOng_Id(ong.getId())
-					.orElseThrow(() -> new IllegalStateException("ONG has no associated owner account"));
+	public List<OngAdminSummary> getPendingOngs(String name, List<Long> tagIds) {
+		String normalizedName = ongService.normalizeNameFilter(name);
+		List<Long> normalizedTagIds = ongService.normalizeTagFilters(tagIds);
 
-			return new OngAdminSummary(
-					ong.getId(),
-					account.getEmail(),
-					ong.getName(),
-					ong.getCep(),
-					ong.getCnpj(),
-					ong.getStatus(),
-					ong.getCreatedAt());
-		}).toList();
+		boolean USE_TAGS_FILTER = tagIds != null && !tagIds.isEmpty();
+		List<Ong> ongs = ongRepository.findFilteredByStatus(OngStatus.PENDING_REVIEW, normalizedName, USE_TAGS_FILTER,
+				normalizedTagIds);
+
+		return ongs.stream().map(ong -> new OngAdminSummary(
+				ong.getId(),
+				userAccountRepository.findByOng_Id(ong.getId()).map(UserAccount::getEmail).orElse(null),
+				ong.getName(),
+				ong.getCep(),
+				ong.getCnpj(),
+				ong.getStatus(),
+				ong.getCreatedAt())).toList();
 	}
 
 	@Transactional(readOnly = true)
