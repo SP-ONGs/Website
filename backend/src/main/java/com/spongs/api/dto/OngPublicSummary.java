@@ -1,8 +1,10 @@
 package com.spongs.api.dto;
 
+import java.util.List;
+
 public record OngPublicSummary(
 		Long id,
 		String name,
-		String cep,
-		String imageUrl) {
+		String imageUrl,
+		List<Long> tagIds) {
 }

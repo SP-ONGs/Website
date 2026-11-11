@@ -1,5 +1,11 @@
 // --> Variables <-- //
 
+// React
+import { useEffect, useSyncExternalStore } from "react"
+
+// Controllers
+import { getOngsSnapshot, updateOngCards, refreshOngs, usePendingOngs } from "../controllers/ongController.js"
+
 // Components
 import OngCard from './ongCard.jsx'
 
@@ -17,17 +23,28 @@ import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow
 // Functions 1: ONGs board component //
 function ONGsBoardComponent({ setCurrentModal, isAdmin }) {
 	const cardsAmount = 6
+	const { displayOngs: ongs } = useSyncExternalStore(updateOngCards, getOngsSnapshot)
+
+	useEffect(() => {
+		usePendingOngs(isAdmin || false)
+		refreshOngs()
+		console.log(ongs)
+	})
 
 	return (
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
 				{Array.from({ length: cardsAmount }, (_, index) => (
-					<OngCard key={index} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
+					<OngCard key={index} id={"ongCard_" + index} ong={ongs[index]} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
 				))}
 				<BoardIndexBarComponent />
 			</div>
 		</>
 	)
+}
+
+function UpdateOngBoard(setOngs, cardsAmount, currentIndex) {
+
 }
 
 

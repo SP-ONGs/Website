@@ -81,12 +81,23 @@ public class OngService {
 				tagIds != null && !tagIds.isEmpty(),
 				normalizedTagIds);
 
+		if (ongs.isEmpty()) {
+			return List.of();
+		}
+
+		List<Long> ongIds = ongs.stream().map(Ong::getId).toList();
+
+		Map<Long, List<Long>> tagsByOngId = ongTagRepository.findAllByOngIds(ongIds).stream()
+				.collect(Collectors.groupingBy(
+						entry -> entry.getOng().getId(),
+						Collectors.mapping(entry -> entry.getTag().getId(), Collectors.toList())));
+
 		return ongs.stream()
 				.map(ong -> new OngPublicSummary(
 						ong.getId(),
 						ong.getName(),
-						ong.getCep(),
-						ong.getImageUrl()))
+						ong.getImageUrl(),
+						tagsByOngId.getOrDefault(ong.getId(), List.of())))
 				.toList();
 	}
 
@@ -264,10 +275,13 @@ public class OngService {
 
 	public String normalizeNameFilter(String name) {
 		if (name == null || name.isBlank()) {
-			return null;
+			return "";
 		}
 
-		return name.trim();
+		return name.trim()
+				.replace("\\", "\\\\")
+				.replace("%", "\\%")
+				.replace("_", "\\_");
 	}
 
 	public List<Long> normalizeTagFilters(List<Long> tagIds) {

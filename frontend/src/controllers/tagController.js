@@ -12,12 +12,10 @@ let tagsData
 
 // Functions 1: Sync social media options // --
 export async function getTagsData() {
-	if (tagsData) {
-		return tagsData
+	if (!tagsData) {
+		const response = await getTags()
+		tagsData = response
 	}
-
-	const response = await getTags()
-	tagsData = response
 
 	return tagsData
 }
