@@ -154,6 +154,17 @@ body {
 }
 
 
+/* Aviso de erro (Error warning) */
+.input_group {
+	outline: 0 solid #E32424;
+	transition: outline 0.0675s ease;
+}
+
+.error_outline {
+	outline: 2px solid #E32424;
+}
+
+
 /* Botão de login */
 .login_button {
 	height: 50px;
