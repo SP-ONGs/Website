@@ -2,7 +2,7 @@ package com.spongs.api.dto;
 
 import java.util.List;
 
-public record OngPublicSummary(
+public record OngSummaryReponse(
 		Long id,
 		String name,
 		String imageUrl,

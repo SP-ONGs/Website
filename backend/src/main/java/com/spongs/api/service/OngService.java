@@ -25,7 +25,7 @@ import com.spongs.api.model.OngTag;
 import com.spongs.api.model.UserAccount;
 
 // DTOs
-import com.spongs.api.dto.OngPublicSummary;
+import com.spongs.api.dto.OngSummaryReponse;
 import com.spongs.api.dto.OngPublicResponse;
 import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.SocialMediaTypeResponse;
@@ -71,12 +71,12 @@ public class OngService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngPublicSummary> getPublicOngs(String name, List<Long> tagIds) {
+	public List<OngSummaryReponse> getOngsByStatus(OngStatus status, String name, List<Long> tagIds) {
 		String normalizedName = normalizeNameFilter(name);
 		List<Long> normalizedTagIds = normalizeTagFilters(tagIds);
 
 		List<Ong> ongs = ongRepository.findFilteredByStatus(
-				OngStatus.APPROVED,
+				status,
 				normalizedName,
 				tagIds != null && !tagIds.isEmpty(),
 				normalizedTagIds);
@@ -93,12 +93,16 @@ public class OngService {
 						Collectors.mapping(entry -> entry.getTag().getId(), Collectors.toList())));
 
 		return ongs.stream()
-				.map(ong -> new OngPublicSummary(
+				.map(ong -> new OngSummaryReponse(
 						ong.getId(),
 						ong.getName(),
 						ong.getImageUrl(),
 						tagsByOngId.getOrDefault(ong.getId(), List.of())))
 				.toList();
+	}
+
+	public List<OngSummaryReponse> getPublicOngs(String name, List<Long> tagIds) {
+		return this.getOngsByStatus(OngStatus.APPROVED, name, tagIds);
 	}
 
 	@Transactional(readOnly = true)

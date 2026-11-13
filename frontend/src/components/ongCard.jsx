@@ -1,5 +1,8 @@
 // -->  Variables <-- //
 
+// API
+import { cloudinaryResize } from "../api/imageUrl.js"
+
 // CSS
 import ongCardStyle from '../styles/ongCard.module.css'
 import "../styles/tagsONG.css"
@@ -38,20 +41,12 @@ function ongCardComponent({ ong, setCurrentModal, isAdmin }) {
 	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
 	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
+	console.log("ong:", ong)
+
 	return (
 		<div className={ongCardStyle.ongCard_container} onClick={onViewONG}>
-			<div className={ongCardStyle.ongCard_photo}>
-				<div className={ongCardStyle.ongCard_photo_BG}></div>
-				<img />
-			</div>
-
-			<div className={ongCardStyle.ongCard_title_container}>
-				<h1>{ong.name}</h1>
-				<div className={ongCardStyle.ongCard_rate_container}>
-					<img src={blackRateIconImage} />
-					<h1>4,7</h1>
-				</div>
-			</div>
+			<CardImageComponent ongImageUrl={ong.imageUrl} />
+			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
 
 			<div className={ongCardStyle.ongCard_socialmedia_container}>
 				<div className={ongCardStyle.socialmedia_card}>
@@ -86,6 +81,39 @@ function ongCardComponent({ ong, setCurrentModal, isAdmin }) {
 					<div className={tagDividerStyle}></div>
 					<label>Doação</label>
 				</div>
+			</div>
+		</div>
+	)
+}
+
+
+// Functions 2: Card image //
+function CardImageComponent({ ongImageUrl }) {
+	function onImageLoadError(e) {
+		e.currentTarget.onerror = null
+		e.currentTarget.src = ""
+	}
+
+	const finalImageUrl = cloudinaryResize(ongImageUrl, 400)
+
+	return (
+		<div className={ongCardStyle.ongCard_photo}>
+			<div className={ongCardStyle.ongCard_photo_BG}></div>
+			<img src={finalImageUrl} onError={onImageLoadError} />
+		</div>
+	)
+}
+
+
+
+// Function 3: Card title //
+function CardTitleComponent({ ongName, ongAverageRate }) {
+	return (
+		<div className={ongCardStyle.ongCard_title_container}>
+			<h1>{ongName}</h1>
+			<div className={ongCardStyle.ongCard_rate_container}>
+				<img src={blackRateIconImage} />
+				<h1>{ongAverageRate}</h1>
 			</div>
 		</div>
 	)

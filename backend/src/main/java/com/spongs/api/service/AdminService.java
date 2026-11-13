@@ -22,7 +22,7 @@ import com.spongs.api.model.UserAccount;
 // DTOs
 import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.TagResponse;
-import com.spongs.api.dto.OngAdminSummary;
+import com.spongs.api.dto.OngSummaryReponse;
 import com.spongs.api.dto.OngAdminResponse;
 
 // Utils
@@ -53,22 +53,8 @@ public class AdminService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngAdminSummary> getPendingOngs(String name, List<Long> tagIds) {
-		String normalizedName = ongService.normalizeNameFilter(name);
-		List<Long> normalizedTagIds = ongService.normalizeTagFilters(tagIds);
-
-		boolean USE_TAGS_FILTER = tagIds != null && !tagIds.isEmpty();
-		List<Ong> ongs = ongRepository.findFilteredByStatus(OngStatus.PENDING_REVIEW, normalizedName, USE_TAGS_FILTER,
-				normalizedTagIds);
-
-		return ongs.stream().map(ong -> new OngAdminSummary(
-				ong.getId(),
-				userAccountRepository.findByOng_Id(ong.getId()).map(UserAccount::getEmail).orElse(null),
-				ong.getName(),
-				ong.getCep(),
-				ong.getCnpj(),
-				ong.getStatus(),
-				ong.getCreatedAt())).toList();
+	public List<OngSummaryReponse> getPendingOngs(String name, List<Long> tagIds) {
+		return ongService.getOngsByStatus(OngStatus.PENDING_REVIEW, name, tagIds);
 	}
 
 	@Transactional(readOnly = true)
