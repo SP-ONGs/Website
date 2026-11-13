@@ -1,8 +1,11 @@
 // --> Variables <-- //
 
 // React
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Routes, Route } from "react-router-dom"
+
+// API
+import { getCurrentAccount } from "./api/session.js"
 
 // Components
 import HomepageComponent from './components/homepage.jsx'
@@ -30,7 +33,42 @@ function PublicSite() {
 
 function AdminSite() {
 	const [layout, setLayout] = useState("")
-	const [currentModal, setCurrentModal] = useState("loginAdmin")
+	const [currentModal, setCurrentModal] = useState("")
+
+	const [inLoading, setLoading] = useState(true)
+
+	useEffect(() => {
+		let cancelled = false
+
+		async function checkSession() {
+			const IS_LOGGED = sessionStorage.getItem("isAdmin") === "true"
+
+			if (!IS_LOGGED) {
+				setCurrentModal("loginAdmin")
+				setLoading(false)
+				return
+			}
+
+			const user = await getCurrentAccount()
+			if (cancelled) return
+
+			const IS_LOGGED_ADMIN = user?.role === "ADMIN"
+
+			if (IS_LOGGED_ADMIN) {
+				setLayout("homepage")
+			} else {
+				sessionStorage.removeItem("isAdmin")
+				setCurrentModal("loginAdmin")
+			}
+
+			setLoading(false)
+		}
+
+		checkSession()
+		return () => { cancelled = true }
+	})
+
+	if (inLoading) return null
 
 	return (
 		<>

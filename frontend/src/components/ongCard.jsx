@@ -23,66 +23,33 @@ import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function ongCardComponent({ ong, setCurrentModal, isAdmin }) {
+function OngCardComponent({ ong, setCurrentModal, isAdmin }) {
 	if (!ong) {
-		return (
-			<div className={ongCardStyle.no_ong_template}></div>
-		)
+		return (<TemplateCardComponent />)
 	}
 
 	function onViewONG() {
 		if (isAdmin) {
+			setCurrentModal("dashboardONG")
 			return
 		}
 
 		setCurrentModal("viewONG")
 	}
 
-	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
-	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
-
-	console.log("ong:", ong)
-
 	return (
 		<div className={ongCardStyle.ongCard_container} onClick={onViewONG}>
 			<CardImageComponent ongImageUrl={ong.imageUrl} />
 			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
-
-			<div className={ongCardStyle.ongCard_socialmedia_container}>
-				<div className={ongCardStyle.socialmedia_card}>
-					<img src={instagramIconImage} />
-					<h1>Instagram</h1>
-				</div>
-				<div className={ongCardStyle.socialmedia_card}>
-					<img src={whatsappIconImage} />
-					<h1>Whatsapp</h1>
-				</div>
-				<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
-					<img src={websiteIconImage} />
-					<h1>Website</h1>
-				</div>
-			</div>
-
-			<div className={ongCardStyle.ongCard_tag_container}>
-				<div className={tagContainerStyle}>
-					<img src={petTagIconImage} alt="Pet" />
-					<div className={tagDividerStyle}></div>
-					<label>Animais</label>
-				</div>
-
-				<div className={tagContainerStyle}>
-					<img src={voluntarioTagIconImage} alt="Voluntário" />
-					<div className={tagDividerStyle}></div>
-					<label>Voluntário</label>
-				</div>
-
-				<div className={tagContainerStyle}>
-					<img src={donationTagIconImage} alt="Doação" />
-					<div className={tagDividerStyle}></div>
-					<label>Doação</label>
-				</div>
-			</div>
+			<CardSocialMediaComponent />
+			<CardTagsComponent tagIds={ong.tagIds} />
 		</div>
+	)
+}
+
+function TemplateCardComponent() {
+	return (
+		<div className={ongCardStyle.no_ong_template}></div>
 	)
 }
 
@@ -106,7 +73,7 @@ function CardImageComponent({ ongImageUrl }) {
 
 
 
-// Function 3: Card title //
+// Functions 3: Card title //
 function CardTitleComponent({ ongName, ongAverageRate }) {
 	return (
 		<div className={ongCardStyle.ongCard_title_container}>
@@ -121,4 +88,56 @@ function CardTitleComponent({ ongName, ongAverageRate }) {
 
 
 
-export default ongCardComponent
+// Functions 4: Card social media //
+function CardSocialMediaComponent() {
+	return (
+		<div className={ongCardStyle.ongCard_socialmedia_container}>
+			<div className={ongCardStyle.socialmedia_card}>
+				<img src={instagramIconImage} />
+				<h1>Instagram</h1>
+			</div>
+			<div className={ongCardStyle.socialmedia_card}>
+				<img src={whatsappIconImage} />
+				<h1>Whatsapp</h1>
+			</div>
+			<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
+				<img src={websiteIconImage} />
+				<h1>Website</h1>
+			</div>
+		</div>
+	)
+}
+
+
+
+// Functions 5: Card tags //
+function CardTagsComponent({ tagIds }) {
+	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
+	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+
+	return (
+		<div className={ongCardStyle.ongCard_tag_container}>
+			<div className={tagContainerStyle}>
+				<img src={petTagIconImage} alt="Pet" />
+				<div className={tagDividerStyle}></div>
+				<label>Animais</label>
+			</div>
+
+			<div className={tagContainerStyle}>
+				<img src={voluntarioTagIconImage} alt="Voluntário" />
+				<div className={tagDividerStyle}></div>
+				<label>Voluntário</label>
+			</div>
+
+			<div className={tagContainerStyle}>
+				<img src={donationTagIconImage} alt="Doação" />
+				<div className={tagDividerStyle}></div>
+				<label>Doação</label>
+			</div>
+		</div>
+	)
+}
+
+
+
+export default OngCardComponent

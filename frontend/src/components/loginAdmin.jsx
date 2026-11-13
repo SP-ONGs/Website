@@ -155,6 +155,8 @@ function LoginButton({ setLayout, setCurrentModal }) {
 				throw new Error("Not an admin account")
 			}
 
+			sessionStorage.setItem("isAdmin", "true")
+
 			setCurrentModal("")
 			setLayout("homepage")
 		} catch (e) {
