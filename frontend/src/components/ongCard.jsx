@@ -21,6 +21,12 @@ import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.
 
 // Functions 1: ONG card component //
 function ongCardComponent({ ong, setCurrentModal, isAdmin }) {
+	if (!ong) {
+		return (
+			<div className={ongCardStyle.no_ong_template}></div>
+		)
+	}
+
 	function onViewONG() {
 		if (isAdmin) {
 			return
@@ -40,7 +46,7 @@ function ongCardComponent({ ong, setCurrentModal, isAdmin }) {
 			</div>
 
 			<div className={ongCardStyle.ongCard_title_container}>
-				<h1>{ong && ong.name || "Nome da ONG"}</h1>
+				<h1>{ong.name}</h1>
 				<div className={ongCardStyle.ongCard_rate_container}>
 					<img src={blackRateIconImage} />
 					<h1>4,7</h1>

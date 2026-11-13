@@ -54,22 +54,24 @@ export async function refreshOngs() {
 	const firstOng = 0 + (currentIndex - 1) * cardsAmount
 	const lastOng = firstOng + cardsAmount
 
-	if (useFilter) {
-		ongState.displayOngs = inFilterOngs.slice(firstOng, lastOng)
-		return
-	}
+	const referenceOngList = useFilter && inFilterOngs || ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
+	const newOngList = referenceOngList.slice(firstOng, lastOng)
 
-	const ongList = ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
-	ongState.displayOngs = ongList.slice(firstOng, lastOng)
+	updateOngState({ displayOngs: newOngList })
 }
 
 export function getOngsSnapshot() {
 	return ongState
 }
 
-export function updateOngCards(listener) {
+export function addOngCard(listener) {
 	listeners.add(listener)
 	return () => listeners.delete(listener)
+}
+
+export function updateOngState(patch) {
+	ongState = { ...ongState, ...patch }
+	listeners.forEach((l) => l())
 }
 
 
@@ -82,18 +84,14 @@ export function usePendingOngs(isPending) {
 	nameFilter
 	tagsFilter = []
 	inFilterOngs = []
-
-	updateOngCards()
 }
 
 export function updateCurrentIndex(newIndex) {
 	currentIndex = newIndex
-	updateOngCards()
 }
 
 export function updateCardsAmount(newCardsAmount) {
 	cardsAmount = newCardsAmount
-	updateOngCards()
 }
 
 
@@ -144,7 +142,7 @@ export function updateNameFilter(name) {
 	nameFilter = USE_NAME_FILTER && name.trim() || undefined
 
 	doFilter()
-	updateOngCards()
+	refreshOngs()
 }
 
 export function addTagInFilter(tagName) {
@@ -153,7 +151,7 @@ export function addTagInFilter(tagName) {
 	tagsFilter.append(tagId)
 
 	doFilter()
-	updateOngCards()
+	refreshOngs()
 }
 
 export function removeTagFromFilter(tagName) {
@@ -163,5 +161,5 @@ export function removeTagFromFilter(tagName) {
 	tagsFilter = newTagsFilter
 
 	doFilter()
-	updateOngCards()
+	refreshOngs()
 }

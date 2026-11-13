@@ -4,7 +4,7 @@
 import { useEffect, useSyncExternalStore } from "react"
 
 // Controllers
-import { getOngsSnapshot, updateOngCards, refreshOngs, usePendingOngs } from "../controllers/ongController.js"
+import { getOngsSnapshot, addOngCard, refreshOngs, usePendingOngs } from "../controllers/ongController.js"
 
 // Components
 import OngCard from './ongCard.jsx'
@@ -23,13 +23,18 @@ import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow
 // Functions 1: ONGs board component //
 function ONGsBoardComponent({ setCurrentModal, isAdmin }) {
 	const cardsAmount = 6
-	const { displayOngs: ongs } = useSyncExternalStore(updateOngCards, getOngsSnapshot)
+	const { displayOngs: ongs } = useSyncExternalStore(addOngCard, getOngsSnapshot)
 
-	useEffect(() => {
+	async function loadOngs() {
+		await refreshOngs()
+	}
+
+	function loadHomepageOngs() {
 		usePendingOngs(isAdmin || false)
-		refreshOngs()
-		console.log(ongs)
-	})
+		loadOngs()
+	}
+
+	useEffect(loadHomepageOngs, [isAdmin])
 
 	return (
 		<>
@@ -41,10 +46,6 @@ function ONGsBoardComponent({ setCurrentModal, isAdmin }) {
 			</div>
 		</>
 	)
-}
-
-function UpdateOngBoard(setOngs, cardsAmount, currentIndex) {
-
 }
 
 
