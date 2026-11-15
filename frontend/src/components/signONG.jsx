@@ -505,7 +505,7 @@ function AddTagContainer({ tagList, setTagList }) {
 			<h2 className={signStyle.social_midia_title}>TAGS DA ONG</h2>
 
 			<div className={signStyle.select_tags_container}>
-				{tagsData.map(({ name, description, image }) => (
+				{Object.entries(tagsData).map(([name, { description, image }]) => (
 					<TagContainer
 						key={name}
 						tagName={name}

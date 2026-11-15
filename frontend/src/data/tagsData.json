@@ -1,14 +1,14 @@
-[
-		{ "name": "comunidade", "description": "Comunidade", "image": "/tag-icons/Comunidade.png" },
-		{ "name": "criancas", "description": "Crianças", "image": "/tag-icons/Crianca.png"  },
-		{ "name": "deficientes", "description": "Deficientes", "image": "/tag-icons/Deficientes.png"  },
-		{ "name": "idosos", "description": "Idosos", "image": "/tag-icons/Idosos.png"  },
-		{ "name": "mulheres", "description": "Mulheres", "image": "/tag-icons/Mulheres.png"  },
-		{ "name": "animais", "description": "Animais", "image": "/tag-icons/Pet.png"  },
-		{ "name": "acolhimento", "description": "Acolhimento", "image": "/tag-icons/Acolhimento.png"  },
-		{ "name": "alimento", "description": "Alimento", "image": "/tag-icons/Alimento.png"  },
-		{ "name": "desenvolvimentoSocial", "description": "Desenvolvimento Social", "image": "/tag-icons/DesenvolvimentoSocial.png"  },
-		{ "name": "desenvolvimento", "description": "Desenvolvimento", "image": "/tag-icons/Desenvolvimento.png"  },
-		{ "name": "voluntario", "description": "Voluntário", "image": "/tag-icons/Voluntario.png"  },
-		{ "name": "doacoes", "description": "Doações", "image": "/tag-icons/Donation.png"  }
-]
+{
+		"comunidade": {"description": "Comunidade", "image": "/tag-icons/Comunidade.png" },
+		"criancas": {"description": "Crianças", "image": "/tag-icons/Crianca.png"  },
+		"deficientes": {"description": "Deficientes", "image": "/tag-icons/Deficientes.png"  },
+		"idosos": {"description": "Idosos", "image": "/tag-icons/Idosos.png"  },
+		"mulheres": {"description": "Mulheres", "image": "/tag-icons/Mulheres.png"  },
+		"animais": {"description": "Animais", "image": "/tag-icons/Pet.png"  },
+		"acolhimento": {"description": "Acolhimento", "image": "/tag-icons/Acolhimento.png"  },
+		"alimento": {"description": "Alimento", "image": "/tag-icons/Alimento.png"  },
+		"desenvolvimentoSocial": {"description": "Desenvolvimento Social", "image": "/tag-icons/DesenvolvimentoSocial.png"  },
+		"desenvolvimento": {"description": "Desenvolvimento", "image": "/tag-icons/Desenvolvimento.png"  },
+		"voluntario": {"description": "Voluntário", "image": "/tag-icons/Voluntario.png"  },
+		"doacoes": {"description": "Doações", "image": "/tag-icons/Donation.png"  }
+}

@@ -1,7 +1,16 @@
 // -->  Variables <-- //
 
+// React
+import { useState, useEffect } from "react"
+
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
+
+// Controller
+import { getTagName } from "../controllers/tagController.js"
+
+// Data
+import tagsData from "../data/tagsData.json"
 
 // CSS
 import ongCardStyle from '../styles/ongCard.module.css'
@@ -13,10 +22,6 @@ import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png'
 import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
 import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
 import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
-
-import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png"
-import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png"
-import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png"
 
 
 
@@ -115,25 +120,36 @@ function CardTagsComponent({ tagIds }) {
 	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
 	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
+	function TagComponent({ tagId }) {
+		const [tagName, setTagName] = useState(undefined)
+
+		async function loadTagName() {
+			const loadedTagName = await getTagName(tagId)
+			setTagName(loadedTagName)
+		}
+
+		loadTagName()
+
+		if (tagName == undefined) {
+			return (<></>)
+		}
+
+		const tagData = tagsData[tagName]
+
+		return (
+			<div className={tagContainerStyle}>
+				<img src={tagData.image} />
+				<div className={tagDividerStyle}></div>
+				<label>{tagData.description}</label>
+			</div>
+		)
+	}
+
 	return (
 		<div className={ongCardStyle.ongCard_tag_container}>
-			<div className={tagContainerStyle}>
-				<img src={petTagIconImage} alt="Pet" />
-				<div className={tagDividerStyle}></div>
-				<label>Animais</label>
-			</div>
-
-			<div className={tagContainerStyle}>
-				<img src={voluntarioTagIconImage} alt="Voluntário" />
-				<div className={tagDividerStyle}></div>
-				<label>Voluntário</label>
-			</div>
-
-			<div className={tagContainerStyle}>
-				<img src={donationTagIconImage} alt="Doação" />
-				<div className={tagDividerStyle}></div>
-				<label>Doação</label>
-			</div>
+			{tagIds.map((tagId) => (
+				<TagComponent key={tagId} tagId={tagId} />
+			))}
 		</div>
 	)
 }
