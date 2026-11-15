@@ -57,6 +57,7 @@ export async function refreshOngs() {
 	const referenceOngList = useFilter && inFilterOngs || ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
 	const newOngList = referenceOngList.slice(firstOng, lastOng)
 
+	console.log(referenceOngList, "useFilter:", useFilter, "firstOng:", firstOng, "lastOng:", lastOng)
 	updateOngState({ displayOngs: newOngList })
 }
 
@@ -99,9 +100,11 @@ export function updateCardsAmount(newCardsAmount) {
 // Functions 3: Filter //
 async function doFilter() {
 	const USE_NAME_FILTER = nameFilter && nameFilter !== ""
-	const USE_TAG_FILTER = tagsFilter.length == 0
+	const USE_TAG_FILTER = tagsFilter.length > 0
 
 	useFilter = USE_NAME_FILTER || USE_TAG_FILTER
+
+	console.log("useFilter:", useFilter)
 
 	if (!useFilter) {
 		return
@@ -130,32 +133,34 @@ async function doFilter() {
 		const IN_NAME_FILTER = !USE_NAME_FILTER || ong.name.toLowerCase().includes(nameFilter)
 		const IN_TAG_FILTER = ongInTagFilter(ong)
 
+		console.log(ong.name, "IN_NAME_FILTER:", IN_NAME_FILTER, "IN_TAG_FILTER:", IN_TAG_FILTER)
+
 		if (IN_NAME_FILTER && IN_TAG_FILTER) {
-			newFilteredOngs.append(ong)
+			newFilteredOngs.push(ong)
 		}
 	}
+
+	inFilterOngs = newFilteredOngs
 }
 
 export function updateNameFilter(name) {
-	const USE_NAME_FILTER = name.trim() !== ""
-
-	nameFilter = USE_NAME_FILTER && name.trim() || undefined
+	nameFilter = name.trim().toLowerCase()
 
 	doFilter()
 	refreshOngs()
 }
 
-export function addTagInFilter(tagName) {
-	const tagId = getTagId(tagName)
+export async function addTagInFilter(tagName) {
+	const tagId = await getTagId(tagName)
 
-	tagsFilter.append(tagId)
+	tagsFilter.push(tagId)
 
 	doFilter()
 	refreshOngs()
 }
 
-export function removeTagFromFilter(tagName) {
-	const tagId = getTagId(tagName)
+export async function removeTagFromFilter(tagName) {
+	const tagId = await getTagId(tagName)
 	const newTagsFilter = tagsFilter.filter(item => item !== tagId)
 
 	tagsFilter = newTagsFilter

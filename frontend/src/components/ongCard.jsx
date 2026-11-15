@@ -1,7 +1,7 @@
 // -->  Variables <-- //
 
 // React
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
