@@ -86,8 +86,13 @@ export function usePendingOngs(isPending) {
 	inFilterOngs = []
 }
 
-export function updateCurrentIndex(newIndex) {
+export function getCurrentIndex() {
+	return currentIndex
+}
+
+export function setCurrentIndex(newIndex) {
 	currentIndex = newIndex
+	refreshOngs()
 }
 
 export function updateCardsAmount(newCardsAmount) {

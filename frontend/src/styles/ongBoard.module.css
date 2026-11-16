@@ -7,6 +7,8 @@ body {
 	font-family: Arial, sans-serif;
 }
 
+
+/* Ong board */
 .ongBoard_container {
 	width: fit-content;
 	height: fit-content;
@@ -23,6 +25,8 @@ body {
 	/*transition: gap 0.1s ease;*/
 }
 
+
+/* Index bar */
 .index_bar_container {
 	height: 35px;
 	width: 100%;
@@ -50,7 +54,7 @@ body {
 }
 
 .selectable_arrow:hover {
-	transform: translateX(12.5%) scaleX(1.15);
+	transform: translateX(12.5%) scaleX(1.25);
 }
 
 .index_numbers_container {
