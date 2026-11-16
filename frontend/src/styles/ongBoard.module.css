@@ -9,7 +9,7 @@ body {
 
 .ongBoard_container {
 	width: fit-content;
-	height: 500px;
+	height: fit-content;
 	display: flex;
 	flex-wrap: wrap;
 

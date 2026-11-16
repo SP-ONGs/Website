@@ -11,15 +11,6 @@ let tagsData
 // --> Functions <-- //
 
 // Functions 1: Sync tags options // --
-export async function loadTags() {
-	if (tagsData) {
-		return
-	}
-
-	const response = await getTags()
-	tagsData = response
-}
-
 export async function getTagsData() {
 	if (!tagsData) {
 		const response = await getTags()

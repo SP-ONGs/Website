@@ -92,11 +92,19 @@ public class OngService {
 						entry -> entry.getOng().getId(),
 						Collectors.mapping(entry -> entry.getTag().getId(), Collectors.toList())));
 
+		Map<Long, List<Long>> socialMediaByOngId = ongSocialMediaRepository.findAllByOngIds(ongIds).stream()
+				.collect(Collectors.groupingBy(
+						entry -> entry.getOng().getId(),
+						Collectors.mapping(
+								entry -> entry.getSocialMedia().getId(),
+								Collectors.toList())));
+
 		return ongs.stream()
 				.map(ong -> new OngSummaryReponse(
 						ong.getId(),
 						ong.getName(),
 						ong.getImageUrl(),
+						socialMediaByOngId.getOrDefault(ong.getId(), List.of()),
 						tagsByOngId.getOrDefault(ong.getId(), List.of())))
 				.toList();
 	}

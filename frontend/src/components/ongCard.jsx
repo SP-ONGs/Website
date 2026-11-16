@@ -117,39 +117,39 @@ function CardSocialMediaComponent() {
 
 // Functions 5: Card tags //
 function CardTagsComponent({ tagIds }) {
-	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
-	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
-
-	function TagComponent({ tagId }) {
-		const [tagName, setTagName] = useState(undefined)
-
-		async function loadTagName() {
-			const loadedTagName = await getTagName(tagId)
-			setTagName(loadedTagName)
-		}
-
-		loadTagName()
-
-		if (tagName == undefined) {
-			return (<></>)
-		}
-
-		const tagData = tagsData[tagName]
-
-		return (
-			<div className={tagContainerStyle}>
-				<img src={tagData.image} />
-				<div className={tagDividerStyle}></div>
-				<label>{tagData.description}</label>
-			</div>
-		)
-	}
-
 	return (
 		<div className={ongCardStyle.ongCard_tag_container}>
 			{tagIds.map((tagId) => (
 				<TagComponent key={tagId} tagId={tagId} />
 			))}
+		</div>
+	)
+}
+
+function TagComponent({ tagId }) {
+	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
+	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+
+	const [tagName, setTagName] = useState(undefined)
+
+	async function loadTagName() {
+		const loadedTagName = await getTagName(tagId)
+		setTagName(loadedTagName)
+	}
+
+	loadTagName()
+
+	if (tagName == undefined) {
+		return (<></>)
+	}
+
+	const tagData = tagsData[tagName]
+
+	return (
+		<div className={tagContainerStyle}>
+			<img src={tagData.image} />
+			<div className={tagDividerStyle}></div>
+			<label>{tagData.description}</label>
 		</div>
 	)
 }

@@ -6,5 +6,6 @@ public record OngSummaryReponse(
 		Long id,
 		String name,
 		String imageUrl,
+		List<Long> hasSocialMedia,
 		List<Long> tagIds) {
 }

@@ -18,6 +18,20 @@ import AdminHomepageComponent from './components/adminHomepage.jsx'
 
 
 // --> Functions <-- //
+
+// Functions 1: App //
+function App() {
+	return (
+		<Routes>
+			<Route path="/admin/*" element={<AdminSite />} />
+			<Route path="*" element={<PublicSite />} />
+		</Routes>
+	)
+}
+
+
+
+// Functions 2: App routes //
 function PublicSite() {
 	const [currentModal, setCurrentModal] = useState("welcome")
 
@@ -75,15 +89,6 @@ function AdminSite() {
 			<LoginAdminComponent setLayout={setLayout} currentModal={currentModal} setCurrentModal={setCurrentModal} />
 			<AdminHomepageComponent layout={layout} currentModal={currentModal} setCurrentModal={setCurrentModal} />
 		</>
-	)
-}
-
-function App() {
-	return (
-		<Routes>
-			<Route path="/admin/*" element={<AdminSite />} />
-			<Route path="*" element={<PublicSite />} />
-		</Routes>
 	)
 }
 

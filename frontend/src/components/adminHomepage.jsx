@@ -1,6 +1,6 @@
 // --> Variables <-- //
 
-// Component
+// Components
 import NavbarComponent from './navbar.jsx'
 import TabsMenuComponent from './tabsMenu.jsx'
 import FilterBarComponent from './filterBar.jsx'
