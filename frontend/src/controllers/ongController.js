@@ -168,3 +168,7 @@ export async function removeTagFromFilter(tagName) {
 	await doFilter()
 	refreshOngs()
 }
+
+export function getTagsFilter() {
+	return tagsFilter
+}

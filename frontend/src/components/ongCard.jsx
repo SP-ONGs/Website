@@ -7,6 +7,7 @@ import { useState } from "react"
 import { cloudinaryResize } from "../api/imageUrl.js"
 
 // Controller
+import { getTagsFilter } from "../controllers/ongController.js"
 import { getTagName } from "../controllers/tagController.js"
 
 // Data
@@ -127,8 +128,15 @@ function CardTagsComponent({ tagIds }) {
 }
 
 function TagComponent({ tagId }) {
-	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
-	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+	let tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
+	let tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+
+	const TAG_IS_SELECTED = getTagsFilter().find(id => id == tagId)
+
+	if (TAG_IS_SELECTED) {
+		tagContainerStyle += " selected_tag_container"
+		tagDividerStyle += " selected_tag_divider_bar"
+	}
 
 	const [tagName, setTagName] = useState(undefined)
 
