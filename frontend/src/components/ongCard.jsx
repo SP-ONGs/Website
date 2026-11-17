@@ -131,24 +131,24 @@ function CardTagsComponent({ tags }) {
 	return (
 		<div className={ongCardStyle.ongCard_tag_container}>
 			{tags.map((tagData) => (
-				<TagComponent key={tagData.id} tagName={tagData.description} />
+				<TagComponent key={tagData.id} tag={tagData} />
 			))}
 		</div>
 	)
 }
 
-function TagComponent({ tagName }) {
+function TagComponent({ tag }) {
 	let tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
 	let tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
-	const TAG_IS_SELECTED = getTagsFilter().find(id => id == tagId)
+	const TAG_IS_SELECTED = getTagsFilter().find(id => id == tag.id)
 
 	if (TAG_IS_SELECTED) {
 		tagContainerStyle += " selected_tag_container"
 		tagDividerStyle += " selected_tag_divider_bar"
 	}
 
-	const tagData = tagsData[tagName]
+	const tagData = tagsData[tag.description]
 
 	return (
 		<div className={tagContainerStyle}>

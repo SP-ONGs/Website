@@ -5,10 +5,15 @@ import { cloudinaryResize } from "../api/imageUrl.js"
 import { getInstagramUrl, getWhatsappUrl } from "../api/socialMediaUrl.js"
 
 // Controllers
+import { getTagsFilter } from "../controllers/ongController.js"
 import { getViewOngData } from "../controllers/viewOngController.js"
+
+// Data
+import tagsData from "../data/tagsData.json"
 
 // CSS
 import "../styles/modals.css"
+import "../styles/tagsONG.css"
 import "../styles/social-media.css"
 import viewOngStyle from '../styles/viewONG.module.css'
 
@@ -74,12 +79,48 @@ function NameContainerComponent({ ongData, setCurrentModal }) {
 
 	return (
 		<div className={viewOngStyle.ONG_name_container}>
-			<img src={finalImageUrl} onError={onImageLoadError} />
+			<img src={finalImageUrl} className={viewOngStyle.ONG_photo} onError={onImageLoadError} />
 			<h1>{ongData.name}</h1>
+			<TagContainerComponent ongTags={ongData.tags} />
+
 			<div className={viewOngStyle.back_button} onClick={onBackButtonClick}>
 				<img src={backToHomeIconImage} />
 				<h1>Voltar</h1>
 			</div>
+		</div>
+	)
+}
+
+function TagContainerComponent({ ongTags }) {
+	return (
+		<div className={viewOngStyle.ONG_tag_container}>
+			{ongTags.map((tagData) => (
+				<>
+					<TagComponent key={tagData.id} tag={tagData} />
+				</>
+			))}
+		</div>
+	)
+}
+
+function TagComponent({ tag }) {
+	let tagContainerStyle = ["tag_container", viewOngStyle.tag_container_size].join(" ")
+	let tagDividerStyle = ["tag_divider_bar", viewOngStyle.tag_divider_size].join(" ")
+
+	const TAG_IS_SELECTED = getTagsFilter().find(id => id == tag.id)
+
+	if (TAG_IS_SELECTED) {
+		tagContainerStyle += " selected_tag_container"
+		tagDividerStyle += " selected_tag_divider_bar"
+	}
+
+	const tagData = tagsData[tag.description]
+
+	return (
+		<div className={tagContainerStyle}>
+			<img src={tagData.image} />
+			<div className={tagDividerStyle}></div>
+			<label>{tagData.description}</label>
 		</div>
 	)
 }

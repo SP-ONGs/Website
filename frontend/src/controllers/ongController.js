@@ -129,7 +129,7 @@ async function doFilter() {
 		}
 
 		for (const tagId of tagsFilter) {
-			const IN_TAG_FILTER = ong.tagIds.find(id => id == tagId)
+			const IN_TAG_FILTER = ong.tags.find(tagData => tagData.id == tagId)
 
 			if (IN_TAG_FILTER) {
 				return true
