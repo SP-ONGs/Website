@@ -1,8 +1,13 @@
 // --> Variables <-- //
 
+// React
+import { useState, useEffect } from "react"
+import { MapContainer, TileLayer, Marker } from "react-leaflet"
+
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
 import { getInstagramUrl, getWhatsappUrl } from "../api/socialMediaUrl.js"
+import { getEndressByCep, getCoordinatesByCep } from "../api/map.js"
 
 // Controllers
 import { getTagsFilter } from "../controllers/ongController.js"
@@ -15,6 +20,7 @@ import tagsData from "../data/tagsData.json"
 import "../styles/modals.css"
 import "../styles/tagsONG.css"
 import "../styles/social-media.css"
+import "leaflet/dist/leaflet.css"
 import viewOngStyle from '../styles/viewONG.module.css'
 
 // Images
@@ -55,7 +61,7 @@ export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation 
 
 				<div className={viewOngStyle.right_container}>
 					<BrandComponent />
-					<OngMapComponent />
+					<OngMapComponent ongData={ongData} />
 				</div>
 			</div >
 		</>
@@ -95,9 +101,7 @@ function TagContainerComponent({ ongTags }) {
 	return (
 		<div className={viewOngStyle.ONG_tag_container}>
 			{ongTags.map((tagData) => (
-				<>
-					<TagComponent key={tagData.id} tag={tagData} />
-				</>
+				<TagComponent key={tagData.id} tag={tagData} />
 			))}
 		</div>
 	)
@@ -277,18 +281,54 @@ function BrandComponent() {
 
 
 // Functions 6: ONG map component //
-function OngMapComponent() {
+function OngMapComponent({ ongData }) {
+	const [ongLocation, setOngLocation] = useState()
+
+	async function loadCoordinates() {
+		if (ongLocation) {
+			return
+		}
+
+		const ongEndress = await getEndressByCep(ongData.cep)
+		const { lat, lon } = await getCoordinatesByCep(ongData.cep)
+
+		setOngLocation({ endress: ongEndress, coordinates: [lat, lon] })
+	}
+
+	useEffect(() => {
+		loadCoordinates()
+	}, [])
+
 	return (
 		<div className={viewOngStyle.ONG_map_container}>
 			<div className={viewOngStyle.map_title_container}>
 				<img src={locationIconImage} />
 				<h1>Veja a localização da ONG!</h1>
-				<h2>Rua Doutor Joviano Pacheco de Aguirre, 255</h2>
+				<h2>{ongLocation && `${ongLocation.endress.logradouro} ${ongData.houseNumber}, ${ongLocation.endress.localidade}` || "Carregando..."}</h2>
 
 				<div className={viewOngStyle.map_divider_bar}></div>
 			</div>
 
-			<div className={viewOngStyle.map_panel}></div>
+			<div className={viewOngStyle.map_panel}>
+
+				{ongLocation && (
+					<MapContainer center={ongLocation.coordinates} zoom={35} style={{ width: "100%", height: "100%" }}>
+						<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
+						<Marker position={ongLocation.coordinates} />
+					</MapContainer>
+				)}
+			</div>
 		</div>
 	)
+}
+
+async function createOngPopup(ongIndex, ongNome, ongCEP) {
+	const { lat, lon } = await obterCoordenadasPorCEP(ongCEP);
+
+	L.marker([lat, lon])
+		.addTo(mapa)
+		//.bindPopup(ongNome)
+		.on("click", () => {
+			abrirModalOng(ongIndex)
+		})
 }
