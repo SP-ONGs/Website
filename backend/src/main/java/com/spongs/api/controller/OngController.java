@@ -5,7 +5,6 @@ import com.spongs.api.service.CloudinaryService;
 
 import com.spongs.api.model.Ong;
 
-import com.spongs.api.dto.OngSummaryReponse;
 import com.spongs.api.dto.OngPublicResponse;
 import com.spongs.api.dto.OngRegistrationRequest;
 import com.spongs.api.dto.OngRegistrationResponse;
@@ -38,7 +37,7 @@ public class OngController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<OngSummaryReponse>> getPublicOngs(
+	public ResponseEntity<List<OngPublicResponse>> getPublicOngs(
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) List<Long> tagIds) {
 		return ResponseEntity.ok(ongService.getPublicOngs(name, tagIds));

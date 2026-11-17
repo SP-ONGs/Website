@@ -1,14 +1,11 @@
 // -->  Variables <-- //
 
-// React
-import { useState } from "react"
-
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
 
 // Controller
 import { getTagsFilter } from "../controllers/ongController.js"
-import { getTagName } from "../controllers/tagController.js"
+import { setViewOngData } from "../controllers/viewOngController.js"
 
 // Data
 import tagsData from "../data/tagsData.json"
@@ -39,6 +36,7 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 
 		// User: View ong
 		if (IS_USER) {
+			setViewOngData(ong)
 			setCurrentModal("viewONG")
 			return
 		}
@@ -50,6 +48,7 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 
 		// Admin: Ong solicatitaion
 		if (currentTab == "Solicitations") {
+			setViewOngData(ong)
 			setCurrentModal("ongSolitation")
 		}
 	}
@@ -59,7 +58,7 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 			<CardImageComponent ongImageUrl={ong.imageUrl} />
 			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
 			<CardSocialMediaComponent />
-			<CardTagsComponent tagIds={ong.tagIds} />
+			<CardTagsComponent tags={ong.tags} />
 		</div>
 	)
 }
@@ -128,17 +127,17 @@ function CardSocialMediaComponent() {
 
 
 // Functions 5: Card tags //
-function CardTagsComponent({ tagIds }) {
+function CardTagsComponent({ tags }) {
 	return (
 		<div className={ongCardStyle.ongCard_tag_container}>
-			{tagIds.map((tagId) => (
-				<TagComponent key={tagId} tagId={tagId} />
+			{tags.map((tagData) => (
+				<TagComponent key={tagData.id} tagName={tagData.description} />
 			))}
 		</div>
 	)
 }
 
-function TagComponent({ tagId }) {
+function TagComponent({ tagName }) {
 	let tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
 	let tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
 
@@ -147,19 +146,6 @@ function TagComponent({ tagId }) {
 	if (TAG_IS_SELECTED) {
 		tagContainerStyle += " selected_tag_container"
 		tagDividerStyle += " selected_tag_divider_bar"
-	}
-
-	const [tagName, setTagName] = useState(undefined)
-
-	async function loadTagName() {
-		const loadedTagName = await getTagName(tagId)
-		setTagName(loadedTagName)
-	}
-
-	loadTagName()
-
-	if (tagName == undefined) {
-		return (<></>)
 	}
 
 	const tagData = tagsData[tagName]

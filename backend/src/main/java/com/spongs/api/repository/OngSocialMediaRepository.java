@@ -12,7 +12,7 @@ import java.util.List;
 public interface OngSocialMediaRepository extends JpaRepository<OngSocialMedia, Long> {
 	List<OngSocialMedia> findAllByOng_Id(Long ongId);
 
-	@Query("select osm from OngSocialMedia osm where osm.ong.id in :ongIds")
+	@Query("select osm from OngSocialMedia osm join fetch osm.socialMedia where osm.ong.id in :ongIds")
 	List<OngSocialMedia> findAllByOngIds(@Param("ongIds") Collection<Long> ongIds);
 
 	void deleteAllByOng_Id(Long ongId);

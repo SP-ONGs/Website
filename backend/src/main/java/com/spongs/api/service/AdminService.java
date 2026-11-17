@@ -22,7 +22,7 @@ import com.spongs.api.model.UserAccount;
 // DTOs
 import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.TagResponse;
-import com.spongs.api.dto.OngSummaryReponse;
+import com.spongs.api.dto.OngPublicResponse;
 import com.spongs.api.dto.OngAdminResponse;
 
 // Utils
@@ -53,7 +53,7 @@ public class AdminService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngSummaryReponse> getPendingOngs(String name, List<Long> tagIds) {
+	public List<OngPublicResponse> getPendingOngs(String name, List<Long> tagIds) {
 		return ongService.getOngsByStatus(OngStatus.PENDING_REVIEW, name, tagIds);
 	}
 

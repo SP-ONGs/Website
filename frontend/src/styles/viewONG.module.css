@@ -68,6 +68,9 @@
 	width: 258px;
 	height: 147px;
 
+	border-radius: 10px;
+	object-fit: cover;
+
 	position: absolute;
 	transform: translateY(-50%);
 	top: 50%;
@@ -75,12 +78,21 @@
 }
 
 .ONG_name_container h1 {
-	font-size: 45px;
+	font-size: 42px;
 	font-weight: 500;
 
+	min-width: 0;
+	max-width: 400px;
+
+	max-height: 90px;
+
+	overflow: hidden;
+	line-height: 105%;
+	text-overflow: ellipsis;
+
 	position: absolute;
-	top: 0px;
-	left: 268px;
+	top: 5px;
+	left: 280px;
 }
 
 .back_button {

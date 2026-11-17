@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.spongs.api.service.AdminService;
 
-import com.spongs.api.dto.OngSummaryReponse;
+import com.spongs.api.dto.OngPublicResponse;
 import com.spongs.api.dto.OngAdminResponse;
 
 import com.spongs.api.model.OngStatus;
@@ -24,7 +24,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/pending")
-	public ResponseEntity<List<OngSummaryReponse>> getPendingOngs(
+	public ResponseEntity<List<OngPublicResponse>> getPendingOngs(
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) List<Long> tagIds) {
 		return ResponseEntity.ok(adminService.getPendingOngs(name, tagIds));

@@ -1,5 +1,11 @@
 // --> Variables <-- //
 
+// API
+import { cloudinaryResize } from "../api/imageUrl.js"
+
+// Controllers
+import { getViewOngData } from "../controllers/viewOngController.js"
+
 // CSS
 import "../styles/modals.css"
 import "../styles/social-media.css"
@@ -25,13 +31,19 @@ import EmptyStarIconImage from "../../images/elements_vectors/EmptyStarIcon.png"
 
 // Functions 1: View ONG component //
 export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation }) {
+	const ongData = getViewOngData()
+
+	if (!ongData) {
+		throw Error("viewONG: Failed to find ONG data!!!")
+	}
+
 	return (
 		<>
 			<div className="focus_BG"></div>
 			<div className={viewOngStyle.view_ONG_modal}>
 				<div className={viewOngStyle.left_container}>
-					<NameContainerComponent setCurrentModal={setCurrentModal} />
-					<SocialMediaComponent />
+					<NameContainerComponent ongData={ongData} setCurrentModal={setCurrentModal} />
+					<SocialMediaComponent ongData={ongData} />
 					<RateContainerComponent />
 				</div>
 
@@ -47,16 +59,23 @@ export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation 
 
 
 // Functions 2: ONG name component //
-function NameContainerComponent({ setCurrentModal }) {
-	function onBack() {
+function NameContainerComponent({ ongData, setCurrentModal }) {
+	function onImageLoadError(e) {
+		e.currentTarget.onerror = null
+		e.currentTarget.src = ""
+	}
+
+	const finalImageUrl = cloudinaryResize(ongData.imageUrl, 400)
+
+	function onBackButtonClick() {
 		setCurrentModal("")
 	}
 
 	return (
 		<div className={viewOngStyle.ONG_name_container}>
-			<img />
-			<h1>Cachorros carentes</h1>
-			<div className={viewOngStyle.back_button} onClick={onBack}>
+			<img src={finalImageUrl} onError={onImageLoadError} />
+			<h1>{ongData.name}</h1>
+			<div className={viewOngStyle.back_button} onClick={onBackButtonClick}>
 				<img src={backToHomeIconImage} />
 				<h1>Voltar</h1>
 			</div>
@@ -67,15 +86,27 @@ function NameContainerComponent({ setCurrentModal }) {
 
 
 // Functions 3: ONG social media component //
-function SocialMediaComponent() {
+function SocialMediaComponent({ ongData }) {
 	const mediaButtonStyle = ["add_midia_container", viewOngStyle.media_button_size].join(" ")
+	const socialMediaData = {}
+
+	console.log("ongData:", ongData)
+	for (const socialMedia of ongData.socialMedia) {
+		socialMediaData[socialMedia.name] = socialMedia.description
+	}
 
 	function InstagramPreview() {
+		const instagram = socialMediaData["instagram"]
+
+		if (!instagram) {
+			return (<></>)
+		}
+
 		return (
 			<div className={mediaButtonStyle + " instagram"}>
 				<img src={instagramIconImage} className="add_midia_icon" />
 				<h1>Instagram</h1>
-				<h2>@instagram data</h2>
+				<h2>@{instagram}</h2>
 			</div>
 		)
 	}

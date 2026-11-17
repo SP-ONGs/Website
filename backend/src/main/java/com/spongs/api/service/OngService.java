@@ -25,7 +25,6 @@ import com.spongs.api.model.OngTag;
 import com.spongs.api.model.UserAccount;
 
 // DTOs
-import com.spongs.api.dto.OngSummaryReponse;
 import com.spongs.api.dto.OngPublicResponse;
 import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.SocialMediaTypeResponse;
@@ -71,7 +70,7 @@ public class OngService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<OngSummaryReponse> getOngsByStatus(OngStatus status, String name, List<Long> tagIds) {
+	public List<OngPublicResponse> getOngsByStatus(OngStatus status, String name, List<Long> tagIds) {
 		String normalizedName = normalizeNameFilter(name);
 		List<Long> normalizedTagIds = normalizeTagFilters(tagIds);
 
@@ -87,29 +86,41 @@ public class OngService {
 
 		List<Long> ongIds = ongs.stream().map(Ong::getId).toList();
 
-		Map<Long, List<Long>> tagsByOngId = ongTagRepository.findAllByOngIds(ongIds).stream()
-				.collect(Collectors.groupingBy(
-						entry -> entry.getOng().getId(),
-						Collectors.mapping(entry -> entry.getTag().getId(), Collectors.toList())));
-
-		Map<Long, List<Long>> socialMediaByOngId = ongSocialMediaRepository.findAllByOngIds(ongIds).stream()
+		Map<Long, List<OngSocialMediaResponse>> socialMediaByOngId = ongSocialMediaRepository
+				.findAllByOngIds(ongIds).stream()
 				.collect(Collectors.groupingBy(
 						entry -> entry.getOng().getId(),
 						Collectors.mapping(
-								entry -> entry.getSocialMedia().getId(),
+								entry -> new OngSocialMediaResponse(
+										entry.getSocialMedia().getId(),
+										entry.getSocialMedia().getName(),
+										entry.getDescription()),
+								Collectors.toList())));
+
+		Map<Long, List<TagResponse>> tagsByOngId = ongTagRepository
+				.findAllByOngIds(ongIds).stream()
+				.collect(Collectors.groupingBy(
+						entry -> entry.getOng().getId(),
+						Collectors.mapping(
+								entry -> new TagResponse(
+										entry.getTag().getId(),
+										entry.getTag().getDescription()),
 								Collectors.toList())));
 
 		return ongs.stream()
-				.map(ong -> new OngSummaryReponse(
+				.map(ong -> new OngPublicResponse(
 						ong.getId(),
 						ong.getName(),
+						ong.getCep(),
+						ong.getHouseNumber(),
+						ong.getCnpj(),
 						ong.getImageUrl(),
 						socialMediaByOngId.getOrDefault(ong.getId(), List.of()),
 						tagsByOngId.getOrDefault(ong.getId(), List.of())))
 				.toList();
 	}
 
-	public List<OngSummaryReponse> getPublicOngs(String name, List<Long> tagIds) {
+	public List<OngPublicResponse> getPublicOngs(String name, List<Long> tagIds) {
 		return this.getOngsByStatus(OngStatus.APPROVED, name, tagIds);
 	}
 
