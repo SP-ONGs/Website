@@ -175,10 +175,10 @@
 .media_title_container h2 {
 	font-size: 20px;
 	font-weight: medium;
-	color: rgba(0, 0, 0, .75)
+	color: rgba(0, 0, 0, .75);
 }
 
-.media_conatiner {
+.media_container {
 	width: 696px;
 	height: 78px;
 
@@ -226,6 +226,12 @@
 
 .media_button_size h2 {
 	font-size: 14px;
+
+	max-width: 150px;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 	position: absolute;
 	left: 60px;

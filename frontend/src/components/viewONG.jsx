@@ -2,6 +2,7 @@
 
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
+import { getInstagramUrl, getWhatsappUrl } from "../api/socialMediaUrl.js"
 
 // Controllers
 import { getViewOngData } from "../controllers/viewOngController.js"
@@ -90,46 +91,61 @@ function SocialMediaComponent({ ongData }) {
 	const mediaButtonStyle = ["add_midia_container", viewOngStyle.media_button_size].join(" ")
 	const socialMediaData = {}
 
-	console.log("ongData:", ongData)
 	for (const socialMedia of ongData.socialMedia) {
 		socialMediaData[socialMedia.name] = socialMedia.description
 	}
 
 	function InstagramPreview() {
-		const instagram = socialMediaData["instagram"]
+		const instagram = socialMediaData["Instagram"]
 
 		if (!instagram) {
 			return (<></>)
 		}
 
+		const instagramHref = getInstagramUrl(instagram)
+
 		return (
-			<div className={mediaButtonStyle + " instagram"}>
+			<a className={mediaButtonStyle + " instagram"} href={instagramHref} target="_blank" rel="noopener noreferrer">
 				<img src={instagramIconImage} className="add_midia_icon" />
 				<h1>Instagram</h1>
 				<h2>@{instagram}</h2>
-			</div>
+			</a>
 		)
 	}
 
 	function WhatsappPreview() {
+		const whatsapp = socialMediaData["WhatsApp"]
+
+		if (!whatsapp) {
+			return (<></>)
+		}
+
+		const whatsappHref = getWhatsappUrl(whatsapp)
+
 		return (
-			<div className={mediaButtonStyle + " whatsapp"}>
+			<a className={mediaButtonStyle + " whatsapp"} href={whatsappHref} target="_blank" rel="noopener noreferrer">
 				<div className="midia_bg_fade"></div>
 				<img src={whatsappIconImage} className="add_midia_icon" />
 				<h1>Whatsapp</h1>
-				<h2>whatsapp data</h2>
-			</div>
+				<h2>{whatsapp}</h2>
+			</a>
 		)
 	}
 
 	function WebsitePreview() {
+		const website = socialMediaData["Website"]
+
+		if (!website) {
+			return (<></>)
+		}
+
 		return (
-			<div className={mediaButtonStyle + " website"}>
+			<a className={mediaButtonStyle + " website"} href={website} target="_blank" rel="noopener noreferrer">
 				<div className="midia_bg_fade"></div>
 				<img src={websiteIconImage} className="add_midia_icon" />
 				<h1>Website</h1>
-				<h2>website data</h2>
-			</div>
+				<h2>{website}</h2>
+			</a>
 		)
 	}
 
@@ -139,7 +155,7 @@ function SocialMediaComponent({ ongData }) {
 				<h1>Acesse a ONG</h1>
 				<h2>(Clique abaixo)</h2>
 			</div>
-			<div className={viewOngStyle.media_conatiner}>
+			<div className={viewOngStyle.media_container}>
 				<InstagramPreview />
 				<WhatsappPreview />
 				<WebsitePreview />
