@@ -77,13 +77,21 @@ export function updateOngState(patch) {
 
 
 // Function 2: Update variables //
-export function usePendingOngs(isPending) {
-	ongType = isPending && "Pending" || "Public"
+export function setOngType(newOngType) {
+	const IS_VALID_ONG_TYPE = newOngType == "Public" || newOngType == "Pending"
+
+	if (!IS_VALID_ONG_TYPE) {
+		throw Error(`ongController: "${newOngType}" is not a valid OngType!!!`)
+	}
+
+	ongType = newOngType
 
 	useFilter = false
 	nameFilter
 	tagsFilter = []
 	inFilterOngs = []
+
+	setCurrentIndex(1)
 }
 
 export function getCurrentIndex() {

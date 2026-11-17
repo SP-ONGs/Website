@@ -29,18 +29,29 @@ import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function OngCardComponent({ ong, setCurrentModal, isAdmin }) {
+function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 	if (!ong) {
 		return (<TemplateCardComponent />)
 	}
 
 	function onViewONG() {
-		if (isAdmin) {
-			setCurrentModal("dashboardONG")
+		const IS_USER = !isAdmin
+
+		// User: View ong
+		if (IS_USER) {
+			setCurrentModal("viewONG")
 			return
 		}
 
-		setCurrentModal("viewONG")
+		// Admin: Ong dashboard
+		if (currentTab == "AdminHomepage") {
+			setCurrentModal("ongDashboard")
+		}
+
+		// Admin: Ong solicatitaion
+		if (currentTab == "Solicitations") {
+			setCurrentModal("ongSolitation")
+		}
 	}
 
 	return (

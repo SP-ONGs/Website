@@ -47,6 +47,7 @@
 	top: 50%;
 
 	background: white;
+	pointer-events: none;
 
 	transition: opacity 0.1s ease-out;
 }
@@ -106,6 +107,7 @@
 
 .disabled_button {
 	opacity: 0;
+	pointer-events: none;
 }
 
 

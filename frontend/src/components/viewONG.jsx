@@ -24,7 +24,7 @@ import EmptyStarIconImage from "../../images/elements_vectors/EmptyStarIcon.png"
 // --> Functions <-- //
 
 // Functions 1: View ONG component //
-export default function ViewOngComponent({ setCurrentModal }) {
+export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation }) {
 	return (
 		<>
 			<div className="focus_BG"></div>

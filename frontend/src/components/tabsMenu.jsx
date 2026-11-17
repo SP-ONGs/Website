@@ -1,9 +1,13 @@
 // --> Variables <-- //
 
+// Controllers
+import { setOngType, refreshOngs } from "../controllers/ongController.js"
+
 // CSS
 import tabsMenuStyle from '../styles/tabsMenu.module.css'
 
 // Styles
+const optionStyle = tabsMenuStyle.menu_option_container
 const selectedOptionStyle = [tabsMenuStyle.menu_option_container, tabsMenuStyle.selected_option].join(" ")
 
 // Images
@@ -18,18 +22,33 @@ import reportIconImage from '../../images/elements_vectors/ReportIcon.png'
 // --> Functions <-- //
 
 // Functions 1: Tabs menu //
-function TabsMenuComponent({ setCurrentModal, isAdmin }) {
+function TabsMenuComponent({ currentTab, setTab, setCurrentModal, isAdmin }) {
 	return (
 		<div className={tabsMenuStyle.menu_container}>
-			<HomepageButton isAdmin={isAdmin} />
-
-			{!isAdmin && (<ViewMapButton />)}
-			{!isAdmin && (<AboutUsButton setCurrentModal={setCurrentModal} />)}
-			{!isAdmin && (<AddOngButton setCurrentModal={setCurrentModal} />)}
-
-			{isAdmin && (<ViewSolicitationsButton />)}
-			{isAdmin && (<ViewReportsButton />)}
+			{!isAdmin && (<TabButtonsComponent setCurrentModal={setCurrentModal} />)}
+			{isAdmin && (<AdminTabButtonsComponent currentTab={currentTab} setTab={setTab} />)}
 		</div>
+	)
+}
+
+function TabButtonsComponent({ setCurrentModal }) {
+	return (
+		<>
+			<HomepageButton />
+			<ViewMapButton />
+			<AboutUsButton setCurrentModal={setCurrentModal} />
+			<AddOngButton setCurrentModal={setCurrentModal} />
+		</>
+	)
+}
+
+function AdminTabButtonsComponent({ currentTab, setTab }) {
+	return (
+		<>
+			<AdminHomepageButton currentTab={currentTab} setTab={setTab} />
+			<ViewSolicitationsButton currentTab={currentTab} setTab={setTab} />
+			<ViewReportsButton currentTab={currentTab} setTab={setTab} />
+		</>
 	)
 }
 
@@ -37,9 +56,14 @@ function TabsMenuComponent({ setCurrentModal, isAdmin }) {
 
 
 // Functions 2: Tabs Buttons //
-function HomepageButton({ isAdmin }) {
+function HomepageButton() {
+	function onHomepageClick() {
+		//setOngType("Public")
+		//refreshOngs()
+	}
+
 	return (
-		<div className={selectedOptionStyle}>
+		<div className={selectedOptionStyle} onClick={onHomepageClick}>
 			<img src={homepageIconImage} />
 			<h1>Homepage</h1>
 		</div>
@@ -48,7 +72,7 @@ function HomepageButton({ isAdmin }) {
 
 function ViewMapButton() {
 	return (
-		<div className={tabsMenuStyle.menu_option_container}>
+		<div className={optionStyle}>
 			<img src={mapIconImage} />
 			<h1>Ver mapa</h1>
 		</div>
@@ -61,7 +85,7 @@ function AboutUsButton({ setCurrentModal }) {
 	}
 
 	return (
-		<div className={tabsMenuStyle.menu_option_container} onClick={onAboutUsClick}>
+		<div className={optionStyle} onClick={onAboutUsClick}>
 			<img src={infoIconImage} />
 			<h1>Sobre nós</h1>
 		</div>
@@ -74,7 +98,7 @@ function AddOngButton({ setCurrentModal }) {
 	}
 
 	return (
-		<div className={tabsMenuStyle.menu_option_container} onClick={onAddONGClick}>
+		<div className={optionStyle} onClick={onAddONGClick}>
 			<img src={addOngIconImage} />
 			<h1>Adicionar ONG</h1>
 		</div>
@@ -84,18 +108,54 @@ function AddOngButton({ setCurrentModal }) {
 
 
 // Functions 3: Admin tabs buttons //
-function ViewSolicitationsButton() {
+function AdminHomepageButton({ currentTab, setTab }) {
+	const IS_SELECTED = currentTab == "AdminHomepage"
+	const buttonStyle = IS_SELECTED && selectedOptionStyle || optionStyle
+
+	function onHomepageClick() {
+		setTab("AdminHomepage")
+
+		setOngType("Public")
+		refreshOngs()
+	}
+
 	return (
-		<div className={tabsMenuStyle.menu_option_container}>
+		<div className={buttonStyle} onClick={onHomepageClick}>
+			<img src={homepageIconImage} />
+			<h1>Homepage</h1>
+		</div>
+	)
+}
+
+function ViewSolicitationsButton({ currentTab, setTab }) {
+	const IS_SELECTED = currentTab == "Solicitations"
+	const buttonStyle = IS_SELECTED && selectedOptionStyle || optionStyle
+
+	function onViewSolicitationsClick() {
+		setTab("Solicitations")
+
+		setOngType("Pending")
+		refreshOngs()
+	}
+
+	return (
+		<div className={buttonStyle} onClick={onViewSolicitationsClick}>
 			<img src={addOngIconImage} />
 			<h1>Solicitações de ONG</h1>
 		</div>
 	)
 }
 
-function ViewReportsButton() {
+function ViewReportsButton({ currentTab, setTab }) {
+	const IS_SELECTED = currentTab == "Reports"
+	const buttonStyle = IS_SELECTED && selectedOptionStyle || optionStyle
+
+	function onViewReportsClick() {
+		setTab("Reports")
+	}
+
 	return (
-		<div className={tabsMenuStyle.menu_option_container}>
+		<div className={buttonStyle} onClick={onViewReportsClick}>
 			<img src={reportIconImage} />
 			<h1 className={tabsMenuStyle.red_text}>Ver denúncias</h1>
 		</div>

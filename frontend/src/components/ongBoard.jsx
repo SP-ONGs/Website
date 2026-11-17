@@ -4,7 +4,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react"
 
 // Controllers
-import { getOngsSnapshot, addOngCard, refreshOngs, usePendingOngs, getCurrentIndex, setCurrentIndex } from "../controllers/ongController.js"
+import { getOngsSnapshot, addOngCard, refreshOngs, getCurrentIndex, setCurrentIndex } from "../controllers/ongController.js"
 
 // Components
 import OngCard from './ongCard.jsx'
@@ -25,26 +25,23 @@ const indexButtonsAmount = 7
 // --> Functions <-- //
 
 // Functions 1: ONGs board component //
-function ONGsBoardComponent({ setCurrentModal, isAdmin }) {
+function ONGsBoardComponent({ currentTab, setCurrentModal, isAdmin }) {
 	const cardsAmount = 6
 	const { displayOngs: ongs } = useSyncExternalStore(addOngCard, getOngsSnapshot)
 
-	async function loadOngs() {
+	async function loadHomepageOngs() {
 		await refreshOngs()
 	}
 
-	function loadHomepageOngs() {
-		usePendingOngs(isAdmin || false)
-		loadOngs()
-	}
-
-	useEffect(loadHomepageOngs, [isAdmin])
+	useEffect(() => {
+		loadHomepageOngs()
+	}, [isAdmin])
 
 	return (
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
 				{Array.from({ length: cardsAmount }, (_, index) => (
-					<OngCard key={index} id={"ongCard_" + index} ong={ongs[index]} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
+					<OngCard key={index} id={"ongCard_" + index} ong={ongs[index]} currentTab={currentTab} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
 				))}
 				<BoardIndexBarComponent />
 			</div>
