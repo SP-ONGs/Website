@@ -180,3 +180,20 @@ export async function removeTagFromFilter(tagName) {
 export function getTagsFilter() {
 	return tagsFilter
 }
+
+
+
+// Functions 4: Add/Remove ongs //
+export function addAcceptedOng(ongData) {
+	const publicOngs = loadedOngs["Public"] || []
+	publicOngs.push(ongData)
+
+	loadedOngs["Public"] = publicOngs
+
+	removeSolicitationOng(ongData.id)
+}
+
+export function removeSolicitationOng(ongId) {
+	const newPendingOngs = loadedOngs["Pending"].filter(ongData => ongData.id !== ongId)
+	loadedOngs["Pending"] = newPendingOngs
+}

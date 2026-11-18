@@ -8,9 +8,10 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet"
 import { cloudinaryResize } from "../api/imageUrl.js"
 import { getInstagramUrl, getWhatsappUrl } from "../api/socialMediaUrl.js"
 import { getEndressByCep, getCoordinatesByCep } from "../api/map.js"
+import { approveOng, rejectOng } from "../api/adminOng.js"
 
 // Controllers
-import { getTagsFilter } from "../controllers/ongController.js"
+import { getTagsFilter, refreshOngs, addAcceptedOng, removeSolicitationOng } from "../controllers/ongController.js"
 import { getViewOngData } from "../controllers/viewOngController.js"
 
 // Data
@@ -84,7 +85,7 @@ function AdminViewOngComponent({ ongData, setCurrentModal }) {
 				<div className={viewOngStyle.left_container}>
 					<NameContainerComponent ongData={ongData} setCurrentModal={setCurrentModal} />
 					<SocialMediaComponent ongData={ongData} />
-					<AdminSolicitationComponent />
+					<AdminSolicitationComponent ongData={ongData} setCurrentModal={setCurrentModal} />
 				</div>
 
 				<div className={viewOngStyle.right_container}>
@@ -364,11 +365,39 @@ async function createOngPopup(ongIndex, ongNome, ongCEP) {
 
 
 // Functions 7: ONG solicitation component //
-function AdminSolicitationComponent() {
+function AdminSolicitationComponent({ ongData, setCurrentModal }) {
 	const acceptButtonStyle = [adminViewOngStyle.solicitation_button, adminViewOngStyle.accept_button].join(" ")
 	const declineButtonStyle = [adminViewOngStyle.solicitation_button, adminViewOngStyle.decline_button].join(" ")
 
 	const backgroundFadeStyle = adminViewOngStyle.solicitation_bg_fade
+
+	let buttonDebounce = false
+
+	function onAcceptSolicitation() {
+		if (buttonDebounce) return
+		buttonDebounce = true
+
+		console.log("Approved", ongData.name, ongData.id)
+		addAcceptedOng(ongData)
+		refreshOngs()
+
+		setCurrentModal("")
+
+		approveOng(ongData.id)
+	}
+
+	function onDeclineSolicitation() {
+		if (buttonDebounce) return
+		buttonDebounce = true
+
+		console.log("Rejected", ongData.name, ongData.id)
+		removeSolicitationOng(ongData.id)
+		refreshOngs()
+
+		setCurrentModal("")
+
+		rejectOng(ongData.id)
+	}
 
 	return (
 		<div className={adminViewOngStyle.ONG_solicitation_container}>
@@ -376,13 +405,13 @@ function AdminSolicitationComponent() {
 
 			<h1 className={adminViewOngStyle.solicitation_title}>Aceitar solicitação</h1>
 			<div className={adminViewOngStyle.solicitation_buttons_container}>
-				<div className={acceptButtonStyle}>
+				<div className={acceptButtonStyle} onClick={onAcceptSolicitation}>
 					<div className={backgroundFadeStyle}></div>
 					<img src={acceptSolicitationIcon} />
 					<h1>ACEITAR ONG</h1>
 				</div>
 
-				<div className={declineButtonStyle}>
+				<div className={declineButtonStyle} onClick={onDeclineSolicitation}>
 					<div className={backgroundFadeStyle}></div>
 					<img src={declineSolicitationIcon} />
 					<h1>RECUSAR ONG</h1>
