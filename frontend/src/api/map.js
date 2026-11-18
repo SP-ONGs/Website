@@ -1,7 +1,17 @@
+const loadedLocations = {}
+
 export async function getEndressByCep(cep) {
+	const loadedViaCep = loadedLocations[cep]
+
+	if (loadedViaCep) {
+		return loadedViaCep
+	}
+
 	const viaCep = await fetch(
 		`https://viacep.com.br/ws/${cep}/json/`
 	).then(res => res.json());
+
+	loadedLocations[cep] = viaCep
 
 	return viaCep
 }

@@ -22,6 +22,7 @@ import "../styles/tagsONG.css"
 import "../styles/social-media.css"
 import "leaflet/dist/leaflet.css"
 import viewOngStyle from '../styles/viewONG.module.css'
+import adminViewOngStyle from '../styles/adminViewONG.module.css'
 
 // Images
 import backToHomeIconImage from '../../images/elements_vectors/BackToHomeIcon.png'
@@ -37,6 +38,9 @@ import FullStarIconImage from "../../images/elements_vectors/FullStarIcon.png"
 import HalfStarIconImage from "../../images/elements_vectors/HalfStarIcon.png"
 import EmptyStarIconImage from "../../images/elements_vectors/EmptyStarIcon.png"
 
+import acceptSolicitationIcon from "../../images/elements_vectors/AcceptSolicitationIcon.png"
+import declineSolicitationIcon from "../../images/elements_vectors/DeclineSolicitationIcon.png"
+
 
 
 // --> Functions <-- //
@@ -49,6 +53,10 @@ export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation 
 		throw Error("viewONG: Failed to find ONG data!!!")
 	}
 
+	if (isAdminSolicitation) {
+		return (<AdminViewOngComponent ongData={ongData} setCurrentModal={setCurrentModal} />)
+	}
+
 	return (
 		<>
 			<div className="focus_BG"></div>
@@ -57,6 +65,26 @@ export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation 
 					<NameContainerComponent ongData={ongData} setCurrentModal={setCurrentModal} />
 					<SocialMediaComponent ongData={ongData} />
 					<RateContainerComponent />
+				</div>
+
+				<div className={viewOngStyle.right_container}>
+					<BrandComponent />
+					<OngMapComponent ongData={ongData} />
+				</div>
+			</div >
+		</>
+	)
+}
+
+function AdminViewOngComponent({ ongData, setCurrentModal }) {
+	return (
+		<>
+			<div className="focus_BG"></div>
+			<div className={viewOngStyle.view_ONG_modal}>
+				<div className={viewOngStyle.left_container}>
+					<NameContainerComponent ongData={ongData} setCurrentModal={setCurrentModal} />
+					<SocialMediaComponent ongData={ongData} />
+					<AdminSolicitationComponent />
 				</div>
 
 				<div className={viewOngStyle.right_container}>
@@ -331,4 +359,35 @@ async function createOngPopup(ongIndex, ongNome, ongCEP) {
 		.on("click", () => {
 			abrirModalOng(ongIndex)
 		})
+}
+
+
+
+// Functions 7: ONG solicitation component //
+function AdminSolicitationComponent() {
+	const acceptButtonStyle = [adminViewOngStyle.solicitation_button, adminViewOngStyle.accept_button].join(" ")
+	const declineButtonStyle = [adminViewOngStyle.solicitation_button, adminViewOngStyle.decline_button].join(" ")
+
+	const backgroundFadeStyle = adminViewOngStyle.solicitation_bg_fade
+
+	return (
+		<div className={adminViewOngStyle.ONG_solicitation_container}>
+			<div className={backgroundFadeStyle}></div>
+
+			<h1 className={adminViewOngStyle.solicitation_title}>Aceitar solicitação</h1>
+			<div className={adminViewOngStyle.solicitation_buttons_container}>
+				<div className={acceptButtonStyle}>
+					<div className={backgroundFadeStyle}></div>
+					<img src={acceptSolicitationIcon} />
+					<h1>ACEITAR ONG</h1>
+				</div>
+
+				<div className={declineButtonStyle}>
+					<div className={backgroundFadeStyle}></div>
+					<img src={declineSolicitationIcon} />
+					<h1>RECUSAR ONG</h1>
+				</div>
+			</div>
+		</div>
+	)
 }
