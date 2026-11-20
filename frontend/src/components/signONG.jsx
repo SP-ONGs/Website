@@ -343,6 +343,10 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 		setOngCEP(cep)
 	}
 
+	function updateHouseNumber() {
+
+	}
+
 	const [useImagePreview, setImagePreview] = useState(false)
 
 	function updateImage() {
@@ -385,10 +389,18 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 				<div className={signStyle.name_input}>
 					<input id="signONG_name" type="text" onSelect={ResetErrors} />
 				</div>
-				<div className={signStyle.cep_input}>
-					<label>CEP</label>
-					<input id="signONG_cep" type="text" onSelect={ResetErrors} onChange={updateCEP} />
+
+				<div className={signStyle.cep_container}>
+					<div className={signStyle.cep_input}>
+						<h1>CEP</h1>
+						<input id="signONG_cep" type="text" onSelect={ResetErrors} onChange={updateCEP} />
+					</div>
+					<div className={signStyle.house_number_input}>
+						<h1>NUMBER</h1>
+						<input id="signONG_houseNumber" type="text" onSelect={ResetErrors} onChange={updateHouseNumber} />
+					</div>
 				</div>
+
 				<div className={signStyle.location_container} id="signONG_location_container">
 					<img src={cepIsInvalid ? invalidLocationIconImage : locationIconImage} alt="Localização" />
 					<h1 id="signONG_location_text">(Informe o CEP)</h1>
