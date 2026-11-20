@@ -412,36 +412,42 @@ function AddSocialMediaContainer({ setMediaModal, socialMediaList, setSocialMedi
 	}
 
 	function InstagramPreview() {
+		const instagramStyle = [signStyle.social_media, "instagram"].join(" ")
+
 		return (
-			<div className="add_midia_container instagram" id="signONG_instagram">
-				<img src={instagramIconImage} className="add_midia_icon" alt="Instagram" />
+			<div className={instagramStyle} id="signONG_instagram">
+				<img src={instagramIconImage} className={signStyle.social_media_icon} />
 				<h1>Instagram</h1>
 				<h2>@{socialMediaList["instagram"]}</h2>
-				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("instagram")} />
+				<img src={cancelMediaIconImage} className={signStyle.social_media_remove_icon} onClick={() => removeMedia("instagram")} />
 			</div>
 		)
 	}
 
 	function WhatsappPreview() {
+		const whatsappStyle = [signStyle.social_media, "whatsapp"].join(" ")
+
 		return (
-			<div className="add_midia_container whatsapp" id="signONG_whatsapp">
-				<div className="midia_bg_fade"></div>
-				<img src={whatsappIconImage} className="add_midia_icon" alt="Whatsapp" />
+			<div className={whatsappStyle} id="signONG_whatsapp">
+				<div className={signStyle.social_media_bg_fade}></div>
+				<img src={whatsappIconImage} className={signStyle.social_media_icon} />
 				<h1>Whatsapp</h1>
 				<h2>{socialMediaList["whatsapp"]}</h2>
-				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("whatsapp")} />
+				<img src={cancelMediaIconImage} className={signStyle.social_media_remove_icon} onClick={() => removeMedia("whatsapp")} />
 			</div>
 		)
 	}
 
 	function WebsitePreview() {
+		const websiteStyle = [signStyle.social_media, "website"].join(" ")
+
 		return (
-			<div className="add_midia_container website" id="signONG_website">
-				<div className="midia_bg_fade"></div>
-				<img src={websiteIconImage} className="add_midia_icon" alt="Website" />
+			<div className={websiteStyle} id="signONG_website">
+				<div className={signStyle.social_media_bg_fade}></div>
+				<img src={websiteIconImage} className={signStyle.social_media_icon} />
 				<h1>Website</h1>
 				<h2>{socialMediaList["website"]}</h2>
-				<img src={cancelMediaIconImage} className="remove_midia" alr="Remove" onClick={() => removeMedia("website")} />
+				<img src={cancelMediaIconImage} className={signStyle.social_media_remove_icon} onClick={() => removeMedia("website")} />
 			</div>
 		)
 	}

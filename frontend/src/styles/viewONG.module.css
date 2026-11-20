@@ -216,7 +216,7 @@
 	color: rgba(0, 0, 0, .75);
 }
 
-.media_container {
+.social_media_background {
 	width: 696px;
 	height: 78px;
 
@@ -235,9 +235,12 @@
 	padding-right: 10px;
 }
 
-.media_button_size {
+.social_media {
 	width: 227px;
 	height: 63px;
+
+	border-radius: 10px;
+	position: relative;
 
 	cursor: pointer;
 	user-select: none;
@@ -245,25 +248,34 @@
 	transition: transform .2s cubic-bezier(.22, 1, 0.35, 1);
 }
 
-.media_button_size:hover {
+.social_media:hover {
 	transform: scale(1.0375) rotate(-1.25deg);
 }
 
-.media_button_size img {
+.social_media img {
 	width: 48px;
 	height: 48px;
+
+	position: absolute;
+	transform: translateY(-50%);
+	left: 6px;
+	top: 50%;
 }
 
-.media_button_size h1 {
+.social_media h1 {
 	font-size: 26px;
+	font-weight: 700;
+	color: white;
 
 	position: absolute;
 	left: 60px;
 	top: 3px;
 }
 
-.media_button_size h2 {
+.social_media h2 {
 	font-size: 14px;
+	font-weight: 500;
+	color: #EDEDED;
 
 	max-width: 150px;
 

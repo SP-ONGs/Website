@@ -6,6 +6,7 @@ import { cloudinaryResize } from "../api/imageUrl.js"
 // Controller
 import { getTagsFilter } from "../controllers/ongController.js"
 import { setViewOngData } from "../controllers/viewOngController.js"
+import { setDashboardOngData } from "../controllers/ongDashboardController.js"
 
 // Data
 import tagsData from "../data/tagsData.json"
@@ -26,12 +27,22 @@ import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
+function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicable = true }) {
 	if (!ong) {
 		return (<TemplateCardComponent />)
 	}
 
+	let cardStyle = ongCardStyle.ongCard_container
+
+	if (isClicable) {
+		cardStyle += ` ${ongCardStyle.clicable_card}`
+	}
+
 	function onViewONG() {
+		if (!isClicable) {
+			return
+		}
+
 		const IS_USER = !isAdmin
 
 		// User: View ong
@@ -43,7 +54,9 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 
 		// Admin: Ong dashboard
 		if (currentTab == "AdminHomepage") {
+			setDashboardOngData(ong)
 			setCurrentModal("ongDashboard")
+			return
 		}
 
 		// Admin: Ong solicatitaion
@@ -54,7 +67,7 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin }) {
 	}
 
 	return (
-		<div className={ongCardStyle.ongCard_container} onClick={onViewONG}>
+		<div className={cardStyle} onClick={onViewONG}>
 			<CardImageComponent ongImageUrl={ong.imageUrl} />
 			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
 			<CardSocialMediaComponent />

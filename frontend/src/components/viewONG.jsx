@@ -162,7 +162,6 @@ function TagComponent({ tag }) {
 
 // Functions 3: ONG social media component //
 function SocialMediaComponent({ ongData }) {
-	const mediaButtonStyle = ["add_midia_container", viewOngStyle.media_button_size].join(" ")
 	const socialMediaData = {}
 
 	for (const socialMedia of ongData.socialMedia) {
@@ -179,7 +178,7 @@ function SocialMediaComponent({ ongData }) {
 		const instagramHref = getInstagramUrl(instagram)
 
 		return (
-			<a className={mediaButtonStyle + " instagram"} href={instagramHref} target="_blank" rel="noopener noreferrer">
+			<a className={viewOngStyle.social_media + " instagram"} href={instagramHref} target="_blank" rel="noopener noreferrer">
 				<img src={instagramIconImage} className="add_midia_icon" />
 				<h1>Instagram</h1>
 				<h2>@{instagram}</h2>
@@ -197,7 +196,7 @@ function SocialMediaComponent({ ongData }) {
 		const whatsappHref = getWhatsappUrl(whatsapp)
 
 		return (
-			<a className={mediaButtonStyle + " whatsapp"} href={whatsappHref} target="_blank" rel="noopener noreferrer">
+			<a className={viewOngStyle.social_media + " whatsapp"} href={whatsappHref} target="_blank" rel="noopener noreferrer">
 				<div className="midia_bg_fade"></div>
 				<img src={whatsappIconImage} className="add_midia_icon" />
 				<h1>Whatsapp</h1>
@@ -214,7 +213,7 @@ function SocialMediaComponent({ ongData }) {
 		}
 
 		return (
-			<a className={mediaButtonStyle + " website"} href={website} target="_blank" rel="noopener noreferrer">
+			<a className={viewOngStyle.social_media + " website"} href={website} target="_blank" rel="noopener noreferrer">
 				<div className="midia_bg_fade"></div>
 				<img src={websiteIconImage} className="add_midia_icon" />
 				<h1>Website</h1>
@@ -229,7 +228,7 @@ function SocialMediaComponent({ ongData }) {
 				<h1>Acesse a ONG</h1>
 				<h2>(Clique abaixo)</h2>
 			</div>
-			<div className={viewOngStyle.media_container}>
+			<div className={viewOngStyle.social_media_background}>
 				<InstagramPreview />
 				<WhatsappPreview />
 				<WebsitePreview />
@@ -351,17 +350,6 @@ function OngMapComponent({ ongData }) {
 	)
 }
 
-async function createOngPopup(ongIndex, ongNome, ongCEP) {
-	const { lat, lon } = await obterCoordenadasPorCEP(ongCEP);
-
-	L.marker([lat, lon])
-		.addTo(mapa)
-		//.bindPopup(ongNome)
-		.on("click", () => {
-			abrirModalOng(ongIndex)
-		})
-}
-
 
 
 // Functions 7: ONG solicitation component //
@@ -377,7 +365,6 @@ function AdminSolicitationComponent({ ongData, setCurrentModal }) {
 		if (buttonDebounce) return
 		buttonDebounce = true
 
-		console.log("Approved", ongData.name, ongData.id)
 		addAcceptedOng(ongData)
 		refreshOngs()
 
@@ -390,7 +377,6 @@ function AdminSolicitationComponent({ ongData, setCurrentModal }) {
 		if (buttonDebounce) return
 		buttonDebounce = true
 
-		console.log("Rejected", ongData.name, ongData.id)
 		removeSolicitationOng(ongData.id)
 		refreshOngs()
 

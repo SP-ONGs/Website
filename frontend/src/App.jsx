@@ -40,7 +40,7 @@ function PublicSite() {
 			<HomepageComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
 			<LoginONGComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
 			<SignONGComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
-			<OngDashboardComponent currentModal={currentModal} setCurrentModal={setCurrentModal} />
+			{currentModal === "ongDashboard" && (<OngDashboardComponent setCurrentModal={setCurrentModal} />)}
 		</>
 	)
 }
