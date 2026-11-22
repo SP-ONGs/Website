@@ -14,7 +14,6 @@ public record OngUpdateRequest(
 		@NotBlank @Pattern(regexp = "\\d{8}") String cep,
 		@NotBlank @Size(max = 30) String houseNumber,
 		@Size(max = 18) String cnpj,
-		@Size(max = 2000) String imageUrl,
 		@NotNull @Size(max = 10) List<@Valid SocialMediaEntry> socialMedia,
 		@NotNull @Size(max = 20) List<@NotNull @Positive Long> tagIds) {
 

@@ -1,81 +1,116 @@
 // -->  Variables <-- //
 
+// API
+import { cloudinaryResize } from "../api/imageUrl.js"
+
+// Controller
+import { getTagsFilter } from "../controllers/ongController.js"
+import { setViewOngData } from "../controllers/viewOngController.js"
+import { setDashboardOngData, setUserRole as ongDashboard_setUserRole } from "../controllers/ongDashboardController.js"
+
+// Data
+import tagsData from "../data/tagsData.json"
+
 // CSS
-import ongCardStyle from '../styles/ongCard.module.css';
-import "../styles/tagsONG.css";
+import ongCardStyle from '../styles/ongCard.module.css'
+import "../styles/tagsONG.css"
 
 // Images
-import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png';
+import blackRateIconImage from '../../images/elements_vectors/BlackRateIcon.png'
 
-import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png";
-import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png";
-import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png";
-
-import petTagIconImage from "../../images/elements_vectors/PetTagIcon.png";
-import voluntarioTagIconImage from "../../images/elements_vectors/VoluntarioTagIcon.png";
-import donationTagIconImage from "../../images/elements_vectors/DonationTagIcon.png";
+import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
+import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
+import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
 
 
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function ongCardComponent({ setCurrentModal }) {
-	function onViewONG() {
-		setCurrentModal("viewONG")
+function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicable = true }) {
+	if (!ong) {
+		return (<TemplateCardComponent />)
 	}
 
-	const tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ");
-	const tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+	let cardStyle = ongCardStyle.ongCard_container
+
+	if (isClicable) {
+		cardStyle += ` ${ongCardStyle.clicable_card}`
+	}
+
+	function onViewONG() {
+		if (!isClicable) {
+			return
+		}
+
+		const IS_USER = !isAdmin
+
+		// User: View ong
+		if (IS_USER) {
+			setViewOngData(ong)
+			setCurrentModal("viewONG")
+			return
+		}
+
+		// Admin: Ong dashboard
+		if (currentTab == "AdminHomepage") {
+			ongDashboard_setUserRole("ADMIN")
+			setDashboardOngData(ong)
+			setCurrentModal("ongDashboard")
+			return
+		}
+
+		// Admin: Ong solicatitaion
+		if (currentTab == "Solicitations") {
+			setViewOngData(ong)
+			setCurrentModal("ongSolitation")
+		}
+	}
 
 	return (
-		<div className={ongCardStyle.ongCard_container} onClick={onViewONG}>
-			<div className={ongCardStyle.ongCard_photo}>
-				<div className={ongCardStyle.ongCard_photo_BG}></div>
-				<img />
-			</div>
+		<div className={cardStyle} onClick={onViewONG}>
+			<CardImageComponent ongImageUrl={ong.imageUrl} />
+			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
+			<CardSocialMediaComponent />
+			<CardTagsComponent tags={ong.tags} />
+		</div>
+	)
+}
 
-			<div className={ongCardStyle.ongCard_title_container}>
-				<h1>Nome da ONG</h1>
-				<div className={ongCardStyle.ongCard_rate_container}>
-					<img src={blackRateIconImage} />
-					<h1>4,7</h1>
-				</div>
-			</div>
+function TemplateCardComponent() {
+	return (
+		<div className={ongCardStyle.no_ong_template}></div>
+	)
+}
 
-			<div className={ongCardStyle.ongCard_socialmedia_container}>
-				<div className={ongCardStyle.socialmedia_card}>
-					<img src={instagramIconImage} />
-					<h1>Instagram</h1>
-				</div>
-				<div className={ongCardStyle.socialmedia_card}>
-					<img src={whatsappIconImage} />
-					<h1>Whatsapp</h1>
-				</div>
-				<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
-					<img src={websiteIconImage} />
-					<h1>Website</h1>
-				</div>
-			</div>
 
-			<div className={ongCardStyle.ongCard_tag_container}>
-				<div className={tagContainerStyle}>
-					<img src={petTagIconImage} alt="Pet" />
-					<div className={tagDividerStyle}></div>
-					<label>Animais</label>
-				</div>
+// Functions 2: Card image //
+function CardImageComponent({ ongImageUrl }) {
+	function onImageLoadError(e) {
+		e.currentTarget.onerror = null
+		e.currentTarget.src = ""
+	}
 
-				<div className={tagContainerStyle}>
-					<img src={voluntarioTagIconImage} alt="Voluntário" />
-					<div className={tagDividerStyle}></div>
-					<label>Voluntário</label>
-				</div>
+	const finalImageUrl = cloudinaryResize(ongImageUrl, 400)
 
-				<div className={tagContainerStyle}>
-					<img src={donationTagIconImage} alt="Doação" />
-					<div className={tagDividerStyle}></div>
-					<label>Doação</label>
-				</div>
+	return (
+		<div className={ongCardStyle.ongCard_photo}>
+			<div className={ongCardStyle.ongCard_photo_BG}></div>
+			<img src={finalImageUrl} onError={onImageLoadError} />
+		</div>
+	)
+}
+
+
+
+// Functions 3: Card title //
+function CardTitleComponent({ ongName, ongAverageRate }) {
+	return (
+		<div className={ongCardStyle.ongCard_title_container}>
+			<h1>{ongName}</h1>
+			<div className={ongCardStyle.ongCard_rate_container}>
+				<img src={blackRateIconImage} />
+				<h1>{ongAverageRate}</h1>
 			</div>
 		</div>
 	)
@@ -83,4 +118,61 @@ function ongCardComponent({ setCurrentModal }) {
 
 
 
-export default ongCardComponent;
+// Functions 4: Card social media //
+function CardSocialMediaComponent() {
+	return (
+		<div className={ongCardStyle.ongCard_socialmedia_container}>
+			<div className={ongCardStyle.socialmedia_card}>
+				<img src={instagramIconImage} />
+				<h1>Instagram</h1>
+			</div>
+			<div className={ongCardStyle.socialmedia_card}>
+				<img src={whatsappIconImage} />
+				<h1>Whatsapp</h1>
+			</div>
+			<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
+				<img src={websiteIconImage} />
+				<h1>Website</h1>
+			</div>
+		</div>
+	)
+}
+
+
+
+// Functions 5: Card tags //
+function CardTagsComponent({ tags }) {
+	return (
+		<div className={ongCardStyle.ongCard_tag_container}>
+			{tags.map((tagData) => (
+				<TagComponent key={tagData.id} tag={tagData} />
+			))}
+		</div>
+	)
+}
+
+function TagComponent({ tag }) {
+	let tagContainerStyle = ["tag_container", ongCardStyle.tag_container_size].join(" ")
+	let tagDividerStyle = ["tag_divider_bar", ongCardStyle.tag_divider_size].join(" ")
+
+	const TAG_IS_SELECTED = getTagsFilter().find(id => id == tag.id)
+
+	if (TAG_IS_SELECTED) {
+		tagContainerStyle += " selected_tag_container"
+		tagDividerStyle += " selected_tag_divider_bar"
+	}
+
+	const tagData = tagsData[tag.description]
+
+	return (
+		<div className={tagContainerStyle}>
+			<img src={tagData.image} />
+			<div className={tagDividerStyle}></div>
+			<label>{tagData.description}</label>
+		</div>
+	)
+}
+
+
+
+export default OngCardComponent

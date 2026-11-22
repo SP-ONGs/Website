@@ -14,9 +14,7 @@ import java.util.UUID;
 
 @Service
 public class CloudinaryService {
-
 	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
-
 	private final Cloudinary cloudinary;
 
 	public CloudinaryService(Cloudinary cloudinary) {
@@ -27,7 +25,6 @@ public class CloudinaryService {
 	}
 
 	public UploadedImage uploadOngImage(MultipartFile file) {
-
 		validateImage(file);
 
 		try {

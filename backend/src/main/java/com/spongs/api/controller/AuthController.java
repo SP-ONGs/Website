@@ -52,7 +52,7 @@ public class AuthController {
 		return new CsrfResponse(csrfToken.getToken());
 	}
 
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest,
 			HttpServletResponse httpResponse) {
 		String email = request.email().trim().toLowerCase(java.util.Locale.ROOT);

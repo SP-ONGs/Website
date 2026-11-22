@@ -1,11 +1,14 @@
 // --> Variables <-- //
 
+// Controllers
+import { updateNameFilter } from '../controllers/ongController.js'
+
 // CSS
-import navbarStyles from '../styles/navbar.module.css';
+import navbarStyles from '../styles/navbar.module.css'
 
 // Images
-import logoImage from "../../images/SPONGs_icon-nobg.png";
-import searchIconImage from "../../images/elements_vectors/SearchIcon.png";
+import logoImage from "../../images/SPONGs_icon-nobg.png"
+import searchIconImage from "../../images/elements_vectors/SearchIcon.png"
 
 
 
@@ -25,10 +28,17 @@ function BrandComponent() {
 
 // Functions 2: Search bar component //
 function SearchBar() {
+	function updateSearchText() {
+		const searchInputElement = document.getElementById("navbar_search")
+		const filterText = searchInputElement.value
+
+		updateNameFilter(filterText)
+	}
+
 	return (
 		<div className={navbarStyles.search_bar}>
 			<img src={searchIconImage} />
-			<input type="text" placeholder="Pesquisar nome da ONG" />
+			<input id="navbar_search" type="text" placeholder="Pesquisar nome da ONG" onChange={updateSearchText} />
 		</div>
 	)
 }
@@ -48,4 +58,4 @@ function NavbarComponent() {
 
 
 
-export default NavbarComponent;
+export default NavbarComponent

@@ -1,0 +1,199 @@
+// --> Variables <-- //
+
+// API
+import { getPublicOngs } from "../api/ongs.js"
+import { getPendingOngs } from "../api/adminOng.js"
+
+// Controllers
+import { getTagId } from "./tagController.js"
+
+// Values
+const loadedOngs = {}
+let ongState = {
+	inLoading: false,
+	displayOngs: []
+}
+
+let useFilter = false
+let nameFilter
+let tagsFilter = []
+let inFilterOngs = []
+
+let cardsAmount = 6
+let currentIndex = 1
+let ongType = "Public"
+
+const listeners = new Set()
+
+
+
+// --> Functions <-- //
+
+// Functions 1: Get ongs //
+async function getLoadedPublicOngs() {
+	if (!loadedOngs["Public"]) {
+		ongState.inLoading = true
+		loadedOngs["Public"] = await getPublicOngs()
+		ongState.inLoading = false
+	}
+
+	return loadedOngs["Public"]
+}
+
+async function getLoadedPendingOngs() {
+	if (!loadedOngs["Pending"]) {
+		ongState.inLoading = true
+		loadedOngs["Pending"] = await getPendingOngs()
+		ongState.inLoading = false
+	}
+
+	return loadedOngs["Pending"]
+}
+
+export async function refreshOngs() {
+	const firstOng = 0 + (currentIndex - 1) * cardsAmount
+	const lastOng = firstOng + cardsAmount
+
+	const referenceOngList = useFilter && inFilterOngs || ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
+	const newOngList = referenceOngList.slice(firstOng, lastOng)
+
+	updateOngState({ displayOngs: newOngList })
+}
+
+export function getOngsSnapshot() {
+	return ongState
+}
+
+export function addOngCard(listener) {
+	listeners.add(listener)
+	return () => listeners.delete(listener)
+}
+
+export function updateOngState(patch) {
+	ongState = { ...ongState, ...patch }
+	listeners.forEach((l) => l())
+}
+
+
+
+// Function 2: Update variables //
+export function setOngType(newOngType) {
+	const IS_VALID_ONG_TYPE = newOngType == "Public" || newOngType == "Pending"
+
+	if (!IS_VALID_ONG_TYPE) {
+		throw Error(`ongController: "${newOngType}" is not a valid OngType!!!`)
+	}
+
+	ongType = newOngType
+
+	useFilter = false
+	nameFilter
+	tagsFilter = []
+	inFilterOngs = []
+
+	setCurrentIndex(1)
+}
+
+export function getCurrentIndex() {
+	return currentIndex
+}
+
+export function setCurrentIndex(newIndex) {
+	currentIndex = newIndex
+	refreshOngs()
+}
+
+export function updateCardsAmount(newCardsAmount) {
+	cardsAmount = newCardsAmount
+}
+
+
+
+// Functions 3: Filter //
+async function doFilter() {
+	const USE_NAME_FILTER = nameFilter && nameFilter !== ""
+	const USE_TAG_FILTER = tagsFilter.length > 0
+
+	useFilter = USE_NAME_FILTER || USE_TAG_FILTER
+
+	if (!useFilter) {
+		return
+	}
+
+	const ongsList = ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
+	const newFilteredOngs = []
+
+	function ongInTagFilter(ong) {
+		if (!USE_TAG_FILTER) {
+			return true
+		}
+
+		for (const tagId of tagsFilter) {
+			const IN_TAG_FILTER = ong.tags.find(tagData => tagData.id == tagId)
+
+			if (IN_TAG_FILTER) {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	for (const ong of ongsList) {
+		const IN_NAME_FILTER = !USE_NAME_FILTER || ong.name.toLowerCase().includes(nameFilter)
+		const IN_TAG_FILTER = ongInTagFilter(ong)
+
+		if (IN_NAME_FILTER && IN_TAG_FILTER) {
+			newFilteredOngs.push(ong)
+		}
+	}
+
+	inFilterOngs = newFilteredOngs
+}
+
+export async function updateNameFilter(name) {
+	nameFilter = name.trim().toLowerCase()
+
+	await doFilter()
+	refreshOngs()
+}
+
+export async function addTagInFilter(tagName) {
+	const tagId = await getTagId(tagName)
+
+	tagsFilter.push(tagId)
+
+	await doFilter()
+	refreshOngs()
+}
+
+export async function removeTagFromFilter(tagName) {
+	const tagId = await getTagId(tagName)
+	const newTagsFilter = tagsFilter.filter(item => item !== tagId)
+
+	tagsFilter = newTagsFilter
+
+	await doFilter()
+	refreshOngs()
+}
+
+export function getTagsFilter() {
+	return tagsFilter
+}
+
+
+
+// Functions 4: Add/Remove ongs //
+export function addAcceptedOng(ongData) {
+	const publicOngs = loadedOngs["Public"] || []
+	publicOngs.push(ongData)
+
+	loadedOngs["Public"] = publicOngs
+
+	removeSolicitationOng(ongData.id)
+}
+
+export function removeSolicitationOng(ongId) {
+	const newPendingOngs = loadedOngs["Pending"].filter(ongData => ongData.id !== ongId)
+	loadedOngs["Pending"] = newPendingOngs
+}

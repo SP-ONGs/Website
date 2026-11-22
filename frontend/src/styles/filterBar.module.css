@@ -3,18 +3,115 @@
 	font-family: Arial, sans-serif;
 }
 
+
+/* Filter container */
 .filter_bar_container {
-	height: 30px;
-	max-width: 947px;
+	height: 35px;
+	width: 950px;
 
 	position: relative;
 	left: 291px;
 	margin-top: 30px;
-
-	display: flex;
-	gap: 8px;
 }
 
+.filter_bar_scroll {
+	height: 100%;
+	width: 100%;
+
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+	left: 0;
+
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+}
+
+
+/* Scroll buttons */
+.start_solid_fade,
+.end_solid_fade,
+.start_fade,
+.end_fade {
+	height: 100%;
+	width: 40px;
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+
+	background: white;
+	pointer-events: none;
+
+	transition: opacity 0.1s ease-out;
+}
+
+.start_solid_fade {
+	left: 0;
+}
+
+.end_solid_fade {
+	right: 0;
+}
+
+.start_fade {
+	background: linear-gradient(to right, white, transparent);
+	left: 40px;
+}
+
+.end_fade {
+	background: linear-gradient(to left, white, transparent);
+	right: 40px;
+}
+
+.scroll_button {
+	height: 30px;
+	width: 30px;
+
+	background: black;
+	border-radius: 50%;
+
+	position: absolute;
+	transform: translateY(-50%);
+	top: 50%;
+
+	cursor: pointer;
+	user-select: none;
+
+	transition: opacity 0.1s ease-out;
+}
+
+.next_button {
+	right: 0;
+}
+
+.previus_button {
+	left: 0;
+}
+
+.scroll_button img {
+	width: 40%;
+	height: 60%;
+
+	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+}
+
+.disabled_button {
+	opacity: 0;
+	pointer-events: none;
+}
+
+
+/* Filter title */
 .filter_title {
 	display: flex;
 	gap: 8px;
@@ -37,10 +134,19 @@
 	margin-right: 6px;
 }
 
+
+/* Tags buttons */
 .tag_container_size {
 	height: 30px;
 }
 
+.tag_container_size img {
+	margin-left: 5px;
+}
+
 .tag_container_size label {
 	font-size: 18px;
+	margin-right: 10px;
+
+	text-wrap: nowrap;
 }

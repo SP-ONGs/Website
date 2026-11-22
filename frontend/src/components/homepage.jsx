@@ -1,12 +1,12 @@
 // --> Variables <-- //
 
 // Component
-import NavbarComponent from './navbar.jsx';
-import TabsMenuComponent from './tabsMenu.jsx';
-import FilterBarComponent from './filterBar.jsx';
-import OngBoardComponent from './ongBoard.jsx';
-import ViewOngComponent from './viewONG.jsx';
-import WelcomeModalComponent from './welcomeModal.jsx';
+import NavbarComponent from './navbar.jsx'
+import TabsMenuComponent from './tabsMenu.jsx'
+import FilterBarComponent from './filterBar.jsx'
+import OngBoardComponent from './ongBoard.jsx'
+import ViewOngComponent from './viewONG.jsx'
+import WelcomeModalComponent from './welcomeModal.jsx'
 
 
 
@@ -23,9 +23,9 @@ function HomepageComponent({ currentModal, setCurrentModal }) {
 			{currentModal === "viewONG" && (<ViewOngComponent setCurrentModal={setCurrentModal} />)}
 			{currentModal === "welcome" && (<WelcomeModalComponent setCurrentModal={setCurrentModal} />)}
 		</>
-	);
+	)
 }
 
 
 
-export default HomepageComponent;
+export default HomepageComponent

@@ -11,16 +11,18 @@
 	top: 50%;
 	left: 50%;
 
+	transform: translate(-50%, -50%) scale(1.05);
+
 	animation: modalOpen 0.175s cubic-bezier(.3, 1.5, .925, 1);
 }
 
 @keyframes modalOpen {
 	from {
-		transform: translate(-50%, -50%) scale(.8);
+		transform: translate(-50%, -50%) scale(.85);
 	}
 
 	to {
-		transform: translate(-50%, -50%) scale(1);
+		transform: translate(-50%, -50%) scale(1.05);
 	}
 }
 
@@ -39,7 +41,7 @@
 
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 4px;
 }
 
 .brand_container img {

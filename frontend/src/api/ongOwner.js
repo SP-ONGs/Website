@@ -1,14 +1,21 @@
 import { apiRequest } from "./api";
 import { apiMutation } from "./auth";
 
-export function getMyOng() {
-	return apiRequest("/api/owner/ong");
+export async function getMyOng() {
+	return apiRequest("/api/owner");
 }
 
-export function updateMyOng(ongData) {
-	return apiMutation("/api/owner/ong", "PUT", ongData);
+export async function updateMyOng(data, imageFile) {
+	const formData = new FormData()
+	formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }))
+
+	if (imageFile) {
+		formData.append("image", imageFile)
+	}
+
+	return apiMutation("/api/owner", "PUT", formData)
 }
 
-export function requestMyOngRemoval() {
+export async function requestMyOngRemoval() {
 	return apiMutation("/api/owner/ong/removal-request", "POST");
 }
