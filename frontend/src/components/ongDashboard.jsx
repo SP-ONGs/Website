@@ -7,6 +7,7 @@ import tagsData from "../data/tagsData.json"
 
 // Controllers
 import { getDashboardOngData } from "../controllers/ongDashboardController.js"
+import { getTagId } from "../controllers/tagController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -270,6 +271,10 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 function OngTagsComponent({ ongData, setOngData }) {
 	const tagList = {}
 
+	for (const tagData of ongData.tags) {
+		tagList[tagData.description] = true
+	}
+
 	return (
 		<div className={ongDashboardStyle.tag_container}>
 			<h1 className={ongDashboardStyle.tag_container_title}>TAGS DA ONG</h1>
@@ -281,6 +286,8 @@ function OngTagsComponent({ ongData, setOngData }) {
 						description={description}
 						image={image}
 						isSelected={!!tagList[name]}
+						ongData={ongData}
+						setOngData={setOngData}
 					/>
 				))}
 			</div>
@@ -288,17 +295,58 @@ function OngTagsComponent({ ongData, setOngData }) {
 	)
 }
 
-function TagContainer({ tagName, description, image, isSelected }) {
+function TagContainer({ tagName, description, image, isSelected, ongData, setOngData }) {
+	const [tagSelected, setTagSelected] = useState(isSelected)
+
 	let tagContainerStyle = ["tag_container", "selectable_tag", ongDashboardStyle.tag_container_size].join(" ")
 	let tagDividerStyle = "tag_divider_bar"
 
-	if (isSelected) {
+	if (tagSelected) {
 		tagContainerStyle += " selected_tag_container"
 		tagDividerStyle += " selected_tag_divider_bar"
 	}
 
-	function onToggleTag() {
+	async function addTag() {
+		const newTagList = ongData.tags
 
+		if (newTagList.length >= 3) {
+			return
+		}
+
+		const tagId = await getTagId(tagName)
+		const CAN_UPDATE_TAG = !ongData.tags.some(tagData => tagData.description == tagName)
+
+		if (CAN_UPDATE_TAG) {
+			newTagList.push({
+				"id": tagId,
+				"description": tagName
+			})
+			setOngData(previusOngData => ({
+				...previusOngData,
+				"tags": newTagList
+			}))
+		}
+	}
+
+	function removeTag() {
+		const newTagList = ongData.tags.filter(tagData => tagData.description != tagName)
+
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"tags": newTagList
+		}))
+	}
+
+	function onToggleTag() {
+		const ADD_TAG = !tagSelected
+
+		setTagSelected(!tagSelected)
+
+		if (ADD_TAG) {
+			addTag()
+		} else {
+			removeTag()
+		}
 	}
 
 	return (

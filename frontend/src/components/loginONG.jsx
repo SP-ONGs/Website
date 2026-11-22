@@ -8,7 +8,7 @@ import { login, logout } from "../api/session"
 import { getMyOng } from "../api/ongOwner.js"
 
 // Controllers
-import { setDashboardOngData } from "../controllers/ongDashboardController.js"
+import { setDashboardOngData, setUserRole as ongDashboard_setUserRole } from "../controllers/ongDashboardController.js"
 
 // CSS
 import loginStyle from "../styles/loginONG.module.css"
@@ -216,7 +216,9 @@ function LoginButton({ setCurrentModal }) {
 
 			const ongData = await getMyOng()
 
+			ongDashboard_setUserRole("ONG_OWNER")
 			setDashboardOngData(ongData)
+
 			setCurrentModal("ongDashboard")
 		} catch (e) {
 			setError(emailInputElement.parentElement, true)

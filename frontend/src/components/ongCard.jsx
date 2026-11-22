@@ -6,7 +6,7 @@ import { cloudinaryResize } from "../api/imageUrl.js"
 // Controller
 import { getTagsFilter } from "../controllers/ongController.js"
 import { setViewOngData } from "../controllers/viewOngController.js"
-import { setDashboardOngData } from "../controllers/ongDashboardController.js"
+import { setDashboardOngData, setUserRole as ongDashboard_setUserRole } from "../controllers/ongDashboardController.js"
 
 // Data
 import tagsData from "../data/tagsData.json"
@@ -54,6 +54,7 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicabl
 
 		// Admin: Ong dashboard
 		if (currentTab == "AdminHomepage") {
+			ongDashboard_setUserRole("ADMIN")
 			setDashboardOngData(ong)
 			setCurrentModal("ongDashboard")
 			return
