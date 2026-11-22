@@ -38,7 +38,7 @@ body {
 
 
 /* Botão de fechar */
-.close_loginONG_button {
+.close_button {
 	position: absolute;
 
 	top: 20px;
@@ -52,8 +52,8 @@ body {
 	background-color: rgba(255, 255, 255, 0);
 }
 
-.close_loginONG_button img,
-.close_loginONG_button button {
+.close_button img,
+.close_button button {
 	position: absolute;
 	cursor: pointer;
 
@@ -181,7 +181,7 @@ body {
 /* Botão de login */
 .login_button {
 	height: 50px;
-	width: 100%;
+	width: 381px;
 
 	border: none;
 	border-radius: 6px;
@@ -194,6 +194,23 @@ body {
 	font-weight: 500;
 
 	cursor: pointer;
+
+	transition: transform 0.2s ease;
+}
+
+.login_button:hover {
+	transform: scale(1.0125);
+}
+
+.login_button_disabled {
+	background: rgba(0, 125, 188, .6);
+	color: rgba(255, 255, 255, .6);
+
+	cursor: default;
+}
+
+.login_button_disabled:hover {
+	transform: scale(1);
 }
 
 

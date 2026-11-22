@@ -2,7 +2,7 @@ import { apiRequest } from "./api";
 import { apiMutation } from "./auth";
 
 export async function getMyOng() {
-	return apiRequest("/api/owner/ong");
+	return apiRequest("/api/owner");
 }
 
 export async function updateMyOng(ongData) {
