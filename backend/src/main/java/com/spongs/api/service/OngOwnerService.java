@@ -4,7 +4,12 @@ package com.spongs.api.service;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // Models
 import com.spongs.api.model.Ong;
@@ -37,6 +42,9 @@ public class OngOwnerService {
 	private final OngTagRepository ongTagRepository;
 
 	private final OngService ongService;
+	private final CloudinaryService cloudinaryService;
+
+	private static final Logger log = LoggerFactory.getLogger(OngOwnerService.class);
 
 	public OngOwnerService(
 			OngRepository ongRepository,
@@ -44,13 +52,15 @@ public class OngOwnerService {
 			TagRepository tagRepository,
 			OngSocialMediaRepository ongSocialMediaRepository,
 			OngTagRepository ongTagRepository,
-			OngService ongService) {
+			OngService ongService,
+			CloudinaryService cloudinaryService) {
 		this.ongRepository = ongRepository;
 		this.socialMediaRepository = socialMediaRepository;
 		this.tagRepository = tagRepository;
 		this.ongSocialMediaRepository = ongSocialMediaRepository;
 		this.ongTagRepository = ongTagRepository;
 		this.ongService = ongService;
+		this.cloudinaryService = cloudinaryService;
 	}
 
 	@Transactional(readOnly = true)
@@ -61,9 +71,17 @@ public class OngOwnerService {
 		return toOwnerResponse(ong);
 	}
 
+	@Transactional
 	public OngOwnerResponse updateOwnerOng(Long ongId, OngUpdateRequest request) {
+		return updateOwnerOng(ongId, request, "", "");
+	}
+
+	@Transactional
+	public OngOwnerResponse updateOwnerOng(Long ongId, OngUpdateRequest request, String newImageUrl,
+			String newImagePublicId) {
 		Ong ong = ongRepository.findById(ongId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ONG not found."));
+		String oldPublicId = ong.getImagePublicId();
 
 		// Check if ONG is removed
 		boolean IS_REMOVED = ong.getStatus() == OngStatus.REMOVAL_REQUESTED || ong.getStatus() == OngStatus.ADMIN_REMOVED;
@@ -114,7 +132,30 @@ public class OngOwnerService {
 		ong.setCep(request.cep());
 		ong.setHouseNumber(request.houseNumber().trim());
 		ong.setCnpj(newCnpj);
-		ong.setImageUrl(request.imageUrl());
+
+		if (!newImageUrl.isEmpty()) {
+			ong.setImageUrl(newImageUrl);
+		}
+
+		if (!newImagePublicId.isEmpty()) {
+			ong.setImagePublicId(newImagePublicId);
+		}
+
+		boolean DELETE_OLD_IMAGE = oldPublicId != null && !oldPublicId.equals(newImagePublicId);
+
+		if (DELETE_OLD_IMAGE) {
+			TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+				@Override
+				public void afterCommit() {
+					try {
+						cloudinaryService.deleteImage(oldPublicId);
+					} catch (RuntimeException e) {
+						// An orphaned old image is not worth failing the request
+						log.warn("Could not delete old image {}", oldPublicId, e);
+					}
+				}
+			});
+		}
 
 		/*
 		 * Changing cnpj requires another review
@@ -146,36 +187,6 @@ public class OngOwnerService {
 
 		return toOwnerResponse(savedOng);
 	}
-
-	/*
-	 * @Transactional
-	 * public String updateOwnerOngImage(String imageUrl, String imagePublicId) {
-	 * 
-	 * UserAccount owner = accountAccessService.requireCurrentOwner();
-	 * Ong ong = owner.getOng();
-	 * 
-	 * if (ong == null) {
-	 * throw new IllegalStateException("Owner does not have an associated ONG.");
-	 * }
-	 * 
-	 * if (ong.getStatus() == OngStatus.REMOVAL_REQUESTED
-	 * || ong.getStatus() == OngStatus.ADMIN_REMOVED) {
-	 * throw new IllegalStateException(
-	 * "This ONG cannot update its image in its current status.");
-	 * }
-	 * 
-	 * String oldPublicId = ong.getImagePublicId();
-	 * 
-	 * ong.setImageUrl(imageUrl);
-	 * ong.setImagePublicId(imagePublicId);
-	 * 
-	 * ongRepository.save(ong);
-	 * 
-	 * // Returned to the controller, which deletes it after this
-	 * // transactional method has successfully committed.
-	 * return oldPublicId;
-	 * }
-	 */
 
 	@Transactional
 	public OngOwnerResponse requestOngRemoval(Long ongId) {

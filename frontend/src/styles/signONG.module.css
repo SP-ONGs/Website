@@ -18,16 +18,18 @@
 	border-radius: 25px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
 
+	transform: translate(-50%, -50%) scale(1.1);
+
 	animation: modalOpen 0.175s cubic-bezier(.3, 1.5, .925, 1);
 }
 
 @keyframes modalOpen {
 	from {
-		transform: translate(-50%, -50%) scale(.8);
+		transform: translate(-50%, -50%) scale(.925);
 	}
 
 	to {
-		transform: translate(-50%, -50%) scale(1);
+		transform: translate(-50%, -50%) scale(1.1);
 	}
 }
 

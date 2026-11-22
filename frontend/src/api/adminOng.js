@@ -22,6 +22,17 @@ export async function getAdminOng(id) {
 	return apiRequest(`/api/admin/ongs/${id}`);
 }
 
+export async function updateOng(id, data, imageFile) {
+	const formData = new FormData()
+	formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }))
+
+	if (imageFile) {
+		formData.append("image", imageFile)   // omit to keep the current image
+	}
+
+	return apiMutation(`/api/admin/ongs/${id}`, "POST", formData)
+}
+
 export async function approveOng(id) {
 	return apiMutation(`/api/admin/ongs/${id}/approve`, "POST");
 }
