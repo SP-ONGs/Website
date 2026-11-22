@@ -60,11 +60,17 @@ public class SecurityConfig {
 						.sessionFixation(fixation -> fixation.changeSessionId()))
 				.formLogin(form -> form.disable()).httpBasic(basic -> basic.disable())
 				.authorizeHttpRequests(auth -> auth
+						// Spring's internal error page (shows the real error instead of 403)
+						.requestMatchers("/error").permitAll()
+
 						// Public authentication
 						.requestMatchers("/api/auth/csrf", "/api/auth/login").permitAll()
 
 						// Public ONG registration
 						.requestMatchers(HttpMethod.POST, "/api/ongs").permitAll()
+
+						// Public ONG reviews (anyone can rate and comment)
+						.requestMatchers(HttpMethod.POST, "/api/ongs/*/reviews").permitAll()
 
 						// Public ONG catalogue
 						.requestMatchers(HttpMethod.GET, "/api/ongs", "/api/ongs/**", "/api/tags", "/api/social-media")

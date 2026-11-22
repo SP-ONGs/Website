@@ -493,3 +493,62 @@
 	bottom: 12px;
 	left: 50%;
 }
+
+	/* Reviews: clickable stars, form and comment list */
+	.clickable_star { cursor: pointer; }
+
+	.comment_area {
+		position: absolute;
+		top: 96px;
+		left: 306px;
+		right: 14px;
+		bottom: 12px;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.comment_form { display: flex; gap: 6px; }
+
+	.comment_name_input,
+	.comment_input {
+		height: 28px;
+		border: 2px solid #D9D9D9;
+		border-radius: 8px;
+		padding: 0 8px;
+		font-size: 14px;
+	}
+	.comment_name_input { width: 25%; }
+	.comment_input { flex: 1; }
+
+	.comment_send_button {
+		height: 32px;
+		padding: 0 14px;
+		border: 0;
+		border-radius: 8px;
+		background: #007DBC;
+		color: #FFFFFF;
+		font-size: 14px;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.comment_send_button:disabled { opacity: .6; cursor: default; }
+
+	.comment_error { font-size: 13px; color: #FF4D4D; }
+
+	.comment_list {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.comment_item { background: #F6F6F6; border-radius: 8px; padding: 5px 9px; }
+	.comment_header { display: flex; align-items: center; gap: 6px; }
+	.comment_header b { font-size: 13px; }
+	.comment_header small { font-size: 11px; color: #777777; }
+	.comment_stars { font-size: 13px; color: #F5B800; letter-spacing: 1px; }
+	.comment_item p { font-size: 13px; color: #333333; margin-top: 1px; }
+
