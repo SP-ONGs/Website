@@ -7,6 +7,7 @@ import com.spongs.api.model.OngReview;
 public record OngReviewResponse(
 		Long id,
 		String authorName,
+		String photoUrl,
 		int rating,
 		String comment,
 		Instant createdAt) {
@@ -15,6 +16,7 @@ public record OngReviewResponse(
 		return new OngReviewResponse(
 				review.getId(),
 				review.getAuthorName(),
+				review.getPhotoUrl(),
 				review.getRating(),
 				review.getComment(),
 				review.getCreatedAt());

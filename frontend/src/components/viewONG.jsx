@@ -3,6 +3,7 @@
 // React
 import { useState, useEffect } from "react"
 import { MapContainer, TileLayer, Marker } from "react-leaflet"
+import { GoogleLogin } from "@react-oauth/google"
 
 // API
 import { cloudinaryResize } from "../api/imageUrl.js"
@@ -241,6 +242,19 @@ function SocialMediaComponent({ ongData }) {
 
 
 // Functions 4: ONG rate component //
+function readGoogleProfile(idToken) {
+	try {
+		const payload = idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")
+		const json = decodeURIComponent(
+			atob(payload).split("").map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0")).join("")
+		)
+		const data = JSON.parse(json)
+		return { name: data.name, picture: data.picture }
+	} catch {
+		return null
+	}
+}
+
 function RateContainerComponent({ ongId }) {
 	const emptySummary = { average: 0, total: 0, distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } }
 
@@ -248,10 +262,12 @@ function RateContainerComponent({ ongId }) {
 	const [reviews, setReviews] = useState([])
 	const [selectedRating, setSelectedRating] = useState(0)
 	const [hoverRating, setHoverRating] = useState(0)
-	const [authorName, setAuthorName] = useState("")
+	const [idToken, setIdToken] = useState("")
 	const [comment, setComment] = useState("")
 	const [sending, setSending] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
+
+	const profile = idToken ? readGoogleProfile(idToken) : null
 
 	async function loadReviews() {
 		try {
@@ -272,22 +288,31 @@ function RateContainerComponent({ ongId }) {
 	}, [ongId])
 
 	async function onSend() {
-		if (selectedRating === 0 || sending) return
+		if (selectedRating === 0 || !idToken || sending) return
 
 		setSending(true)
 		setErrorMessage("")
 
 		try {
-			await createReview(ongId, { authorName, rating: selectedRating, comment })
+			await createReview(ongId, { idToken, rating: selectedRating, comment })
 
 			setSelectedRating(0)
-			setAuthorName("")
 			setComment("")
 
 			await loadReviews()
 		} catch (error) {
 			console.error("Could not send review:", error)
-			setErrorMessage("Não foi possível enviar. Tente novamente.")
+
+			const message = String(error.message)
+
+			if (message.includes("409")) {
+				setErrorMessage("Você já avaliou esta ONG.")
+			} else if (message.includes("401")) {
+				setIdToken("")
+				setErrorMessage("Sua sessão do Google expirou. Entre novamente.")
+			} else {
+				setErrorMessage("Não foi possível enviar. Tente novamente.")
+			}
 		} finally {
 			setSending(false)
 		}
@@ -312,6 +337,14 @@ function RateContainerComponent({ ongId }) {
 				</div>
 			</div>
 		)
+	}
+
+	function Avatar({ name, photoUrl }) {
+		if (photoUrl) {
+			return <img className={viewOngStyle.comment_avatar} src={photoUrl} referrerPolicy="no-referrer" alt="" />
+		}
+
+		return <span className={viewOngStyle.comment_avatar_letter}>{(name || "?").charAt(0).toUpperCase()}</span>
 	}
 
 	const shownRating = hoverRating || selectedRating
@@ -359,15 +392,24 @@ function RateContainerComponent({ ongId }) {
 			</div>
 
 			<div className={viewOngStyle.comment_area}>
-				{selectedRating > 0 && (
-					<div className={viewOngStyle.comment_form}>
-						<input
-							className={viewOngStyle.comment_name_input}
-							placeholder="Seu nome"
-							maxLength={80}
-							value={authorName}
-							onChange={(event) => setAuthorName(event.target.value)}
+				{selectedRating > 0 && !idToken && (
+					<div className={viewOngStyle.login_box}>
+						<GoogleLogin
+							onSuccess={(credentialResponse) => {
+								setErrorMessage("")
+								setIdToken(credentialResponse.credential)
+							}}
+							onError={() => setErrorMessage("Não foi possível entrar com o Google.")}
 						/>
+					</div>
+				)}
+
+				{selectedRating > 0 && idToken && (
+					<div className={viewOngStyle.comment_form}>
+						<div className={viewOngStyle.comment_user}>
+							<Avatar name={profile?.name} photoUrl={profile?.picture} />
+							<b>{profile?.name}</b>
+						</div>
 						<input
 							className={viewOngStyle.comment_input}
 							placeholder="Escreva um comentário (opcional)"
@@ -387,6 +429,7 @@ function RateContainerComponent({ ongId }) {
 					{reviews.map((review) => (
 						<div key={review.id} className={viewOngStyle.comment_item}>
 							<div className={viewOngStyle.comment_header}>
+								<Avatar name={review.authorName} photoUrl={review.photoUrl} />
 								<b>{review.authorName}</b>
 								<span className={viewOngStyle.comment_stars}>
 									{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
@@ -401,7 +444,6 @@ function RateContainerComponent({ ongId }) {
 		</div>
 	)
 }
-
 
 
 // Functions 5: Brand component //

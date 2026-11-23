@@ -15,4 +15,5 @@ public interface OngReviewRepository extends JpaRepository<OngReview, Long> {
 	// Each row: [rating (Integer), amount (Long)]
 	@Query("select r.rating, count(r) from OngReview r where r.ong.id = :ongId group by r.rating")
 	List<Object[]> countByRating(@Param("ongId") Long ongId);
+	boolean existsByOng_IdAndGoogleSub(Long ongId, String googleSub);
 }

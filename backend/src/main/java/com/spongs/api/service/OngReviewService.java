@@ -18,6 +18,7 @@ import com.spongs.api.model.OngReview;
 import com.spongs.api.model.OngStatus;
 import com.spongs.api.repository.OngRepository;
 import com.spongs.api.repository.OngReviewRepository;
+import com.spongs.api.service.GoogleTokenVerifier.GoogleUser;
 
 @Service
 public class OngReviewService {
@@ -25,24 +26,31 @@ public class OngReviewService {
 
     private final OngRepository ongRepository;
     private final OngReviewRepository reviewRepository;
+    private final GoogleTokenVerifier googleTokenVerifier;
 
-    public OngReviewService(OngRepository ongRepository, OngReviewRepository reviewRepository) {
+    public OngReviewService(OngRepository ongRepository, OngReviewRepository reviewRepository,
+                            GoogleTokenVerifier googleTokenVerifier) {
         this.ongRepository = ongRepository;
         this.reviewRepository = reviewRepository;
+        this.googleTokenVerifier = googleTokenVerifier;
     }
 
     @Transactional
     public OngReviewResponse createReview(Long ongId, OngReviewRequest request) {
         Ong ong = findApprovedOng(ongId);
+        GoogleUser user = googleTokenVerifier.verify(request.idToken());
 
-        String authorName = clean(request.authorName());
-        String comment = clean(request.comment());
+        if (reviewRepository.existsByOng_IdAndGoogleSub(ongId, user.sub())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "You already reviewed this ONG");
+        }
 
         OngReview review = reviewRepository.save(new OngReview(
                 ong,
-                authorName == null ? "Anônimo" : authorName,
+                user.name().length() > 80 ? user.name().substring(0, 80) : user.name(),
+                user.sub(),
+                user.picture(),
                 request.rating(),
-                comment));
+                clean(request.comment())));
 
         return OngReviewResponse.from(review);
     }

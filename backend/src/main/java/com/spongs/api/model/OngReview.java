@@ -28,6 +28,12 @@ public class OngReview {
 	@Column(name = "author_name", nullable = false, length = 80)
 	private String authorName;
 
+	@Column(name = "google_sub", length = 64)
+	private String googleSub;
+
+	@Column(name = "photo_url", length = 500)
+	private String photoUrl;
+
 	@Column(nullable = false)
 	private int rating;
 
@@ -41,9 +47,11 @@ public class OngReview {
 	protected OngReview() {
 	}
 
-	public OngReview(Ong ong, String authorName, int rating, String comment) {
+	public OngReview(Ong ong, String authorName, String googleSub, String photoUrl, int rating, String comment) {
 		this.ong = ong;
 		this.authorName = authorName;
+		this.googleSub = googleSub;
+		this.photoUrl = photoUrl;
 		this.rating = rating;
 		this.comment = comment;
 	}
@@ -58,6 +66,14 @@ public class OngReview {
 
 	public String getAuthorName() {
 		return authorName;
+	}
+
+	public String getGoogleSub() {
+		return googleSub;
+	}
+
+	public String getPhotoUrl() {
+		return photoUrl;
 	}
 
 	public int getRating() {
