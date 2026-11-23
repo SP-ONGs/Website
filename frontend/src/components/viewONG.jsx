@@ -169,7 +169,7 @@ function SocialMediaComponent({ ongData }) {
 	}
 
 	function InstagramPreview() {
-		const instagram = socialMediaData["Instagram"]
+		const instagram = socialMediaData["instagram"]
 
 		if (!instagram) {
 			return (<></>)
@@ -187,7 +187,7 @@ function SocialMediaComponent({ ongData }) {
 	}
 
 	function WhatsappPreview() {
-		const whatsapp = socialMediaData["WhatsApp"]
+		const whatsapp = socialMediaData["whatsapp"]
 
 		if (!whatsapp) {
 			return (<></>)
@@ -206,7 +206,7 @@ function SocialMediaComponent({ ongData }) {
 	}
 
 	function WebsitePreview() {
-		const website = socialMediaData["Website"]
+		const website = socialMediaData["website"]
 
 		if (!website) {
 			return (<></>)

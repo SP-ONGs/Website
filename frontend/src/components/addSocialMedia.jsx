@@ -96,7 +96,7 @@ function UpdateAddMediaButtonEnabled() {
 	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled)
 }
 
-export function SocialMediaInputModal({ setMediaModal, currentAddMedia, setSocialMediaList }) {
+export function SocialMediaInputModal({ setMediaModal, currentAddMedia, addSocialMediaFunction }) {
 	const iconsList = {
 		["instagram"]: instagramIconImage,
 		["whatsapp"]: whatsappIconImage,
@@ -125,10 +125,7 @@ export function SocialMediaInputModal({ setMediaModal, currentAddMedia, setSocia
 			return
 		}
 
-		setSocialMediaList(previous => ({
-			...previous,
-			[currentAddMedia]: mediaValue
-		}))
+		addSocialMediaFunction(currentAddMedia, mediaValue)
 		setMediaModal(null)
 	}
 

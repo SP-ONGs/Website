@@ -53,6 +53,13 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 	const [socialMediaList, setSocialMediaList] = useState({})
 	const [tagList, setTagList] = useState({})
 
+	function addSocialMedia(mediaName, mediaValue) {
+		setSocialMediaList(previous => ({
+			...previous,
+			[mediaName]: mediaValue
+		}))
+	}
+
 	const [imageFile, setImageFile] = useState(undefined)
 
 	return (
@@ -85,7 +92,7 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 				)}
 
 				{currentMediaModal === "add_media" && (
-					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} setSocialMediaList={setSocialMediaList} />
+					<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} addSocialMediaFunction={addSocialMedia} />
 				)}
 			</>
 		)

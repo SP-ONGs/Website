@@ -201,6 +201,9 @@ public class OngService {
 			throw new IllegalArgumentException("An ONG with this CNPJ is already registered");
 		}
 
+		boolean CNPJ_IS_VALID = verifyCnpjIsValid(normalizedCnpj);
+		OngStatus ongStatus = CNPJ_IS_VALID ? OngStatus.APPROVED : OngStatus.PENDING_REVIEW;
+
 		// Validate catalogue IDs before creating the ONG.
 		List<Long> socialMediaIds = request.socialMedia().stream()
 				.map(OngRegistrationRequest.SocialMediaEntry::socialMediaId).toList();
@@ -236,7 +239,7 @@ public class OngService {
 				imageUrl,
 				imagePublicId);
 
-		ong.setStatus(OngStatus.PENDING_REVIEW);
+		ong.setStatus(ongStatus);
 
 		Ong savedOng = ongRepository.save(ong);
 
@@ -326,5 +329,14 @@ public class OngService {
 		if (uniqueIds.size() != ids.size()) {
 			throw new IllegalArgumentException("Duplicate " + fieldName + " IDs are not allowed.");
 		}
+	}
+
+	private boolean verifyCnpjIsValid(String cnpj) {
+		if (cnpj == null || cnpj.isBlank()) {
+			return false;
+		}
+
+		// Colocar o codigo de logica do CNPJ aqui
+		return false;
 	}
 }

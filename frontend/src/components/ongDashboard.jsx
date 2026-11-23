@@ -8,6 +8,7 @@ import tagsData from "../data/tagsData.json"
 // Controllers
 import { getDashboardOngData } from "../controllers/ongDashboardController.js"
 import { getTagId } from "../controllers/tagController.js"
+import { getSocialMediaId } from "../controllers/socialMediaController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -49,6 +50,24 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 	const [currentEditingMedia, setEditingMedia] = useState(null)
 	const [ongData, setOngData] = useState(ongDataReference)
 
+	console.log(ongData)
+
+	async function addSocialMedia(socialMediaName, socialMediaValue) {
+		const newSocialMediaList = ongData.socialMedia.filter(socialMediaData => socialMediaData.name !== socialMediaName)
+		const socialMediaId = await getSocialMediaId(socialMediaName)
+
+		newSocialMediaList.push({
+			"socialMediaId": socialMediaId,
+			"name": socialMediaName,
+			"description": socialMediaValue
+		})
+
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"socialMedia": newSocialMediaList
+		}))
+	}
+
 	return (
 		<>
 			<div className="focus_BG"></div>
@@ -81,7 +100,7 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 			)}
 
 			{currentMediaModal === "add_media" && (
-				<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentAddMedia} setSocialMediaList={setSocialMediaList} />
+				<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentEditingMedia} addSocialMediaFunction={addSocialMedia} />
 			)}
 		</>
 	)
@@ -184,24 +203,31 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 	const socialMediaLimit = 3
 	const CAN_ADD_SOCIAL_MEDIA = ongData.socialMedia.length < socialMediaLimit
 
-	function addMedia(mediaName) {
+	const removeIconStyle = ongDashboardStyle.social_media_remove_icon
+
+	function editSocialMedia(mediaName) {
 		setEditingMedia(mediaName)
-		setMediaModal("options")
+		setMediaModal("add_media")
 	}
 
-	function removeMedia(mediaName) {
-		setSocialMediaList(previous => ({
-			...previous,
-			[mediaName]: undefined
+	function removeSocialMedia(mediaName) {
+		const newSocialMediaList = ongData.socialMedia.filter(socialMediaData => socialMediaData.name.toLowerCase() !== mediaName)
+
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"socialMedia": newSocialMediaList
 		}))
 	}
 
 	function AddSocialMediaButton() {
+		function openSocialMediaOptions() {
+			setMediaModal("options")
+		}
+
 		return (
-			<div className={ongDashboardStyle.add_social_media_button} id="signONG_add_midia">
+			<div className={ongDashboardStyle.add_social_media_button} id="signONG_add_midia" onClick={openSocialMediaOptions}>
 				<img src={addGreyIconImage} alt="Adicionar rede social" />
 				<h1>Adicionar</h1>
-				<button onClick={onAddMedia}></button>
 			</div>
 		)
 	}
@@ -210,11 +236,11 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const instagramStyle = [ongDashboardStyle.social_media, "instagram"].join(" ")
 
 		return (
-			<div className={instagramStyle} id="signONG_instagram">
+			<div className={instagramStyle} id="signONG_instagram" onClick={() => editSocialMedia("instagram")}>
 				<img src={instagramIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Instagram</h1>
-				<h2>@{ongSocialMedias["Instagram"]}</h2>
-				<img src={cancelMediaIconImage} className={ongDashboardStyle.social_media_remove_icon} onClick={() => removeMedia("instagram")} />
+				<h2>@{ongSocialMedias["instagram"]}</h2>
+				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("instagram")} />
 			</div>
 		)
 	}
@@ -223,12 +249,12 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const whatsappStyle = [ongDashboardStyle.social_media, "whatsapp"].join(" ")
 
 		return (
-			<div className={whatsappStyle} id="signONG_whatsapp">
+			<div className={whatsappStyle} id="signONG_whatsapp" onClick={() => editSocialMedia("whatsapp")}>
 				<div className={ongDashboardStyle.social_media_bg_fade}></div>
 				<img src={whatsappIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Whatsapp</h1>
-				<h2>{ongSocialMedias["WhatsApp"]}</h2>
-				<img src={cancelMediaIconImage} className={ongDashboardStyle.social_media_remove_icon} onClick={() => removeMedia("whatsapp")} />
+				<h2>{ongSocialMedias["whatsapp"]}</h2>
+				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("whatsapp")} />
 			</div>
 		)
 	}
@@ -237,12 +263,12 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const websiteStyle = [ongDashboardStyle.social_media, "website"].join(" ")
 
 		return (
-			<div className={websiteStyle} id="signONG_website">
+			<div className={websiteStyle} id="signONG_website" onClick={() => editSocialMedia("website")}>
 				<div className={ongDashboardStyle.social_media_bg_fade}></div>
 				<img src={websiteIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Website</h1>
-				<h2>{ongSocialMedias["Website"]}</h2>
-				<img src={cancelMediaIconImage} className={ongDashboardStyle.social_media_remove_icon} onClick={() => removeMedia("website")} />
+				<h2>{ongSocialMedias["website"]}</h2>
+				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("website")} />
 			</div>
 		)
 	}
@@ -257,9 +283,9 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 			<div className={ongDashboardStyle.social_media_background}>
 				{CAN_ADD_SOCIAL_MEDIA && (<AddSocialMediaButton />)}
 
-				{ongSocialMedias["Instagram"] !== undefined && (<InstagramPreview />)}
-				{ongSocialMedias["WhatsApp"] !== undefined && (<WhatsappPreview />)}
-				{ongSocialMedias["Website"] !== undefined && (<WebsitePreview />)}
+				{ongSocialMedias["instagram"] !== undefined && (<InstagramPreview />)}
+				{ongSocialMedias["whatsapp"] !== undefined && (<WhatsappPreview />)}
+				{ongSocialMedias["website"] !== undefined && (<WebsitePreview />)}
 			</div>
 		</div>
 	)
