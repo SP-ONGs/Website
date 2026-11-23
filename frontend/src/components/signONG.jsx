@@ -5,6 +5,8 @@ import { useState } from "react"
 
 // API
 import { registerOng } from "../api/ongs.js"
+import { login, logout } from "../api/session"
+import { getMyOng } from "../api/ongOwner.js"
 
 // Data
 import tagsData from "../data/tagsData.json"
@@ -13,6 +15,7 @@ import tagsData from "../data/tagsData.json"
 import { getCepData } from "../controllers/locationController.js"
 import { getSocialMediaId } from "../controllers/socialMediaController.js"
 import { getTagId } from "../controllers/tagController.js"
+import { setDashboardOngData, setUserRole as ongDashboard_setUserRole } from "../controllers/ongDashboardController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -39,6 +42,9 @@ import nonHideIconImage from "../../images/elements_vectors/NonHideIcon.png"
 
 import logoImage from "../../images/SPONGs_icon-nobg.png"
 import closeIconImage from "../../images/elements_vectors/CloseIcon.png"
+
+// Values
+let inSignLoading = false
 
 
 
@@ -83,7 +89,7 @@ function SignONGComponent({ currentModal, setCurrentModal }) {
 
 						<h2 className={signStyle.sign_text}>Adicione as informações para cadastrar a sua ONG</h2>
 						<SignInputsContainer />
-						<SignButtonComponent ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} imageFile={imageFile} />
+						<SignButtonComponent setCurrentModal={setCurrentModal} ongCEP={ongCEP} socialMediaList={socialMediaList} tagList={tagList} imageFile={imageFile} />
 					</div>
 				</div>
 
@@ -142,7 +148,33 @@ function ResetErrors() {
 	setEmailExistsError(false)
 }
 
-async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
+async function signLoadingAnimation() {
+	const signButton = document.getElementById("signONG_sign_button")
+	let reticencesText = ""
+
+	for (let i = 0; i < 4; i++) {
+		if (!inSignLoading) {
+			break
+		}
+
+		signButton.textContent = "Carregando" + reticencesText + ""
+		reticencesText += "."
+
+		await new Promise(resolve => setTimeout(resolve, 250))
+	}
+
+	await new Promise(resolve => setTimeout(resolve, 200))
+
+	if (inSignLoading) {
+		signLoadingAnimation()
+	}
+}
+
+async function OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFile) {
+	if (inSignLoading) {
+		return
+	}
+
 	const nameInput = document.getElementById("signONG_name")
 	const cepInput = document.getElementById("signONG_cep")
 	const houseNumberInput = document.getElementById("signONG_houseNumber")
@@ -237,14 +269,51 @@ async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 		"tagIds": ongTagsIds
 	}
 
+	const signButton = document.getElementById("signONG_sign_button")
+
+	signButton.textContent = "Carregando"
+	inSignLoading = true
+
+	UpdateSignButtonEnabled()
+	signLoadingAnimation()
+
 	try {
+		// Register ONG
 		await registerOng(payload, imageFile)
+
+		// Login in new ONG
+		console.log("register 1")
+		const loginReponse = await login(emailInput.value, passwordInput.value)
+		console.log("register 2")
+		const SUCCESS_LOGIN_ONG = loginReponse?.role === "ONG_OWNER"
+		console.log("register 3")
+
+		if (!SUCCESS_LOGIN_ONG) {
+			try { await logout() } catch { }
+			throw new Error("Not an ONG account")
+		}
+		console.log("register 4")
+
+		const ongData = await getMyOng()
+
+		console.log("register 5")
+		// Open ONG dashboard
+		ongDashboard_setUserRole("ONG_OWNER")
+		setDashboardOngData(ongData)
+
+		console.log("register 6")
+		setCurrentModal("ongDashboard")
 	} catch (error) {
+		console.log("register error:", error)
 		if (error.code == "EMAIL_ALREADY_EXISTS") {
 			setEmailExistsError(true)
-			return
 		}
 	}
+
+	signButton.textContent = "Cadastrar"
+	inSignLoading = false
+
+	UpdateSignButtonEnabled()
 }
 
 function UpdateSignButtonEnabled() {
@@ -260,19 +329,19 @@ function UpdateSignButtonEnabled() {
 
 	const CAN_SIGNIN = HAVE_EMAIL & HAVE_PASSWORD
 
-	if (!CAN_SIGNIN) {
-		signButton.classList.add(signStyle.signin_button_disabled)
+	if (CAN_SIGNIN && !inSignLoading) {
+		signButton.classList.remove(signStyle.signin_button_disabled)
 		return
 	}
 
-	signButton.classList.remove(signStyle.signin_button_disabled)
+	signButton.classList.add(signStyle.signin_button_disabled)
 }
 
-function SignButtonComponent({ ongCEP, socialMediaList, tagList, imageFile }) {
+function SignButtonComponent({ setCurrentModal, ongCEP, socialMediaList, tagList, imageFile }) {
 	return (
 		<button
 			className={[signStyle.signin_button, signStyle.signin_button_disabled].join(" ")}
-			onClick={() => OnSign(ongCEP, socialMediaList, tagList, imageFile)}
+			onClick={() => OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFile)}
 			id="signONG_sign_button"
 		>Cadastrar</button>
 	)
