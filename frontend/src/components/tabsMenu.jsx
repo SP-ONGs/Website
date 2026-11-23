@@ -32,10 +32,18 @@ function TabsMenuComponent({ currentTab, setTab, setCurrentModal, isAdmin }) {
 }
 
 function TabButtonsComponent({ setCurrentModal }) {
-	return (
+	/*return (
 		<>
 			<HomepageButton />
 			<ViewMapButton />
+			<AboutUsButton setCurrentModal={setCurrentModal} />
+			<AddOngButton setCurrentModal={setCurrentModal} />
+		</>
+	)*/
+
+	return (
+		<>
+			<HomepageButton />
 			<AboutUsButton setCurrentModal={setCurrentModal} />
 			<AddOngButton setCurrentModal={setCurrentModal} />
 		</>
@@ -43,11 +51,18 @@ function TabButtonsComponent({ setCurrentModal }) {
 }
 
 function AdminTabButtonsComponent({ currentTab, setTab }) {
-	return (
+	/*return (
 		<>
 			<AdminHomepageButton currentTab={currentTab} setTab={setTab} />
 			<ViewSolicitationsButton currentTab={currentTab} setTab={setTab} />
 			<ViewReportsButton currentTab={currentTab} setTab={setTab} />
+		</>
+	)*/
+
+	return (
+		<>
+			<AdminHomepageButton currentTab={currentTab} setTab={setTab} />
+			<ViewSolicitationsButton currentTab={currentTab} setTab={setTab} />
 		</>
 	)
 }

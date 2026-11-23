@@ -37,6 +37,7 @@
 /* Aviso de erro (Error warning) */
 .name_input,
 .cep_input,
+.house_number_input,
 .photo_bg,
 .midia_container,
 .input_group {
@@ -130,7 +131,7 @@
 	left: 50%;
 	top: 50%;
 
-	object-fit: contain;
+	object-fit: cover;
 }
 
 .photo_add_icon {
