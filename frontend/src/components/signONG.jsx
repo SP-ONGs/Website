@@ -109,6 +109,21 @@ function setError(element, isError) {
 	element.classList.remove(signStyle.error_outline)
 }
 
+function setEmailExistsError(inError) {
+	const emailInput = document.getElementById("signONG_email")
+	const emailLabel = emailInput.parentElement.querySelector("label")
+
+	setError(emailInput.parentElement, inError)
+
+	if (inError) {
+		emailLabel.textContent = "EMAIL JÁ CADASTRADO, UTILIZE OUTRO EMAIL!"
+		emailLabel.parentElement.classList.add(signStyle.input_error_warn)
+	} else {
+		emailLabel.textContent = "EMAIL"
+		emailLabel.parentElement.classList.remove(signStyle.input_error_warn)
+	}
+}
+
 function ResetErrors() {
 	const nameInput = document.getElementById("signONG_name")
 	const cepInput = document.getElementById("signONG_cep")
@@ -123,6 +138,8 @@ function ResetErrors() {
 	setError(imageInput.parentElement, false)
 	setError(midiaContainer, false)
 	setError(confirmPasswordInput.parentElement, false)
+
+	setEmailExistsError(false)
 }
 
 async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
@@ -220,7 +237,14 @@ async function OnSign(ongCEP, socialMediaList, tagList, imageFile) {
 		"tagIds": ongTagsIds
 	}
 
-	registerOng(payload, imageFile)
+	try {
+		await registerOng(payload, imageFile)
+	} catch (error) {
+		if (error.code == "EMAIL_ALREADY_EXISTS") {
+			setEmailExistsError(true)
+			return
+		}
+	}
 }
 
 function UpdateSignButtonEnabled() {
@@ -260,11 +284,10 @@ function SignButtonComponent({ ongCEP, socialMediaList, tagList, imageFile }) {
 function AddNameContainer({ setOngCEP, setImageFile }) {
 	const [cepIsInvalid, setCepIsInvalid] = useState(false)
 	const [currentCepData, setCepData] = useState(null)
+	const [currentHouseNumber, setHouseNumber] = useState(null)
 
 	let lastUpdatedCEP
 	let cepIsLoading = false
-
-	let houseNumberValue
 
 	function setCepInvalid(isInvalid) {
 		const locationContainerElement = document.getElementsByClassName(signStyle.location_container)[0]
@@ -278,16 +301,12 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 		}
 	}
 
-	function updateCepText(cepData) {
-		if (!currentCepData) {
-			return
-		}
-
+	function updateCepText(cepData, houseNumber) {
 		let streetText = `${cepData.logradouro}`
 		const cityText = `, ${cepData.localidade}` //, ${cepData.uf}`
 
-		if (houseNumberValue) {
-			streetText += ` ${houseNumberValue}`
+		if (houseNumber) {
+			streetText += ` ${houseNumber}`
 		}
 
 		const locationTextElement = document.getElementById("signONG_location_text")
@@ -373,20 +392,20 @@ function AddNameContainer({ setOngCEP, setImageFile }) {
 		}
 
 		setCepData(cepData)
-		updateCepText(cepData)
+		updateCepText(cepData, currentHouseNumber)
 
 		setOngCEP(cep)
 	}
 
 	function updateHouseNumber() {
 		const houseNumberInput = document.getElementById("signONG_houseNumber")
-		const houseNumber = houseNumberInput.value.replace(/\D/g, "").substring(0, 8)
+		const houseNumberValue = houseNumberInput.value.replace(/\D/g, "").substring(0, 8)
 
-		houseNumberInput.value = houseNumber
-		houseNumberValue = houseNumber
+		houseNumberInput.value = houseNumberValue
+		setHouseNumber(houseNumberValue)
 
 		if (currentCepData) {
-			updateCepText(currentCepData)
+			updateCepText(currentCepData, houseNumberValue)
 		}
 	}
 

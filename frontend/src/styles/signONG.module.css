@@ -653,3 +653,9 @@ input[type="file"] {
 .signin_button_disabled:hover {
 	transform: scale(1);
 }
+
+
+/* sign errors */
+.input_error_warn label {
+	color: rgba(152, 34, 34, .75);
+}

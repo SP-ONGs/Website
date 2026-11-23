@@ -31,6 +31,9 @@ import com.spongs.api.dto.SocialMediaTypeResponse;
 import com.spongs.api.dto.TagResponse;
 import com.spongs.api.dto.OngRegistrationRequest;
 
+// Exceptions
+import com.spongs.api.exception.EmailAlreadyExistsException;
+
 // Utils
 import java.util.HashSet;
 import java.util.List;
@@ -191,7 +194,7 @@ public class OngService {
 		boolean IS_ALREADY_REGISTERED = userAccountRepository.findByEmail(normalizedEmail).isPresent();
 
 		if (IS_ALREADY_REGISTERED) {
-			throw new IllegalArgumentException("An account with this email already exists.");
+			throw new EmailAlreadyExistsException("An account with this email already exists.");
 		}
 
 		// Normal and validate optional CNPJ
