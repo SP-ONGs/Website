@@ -10,5 +10,6 @@ public record OngPublicResponse(
 		String cnpj,
 		String imageUrl,
 		List<OngSocialMediaResponse> socialMedia,
-		List<TagResponse> tags) {
+		List<TagResponse> tags,
+		OngReviewSummaryResponse reviewsSummary) {
 }

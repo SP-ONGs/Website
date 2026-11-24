@@ -67,7 +67,7 @@ export default function ViewOngComponent({ setCurrentModal, isAdminSolicitation 
 				<div className={viewOngStyle.left_container}>
 					<NameContainerComponent ongData={ongData} setCurrentModal={setCurrentModal} />
 					<SocialMediaComponent ongData={ongData} />
-					<RateContainerComponent ongId={ongData.id} />
+					<RateContainerComponent ongData={ongData} />
 				</div>
 
 				<div className={viewOngStyle.right_container}>
@@ -255,10 +255,14 @@ function readGoogleProfile(idToken) {
 	}
 }
 
-function RateContainerComponent({ ongId }) {
-	const emptySummary = { average: 0, total: 0, distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } }
+function RateContainerComponent({ ongData }) {
+	if (!ongData.reviewsSummary) {
+		throw Error("viewONG: Failed to find ONG reviews summary!!!")
+	}
 
-	const [summary, setSummary] = useState(emptySummary)
+	//const emptySummary = { average: 0, total: 0, distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 } }
+
+	const [summary, setSummary] = useState(ongData.reviewsSummary)
 	const [reviews, setReviews] = useState([])
 	const [selectedRating, setSelectedRating] = useState(0)
 	const [hoverRating, setHoverRating] = useState(0)
@@ -272,8 +276,8 @@ function RateContainerComponent({ ongId }) {
 	async function loadReviews() {
 		try {
 			const [summaryData, reviewsData] = await Promise.all([
-				getReviewSummary(ongId),
-				getReviews(ongId)
+				getReviewSummary(ongData.id),
+				getReviews(ongData.id)
 			])
 
 			setSummary(summaryData)
@@ -285,7 +289,7 @@ function RateContainerComponent({ ongId }) {
 
 	useEffect(() => {
 		loadReviews()
-	}, [ongId])
+	}, [ongData.id])
 
 	async function onSend() {
 		if (selectedRating === 0 || !idToken || sending) return
@@ -294,7 +298,7 @@ function RateContainerComponent({ ongId }) {
 		setErrorMessage("")
 
 		try {
-			await createReview(ongId, { idToken, rating: selectedRating, comment })
+			await createReview(ongData.id, { idToken, rating: selectedRating, comment })
 
 			setSelectedRating(0)
 			setComment("")

@@ -1,6 +1,7 @@
 package com.spongs.api.repository;
 
 import java.util.List;
+import java.util.Collection;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,9 @@ public interface OngReviewRepository extends JpaRepository<OngReview, Long> {
 	// Each row: [rating (Integer), amount (Long)]
 	@Query("select r.rating, count(r) from OngReview r where r.ong.id = :ongId group by r.rating")
 	List<Object[]> countByRating(@Param("ongId") Long ongId);
+
 	boolean existsByOng_IdAndGoogleSub(Long ongId, String googleSub);
+
+	@Query("select r.ong.id, r.rating, count(r) from OngReview r where r.ong.id in :ongIds group by r.ong.id, r.rating")
+	List<Object[]> countByOngIdsAndRating(@Param("ongIds") Collection<Long> ongIds);
 }

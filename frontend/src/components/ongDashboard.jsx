@@ -50,8 +50,6 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 	const [currentEditingMedia, setEditingMedia] = useState(null)
 	const [ongData, setOngData] = useState(ongDataReference)
 
-	console.log(ongData)
-
 	async function addSocialMedia(socialMediaName, socialMediaValue) {
 		const newSocialMediaList = ongData.socialMedia.filter(socialMediaData => socialMediaData.name !== socialMediaName)
 		const socialMediaId = await getSocialMediaId(socialMediaName)
@@ -405,7 +403,7 @@ function OngPreviewComponent({ ongData }) {
 			</div>
 
 			<div className={ongDashboardStyle.preview_card_container}>
-				<OngCardComponent ong={ongData} isClicable={false} />
+				<OngCardComponent ongData={ongData} isClicable={false} />
 			</div>
 		</>
 	)

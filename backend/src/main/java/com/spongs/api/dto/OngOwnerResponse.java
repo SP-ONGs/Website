@@ -13,5 +13,6 @@ public record OngOwnerResponse(
 		String imageUrl,
 		OngStatus status,
 		List<OngSocialMediaResponse> socialMedia,
-		List<TagResponse> tags) {
+		List<TagResponse> tags,
+		OngReviewSummaryResponse reviewsSummary) {
 }

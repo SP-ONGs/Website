@@ -41,7 +41,7 @@ function ONGsBoardComponent({ currentTab, setCurrentModal, isAdmin }) {
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
 				{Array.from({ length: cardsAmount }, (_, index) => (
-					<OngCard key={index} id={"ongCard_" + index} ong={ongs[index]} currentTab={currentTab} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
+					<OngCard key={index} id={"ongCard_" + index} ongData={ongs[index]} currentTab={currentTab} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
 				))}
 				<BoardIndexBarComponent />
 			</div>

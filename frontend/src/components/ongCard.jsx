@@ -27,8 +27,8 @@ import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 // --> Functions <-- //
 
 // Functions 1: ONG card component //
-function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicable = true }) {
-	if (!ong) {
+function OngCardComponent({ ongData, currentTab, setCurrentModal, isAdmin, isClicable = true }) {
+	if (!ongData) {
 		return (<TemplateCardComponent />)
 	}
 
@@ -45,9 +45,9 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicabl
 
 		const IS_USER = !isAdmin
 
-		// User: View ong
+		// User: View ongData
 		if (IS_USER) {
-			setViewOngData(ong)
+			setViewOngData(ongData)
 			setCurrentModal("viewONG")
 			return
 		}
@@ -55,24 +55,27 @@ function OngCardComponent({ ong, currentTab, setCurrentModal, isAdmin, isClicabl
 		// Admin: Ong dashboard
 		if (currentTab == "AdminHomepage") {
 			ongDashboard_setUserRole("ADMIN")
-			setDashboardOngData(ong)
+			setDashboardOngData(ongData)
 			setCurrentModal("ongDashboard")
 			return
 		}
 
 		// Admin: Ong solicatitaion
 		if (currentTab == "Solicitations") {
-			setViewOngData(ong)
+			setViewOngData(ongData)
 			setCurrentModal("ongSolitation")
 		}
 	}
 
+	const reviewsSummary = ongData.reviewsSummary
+	const ongAverageRate = reviewsSummary.total == 0 && "--" || reviewsSummary.average
+
 	return (
 		<div className={cardStyle} onClick={onViewONG}>
-			<CardImageComponent ongImageUrl={ong.imageUrl} />
-			<CardTitleComponent ongName={ong.name} ongAverageRate={4.7} />
+			<CardImageComponent ongImageUrl={ongData.imageUrl} />
+			<CardTitleComponent ongName={ongData.name} ongAverageRate={ongAverageRate} />
 			<CardSocialMediaComponent />
-			<CardTagsComponent tags={ong.tags} />
+			<CardTagsComponent tags={ongData.tags} />
 		</div>
 	)
 }

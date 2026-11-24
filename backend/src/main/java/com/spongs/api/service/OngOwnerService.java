@@ -29,6 +29,7 @@ import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.TagResponse;
 import com.spongs.api.dto.OngUpdateRequest;
 import com.spongs.api.dto.OngOwnerResponse;
+import com.spongs.api.dto.OngReviewSummaryResponse;
 
 // Utils
 import java.util.HashSet;
@@ -43,6 +44,7 @@ public class OngOwnerService {
 
 	private final OngService ongService;
 	private final CloudinaryService cloudinaryService;
+	private final OngReviewService ongReviewService;
 
 	private static final Logger log = LoggerFactory.getLogger(OngOwnerService.class);
 
@@ -53,7 +55,8 @@ public class OngOwnerService {
 			OngSocialMediaRepository ongSocialMediaRepository,
 			OngTagRepository ongTagRepository,
 			OngService ongService,
-			CloudinaryService cloudinaryService) {
+			CloudinaryService cloudinaryService,
+			OngReviewService ongReviewService) {
 		this.ongRepository = ongRepository;
 		this.socialMediaRepository = socialMediaRepository;
 		this.tagRepository = tagRepository;
@@ -61,6 +64,7 @@ public class OngOwnerService {
 		this.ongTagRepository = ongTagRepository;
 		this.ongService = ongService;
 		this.cloudinaryService = cloudinaryService;
+		this.ongReviewService = ongReviewService;
 	}
 
 	@Transactional(readOnly = true)
@@ -216,6 +220,8 @@ public class OngOwnerService {
 				entry.getTag().getId(),
 				entry.getTag().getDescription())).toList();
 
+		OngReviewSummaryResponse reviewsSummary = ongReviewService.getSummary(ong.getId());
+
 		return new OngOwnerResponse(
 				ong.getId(),
 				ong.getName(),
@@ -225,6 +231,7 @@ public class OngOwnerService {
 				ong.getImageUrl(),
 				ong.getStatus(),
 				socialMedia,
-				tags);
+				tags,
+				reviewsSummary);
 	}
 }

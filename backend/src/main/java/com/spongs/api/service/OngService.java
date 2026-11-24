@@ -26,6 +26,7 @@ import com.spongs.api.model.UserAccount;
 
 // DTOs
 import com.spongs.api.dto.OngPublicResponse;
+import com.spongs.api.dto.OngReviewSummaryResponse;
 import com.spongs.api.dto.OngSocialMediaResponse;
 import com.spongs.api.dto.SocialMediaTypeResponse;
 import com.spongs.api.dto.TagResponse;
@@ -61,12 +62,14 @@ public class OngService {
 		factory.setReadTimeout(Duration.ofSeconds(5));
 		return RestClient.builder().requestFactory(factory).build();
 	}
+
 	private final OngRepository ongRepository;
 	private final SocialMediaRepository socialMediaRepository;
 	private final TagRepository tagRepository;
 	private final OngSocialMediaRepository ongSocialMediaRepository;
 	private final OngTagRepository ongTagRepository;
 	private final UserAccountRepository userAccountRepository;
+	private final OngReviewService ongReviewService;
 
 	private final PasswordEncoder passwordEncoder;
 
@@ -77,7 +80,8 @@ public class OngService {
 			OngSocialMediaRepository ongSocialMediaRepository,
 			OngTagRepository ongTagRepository,
 			UserAccountRepository userAccountRepository,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder,
+			OngReviewService ongReviewService) {
 		this.ongRepository = ongRepository;
 		this.socialMediaRepository = socialMediaRepository;
 		this.tagRepository = tagRepository;
@@ -85,6 +89,7 @@ public class OngService {
 		this.ongTagRepository = ongTagRepository;
 		this.userAccountRepository = userAccountRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.ongReviewService = ongReviewService;
 	}
 
 	@Transactional(readOnly = true)
@@ -125,6 +130,8 @@ public class OngService {
 										entry.getTag().getDescription()),
 								Collectors.toList())));
 
+		Map<Long, OngReviewSummaryResponse> reviewByOngId = ongReviewService.getSummaries(ongIds);
+
 		return ongs.stream()
 				.map(ong -> new OngPublicResponse(
 						ong.getId(),
@@ -134,7 +141,8 @@ public class OngService {
 						ong.getCnpj(),
 						ong.getImageUrl(),
 						socialMediaByOngId.getOrDefault(ong.getId(), List.of()),
-						tagsByOngId.getOrDefault(ong.getId(), List.of())))
+						tagsByOngId.getOrDefault(ong.getId(), List.of()),
+						reviewByOngId.get(ong.getId())))
 				.toList();
 	}
 
@@ -158,6 +166,8 @@ public class OngService {
 				entry.getTag().getId(),
 				entry.getTag().getDescription())).toList();
 
+		OngReviewSummaryResponse reviews = ongReviewService.getSummary(id);
+
 		return new OngPublicResponse(
 				ong.getId(),
 				ong.getName(),
@@ -166,7 +176,8 @@ public class OngService {
 				ong.getCnpj(),
 				ong.getImageUrl(),
 				socialMedia,
-				tags);
+				tags,
+				reviews);
 	}
 
 	@Transactional(readOnly = true)
