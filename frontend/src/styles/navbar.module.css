@@ -86,3 +86,269 @@
 
 	font-size: 22px;
 }
+
+/* ============================================
+   RESPONSIVIDADE DA NAVBAR
+   ============================================ */
+
+/* ============================================
+   1367px tela normal de pc aqui
+   ============================================ */
+@media (max-width: 1367px) {
+  .navbar_background {
+    height: 70px;
+  }
+
+  .brand_container {
+    width: 260px;
+    left: 18px;
+    height: 46px;
+  }
+
+  .brand_container img {
+    width: 46px;
+  }
+
+  .brand_container h1 {
+    font-size: 38px;
+  }
+
+  .search_bar {
+    width: 480px;
+    height: 44px;
+  }
+
+  .search_bar img {
+    width: 24px;
+    height: 24px;
+    left: 18px;
+  }
+
+  .search_bar input {
+    left: 54px;
+    font-size: 20px;
+    width: 70%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .brand_container {
+    width: auto;
+    left: 18px;
+  }
+
+  .brand_container h1 {
+    display: none;
+  }
+
+  .brand_container img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .search_bar {
+    width: 55%;
+    max-width: 480px;
+  }
+}
+
+/* ============================================
+   TABLET PEQUENO (até 992px)
+   ============================================ */
+@media (max-width: 992px) {
+  .navbar_background {
+    height: 65px;
+  }
+
+  .brand_container {
+    left: 15px;
+    height: 42px;
+  }
+
+  .brand_container img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .search_bar {
+    width: 58%;
+    height: 40px;
+  }
+
+  .search_bar img {
+    width: 20px;
+    height: 20px;
+    left: 16px;
+  }
+
+  .search_bar input {
+    left: 46px;
+    font-size: 17px;
+    width: 72%;
+  }
+}
+
+/* ============================================
+   MOBILE (até 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .navbar_background {
+    height: 60px;
+    padding: 0 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* Logo à esquerda */
+  .brand_container {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+
+    width: auto;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .brand_container img {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Barra de pesquisa ocupa o restante */
+  .search_bar {
+    position: relative;
+    transform: none;
+    top: auto;
+    left: auto;
+
+    width: 100%;
+    max-width: none;
+    height: 38px;
+
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search_bar img {
+    width: 18px;
+    height: 18px;
+    left: 14px;
+  }
+
+  .search_bar input {
+    left: 40px;
+    font-size: 15px;
+    width: calc(100% - 48px);
+  }
+
+  .navbar_bottom_line {
+    height: 2px;
+  }
+}
+
+/* ============================================
+   MOBILE PEQUENO (até 620px) — LOGO À DIREITA
+   ============================================ */
+@media (max-width: 620px) {
+  .navbar_background {
+    height: 58px;
+    padding: 0 10px;
+  }
+
+  /* Inverte a ordem: search bar à esquerda, logo à direita */
+  .search_bar {
+    order: 1;
+    flex: 1;
+    height: 36px;
+  }
+
+  .brand_container {
+    order: 2;
+    height: 36px;
+  }
+
+  .brand_container img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .search_bar img {
+    width: 16px;
+    height: 16px;
+    left: 12px;
+  }
+
+  .search_bar input {
+    left: 34px;
+    font-size: 14px;
+    width: calc(100% - 42px);
+  }
+}
+
+/* ============================================
+   MOBILE MUITO PEQUENO (até 450px)
+   ============================================ */
+@media (max-width: 450px) {
+  .navbar_background {
+    height: 54px;
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .search_bar {
+    height: 34px;
+    border-radius: 20px;
+  }
+
+  .search_bar img {
+    width: 14px;
+    height: 14px;
+    left: 10px;
+  }
+
+  .search_bar input {
+    left: 30px;
+    font-size: 13px;
+    width: calc(100% - 36px);
+  }
+
+  .brand_container {
+    height: 32px;
+  }
+
+  .brand_container img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ============================================
+   MOBILE MUITO PEQUENO (até 360px)
+   ============================================ */
+@media (max-width: 360px) {
+  .navbar_background {
+    height: 50px;
+    padding: 0 6px;
+    gap: 6px;
+  }
+
+  .search_bar {
+    height: 32px;
+  }
+
+  .search_bar input {
+    font-size: 12px;
+    left: 28px;
+    width: calc(100% - 34px);
+  }
+
+  .brand_container img {
+    width: 30px;
+    height: 30px;
+  }
+}

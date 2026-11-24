@@ -14,6 +14,7 @@ body {
 	height: fit-content;
 	display: flex;
 	flex-wrap: wrap;
+	background: rgb(255, 255, 255);
 
 	border: none;
 
@@ -106,4 +107,374 @@ body {
 
 .selected_index:hover {
 	background: rgba(0, 0, 0);
+}
+
+/* ============================================================
+   ONG BOARD — Base
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Container principal: grid moderno com cards adaptativos.
+   No desktop fica posicionado ao lado do menu lateral. */
+.ongBoard_container {
+  width: fit-content;
+  height: fit-content;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px 15px;
+
+  background: rgb(255, 255, 255);
+  border: none;
+
+  position: absolute;
+  top: 150px;
+  left: 291px;
+}
+
+/* A paginação ocupa a linha inteira do grid */
+.index_bar_container {
+  grid-column: 1 / -1;
+
+  height: 35px;
+  width: 100%;
+  margin-top: 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+
+  user-select: none;
+}
+
+/* ============================================================
+   Setas
+   ============================================================ */
+
+.next_arrow {
+  height: 20px;
+  width: 18px;
+  opacity: 0.25;
+  flex-shrink: 0;
+
+  transition:
+    transform 0.2s cubic-bezier(.22, 1, 0.35, 1),
+    opacity 0.2s ease;
+}
+
+.selectable_arrow {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.selectable_arrow:hover {
+  transform: translateX(12.5%) scaleX(1.25);
+}
+
+/* ============================================================
+   Números da paginação
+   ============================================================ */
+
+.index_numbers_container {
+  height: 100%;
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.index_numbers_container h1 {
+  font-size: 22px;
+  font-weight: 500;
+
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  width: 35px;
+  height: 35px;
+
+  transition:
+    color 0.125s cubic-bezier(.22, 1, 0.35, 1),
+    background 0.125s ease,
+    transform 0.15s ease;
+}
+
+.selectable_index {
+  color: #5B9CFF;
+  cursor: pointer;
+}
+
+.selectable_index:hover {
+  color: rgb(255, 255, 255);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.selected_index {
+  color: rgb(255, 255, 255);
+  background: rgb(0, 0, 0);
+
+  cursor: auto;
+  width: 38px;
+  height: 38px;
+
+  transform: scale(1.05);
+}
+
+.selected_index:hover {
+  background: rgb(0, 0, 0);
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ≤1367px — acompanha o menu lateral (24%)
+   ------------------------------------------------------------ */
+@media (max-width: 1367px) {
+  .ongBoard_container {
+    top: 140px;
+    left: 24%;
+    width: calc(100% - 24% - 3%);
+    gap: 12px 14px;
+  }
+
+  .index_bar_container {
+    height: 32px;
+    gap: 14px;
+    margin-top: 2px;
+  }
+
+  .next_arrow {
+    height: 18px;
+    width: 16px;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 19px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .selected_index {
+    width: 33px;
+    height: 33px;
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤1140px — ainda ao lado do menu lateral (26%)
+   Grid auto-adaptativo, mas AINDA com left/width do menu.
+   ------------------------------------------------------------ */
+@media (max-width: 1140px) {
+  .ongBoard_container {
+    top: 130px;
+    left: 26%;
+    width: calc(100% - 26% - 2%);
+
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .index_bar_container {
+    height: 32px;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .next_arrow {
+    height: 17px;
+    width: 15px;
+  }
+
+  .index_numbers_container {
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 17px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .selected_index {
+    width: 33px;
+    height: 33px;
+  }
+
+  .selectable_arrow:hover {
+    transform: translateX(8%) scaleX(1.15);
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤992px — ainda ao lado do menu lateral, cards menores
+   ------------------------------------------------------------ */
+@media (max-width: 992px) {
+  .ongBoard_container {
+    top: 120px;
+    left: 26%;
+    width: calc(100% - 26% - 2%);
+
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+
+  .index_bar_container {
+    height: 30px;
+    gap: 10px;
+  }
+
+  .next_arrow {
+    height: 15px;
+    width: 13px;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 15px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .selected_index {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* ------------------------------------------------------------
+   840px o menu lateral sai, foi a opção que achei nesse momento, ele vira vertical e os cards ocuoam a tela toda. 
+   ------------------------------------------------------------ */
+@media (max-width: 840px) {
+  .ongBoard_container {
+    position: static;
+    top: auto;
+    left: auto;
+
+    width: 100%;
+    height: auto;
+
+    padding: 0 10px;
+    margin: 15px 0 0 0;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 8px;
+  }
+
+  .index_bar_container {
+    height: 30px;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .next_arrow {
+    height: 14px;
+    width: 12px;
+  }
+
+  .index_numbers_container {
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 15px;
+    width: 27px;
+    height: 27px;
+  }
+
+  .selected_index {
+    width: 29px;
+    height: 29px;
+  }
+
+  .selectable_arrow:hover {
+    transform: translateX(5%) scaleX(1.1);
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤450px — 1 coluna
+   ------------------------------------------------------------ */
+@media (max-width: 450px) {
+  .ongBoard_container {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+    padding: 0 8px;
+    margin-top: 8px;
+  }
+
+  .index_bar_container {
+    height: 28px;
+    gap: 6px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .next_arrow {
+    height: 12px;
+    width: 10px;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .selected_index {
+    width: 24px;
+    height: 24px;
+  }
+
+  .selectable_arrow:hover {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤360px
+   ------------------------------------------------------------ */
+@media (max-width: 360px) {
+  .ongBoard_container {
+    gap: 10px 0;
+    padding: 0 6px;
+  }
+
+  .index_bar_container {
+    height: 26px;
+    gap: 4px;
+  }
+
+  .next_arrow {
+    height: 10px;
+    width: 9px;
+  }
+
+  .index_numbers_container h1 {
+    font-size: 11px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .selected_index {
+    width: 22px;
+    height: 22px;
+  }
 }

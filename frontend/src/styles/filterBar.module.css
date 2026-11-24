@@ -150,3 +150,359 @@
 
 	text-wrap: nowrap;
 }
+
+/* ============================================================
+   FILTER BAR — Estilos base
+   ============================================================ */
+
+* {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Container principal: ocupa a largura definida.
+   As setas ficam absolutas nas bordas; as tags rolam entre elas. */
+.filter_bar_container {
+  height: 35px;
+  width: 950px;
+
+  position: relative;
+  left: 291px;
+  margin-top: 30px;
+
+  display: flex;
+  align-items: center;
+}
+
+/* Área rolável: padding lateral para não ficar embaixo das setas */
+.filter_bar_scroll {
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  position: relative;
+  padding: 0 40px;           /* reserva para setas + fades */
+  box-sizing: border-box;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.filter_bar_scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   Setas de scroll (prev / next) — fixas nas bordas
+   ============================================================ */
+
+.scroll_button {
+  height: 30px;
+  width: 30px;
+  flex-shrink: 0;
+
+  background: black;
+  border-radius: 50%;
+
+  cursor: pointer;
+  user-select: none;
+
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  z-index: 10;
+
+  transition: opacity 0.1s ease-out;
+}
+
+.previus_button { left: 0; }
+.next_button   { right: 0; }
+
+.scroll_button img {
+  width: 40%;
+  height: 60%;
+
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+.disabled_button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Fades laterais (acompanham as setas)
+   ============================================================ */
+
+.start_solid_fade,
+.end_solid_fade,
+.start_fade,
+.end_fade {
+  height: 100%;
+  width: 40px;
+
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+
+  background: white;
+  pointer-events: none;
+  z-index: 2;
+
+  transition: opacity 0.1s ease-out;
+}
+
+.start_solid_fade { left: 0; }
+.end_solid_fade   { right: 0; }
+
+.start_fade {
+  background: linear-gradient(to right, white, transparent);
+  left: 40px;
+}
+
+.end_fade {
+  background: linear-gradient(to left, white, transparent);
+  right: 40px;
+}
+
+/* ============================================================
+   Título "Filtrar"
+   ============================================================ */
+
+.filter_title {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.filter_title img {
+  height: 100%;
+  width: 34px;
+  object-fit: contain;
+  user-select: none;
+}
+
+.filter_title h1 {
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  margin-right: 6px;
+}
+
+/* ============================================================
+   Tags
+   ============================================================ */
+
+.tag_container_size {
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.tag_container_size img {
+  margin-left: 5px;
+}
+
+.tag_container_size label {
+  font-size: 18px;
+  margin-right: 10px;
+  text-wrap: nowrap;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ≤1367px — acompanha o menu lateral
+   ------------------------------------------------------------ */
+@media (max-width: 1367px) {
+  .filter_bar_container {
+    width: calc(100% - 24% - 3%);
+    left: 24%;
+    margin-top: 25px;
+  }
+
+  .filter_title img { width: 30px; }
+  .filter_title h1  { font-size: 20px; margin-right: 5px; }
+
+  .tag_container_size       { height: 28px; }
+  .tag_container_size label { font-size: 16px; margin-right: 8px; }
+  .tag_container_size img   { margin-left: 4px; }
+
+  .filter_bar_scroll { padding: 0 36px; }
+
+  .scroll_button { width: 28px; height: 28px; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 36px; }
+
+  .start_fade { left: 36px; }
+  .end_fade   { right: 36px; }
+}
+
+/* ------------------------------------------------------------
+   ≤1140px — sai do absolute, alinhada à esquerda, 100%
+   (mesmo breakpoint do TabsMenu)
+   ------------------------------------------------------------ */
+@media (max-width: 1140px) {
+  .filter_bar_container {
+    position: relative;
+    left: 0;
+    top: auto;
+
+    width: 100%;
+    max-width: 100%;
+    height: 36px;
+
+    margin: 10px 0 0 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  /* O scroll volta a ocupar o container inteiro;
+     os paddings internos reservam espaço para as setas. */
+  .filter_bar_scroll {
+    padding: 0 34px;
+    gap: 8px;
+  }
+
+  .filter_title { gap: 6px; }
+  .filter_title img { width: 26px; height: 26px; }
+  .filter_title h1 {
+    font-size: 17px;
+    margin-right: 4px;
+    white-space: nowrap;
+  }
+
+  .tag_container_size       { height: 28px; }
+  .tag_container_size label { font-size: 15px; margin-right: 7px; }
+  .tag_container_size img   { height: 11px; width: 11px; margin-left: 3px; }
+
+  .scroll_button { width: 28px; height: 28px; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 34px; }
+
+  .start_fade { left: 34px; }
+  .end_fade   { right: 34px; }
+}
+
+/* ------------------------------------------------------------
+   ≤992px
+   ------------------------------------------------------------ */
+@media (max-width: 992px) {
+  .filter_bar_container { height: 34px; padding: 0 8px; }
+
+  .filter_bar_scroll { gap: 7px; padding: 0 30px; }
+
+  .filter_title img { width: 22px; height: 22px; }
+  .filter_title h1  { font-size: 15px; margin-right: 3px; }
+
+  .tag_container_size       { height: 26px; }
+  .tag_container_size label { font-size: 13px; margin-right: 6px; }
+  .tag_container_size img   { height: 10px; width: 10px; margin-left: 3px; }
+
+  .scroll_button { width: 26px; height: 26px; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 30px; }
+
+  .start_fade { left: 30px; }
+  .end_fade   { right: 30px; }
+}
+
+/* ------------------------------------------------------------
+   ≤768px
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  .filter_bar_container { height: 32px; margin-top: 8px; padding: 0 10px; }
+
+  .filter_bar_scroll { gap: 6px; padding: 0 24px; }
+
+  .filter_title { gap: 5px; }
+  .filter_title img { width: 20px; height: 20px; }
+  .filter_title h1  { font-size: 13px; margin-right: 3px; }
+
+  .tag_container_size       { height: 24px; }
+  .tag_container_size label { font-size: 12px; margin-right: 5px; }
+  .tag_container_size img   { height: 9px; width: 9px; margin-left: 2px; }
+
+  .scroll_button     { width: 24px; height: 24px; }
+  .scroll_button img { width: 45%; height: 55%; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 24px; }
+
+  .start_fade { left: 24px; }
+  .end_fade   { right: 24px; }
+}
+
+/* ------------------------------------------------------------
+   ≤450px
+   ------------------------------------------------------------ */
+@media (max-width: 450px) {
+  .filter_bar_container { height: 30px; margin-top: 6px; padding: 0 8px; }
+
+  .filter_bar_scroll { gap: 5px; padding: 0 20px; }
+
+  .filter_title { gap: 4px; }
+  .filter_title img { width: 18px; height: 18px; }
+  .filter_title h1  { font-size: 12px; margin-right: 2px; }
+
+  .tag_container_size       { height: 22px; }
+  .tag_container_size label { font-size: 11px; margin-right: 4px; }
+  .tag_container_size img   { height: 8px; width: 8px; margin-left: 2px; }
+
+  .scroll_button { width: 22px; height: 22px; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 20px; }
+
+  .start_fade { left: 20px; }
+  .end_fade   { right: 20px; }
+}
+
+/* ------------------------------------------------------------
+   ≤360px
+   ------------------------------------------------------------ */
+@media (max-width: 360px) {
+  .filter_bar_container { height: 28px; padding: 0 6px; }
+
+  .filter_bar_scroll { gap: 4px; padding: 0 18px; }
+
+  .filter_title img { width: 16px; height: 16px; }
+  .filter_title h1  { font-size: 11px; }
+
+  .tag_container_size       { height: 20px; }
+  .tag_container_size label { font-size: 10px; margin-right: 3px; }
+  .tag_container_size img   { height: 7px; width: 7px; margin-left: 2px; }
+
+  .scroll_button { width: 20px; height: 20px; }
+
+  .start_fade,
+  .end_fade,
+  .start_solid_fade,
+  .end_solid_fade { width: 18px; }
+
+  .start_fade { left: 18px; }
+  .end_fade   { right: 18px; }
+}
