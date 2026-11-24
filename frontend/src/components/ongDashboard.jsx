@@ -66,6 +66,10 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 		}))
 	}
 
+	function getSocialMediaDescription() {
+
+	}
+
 	return (
 		<>
 			<div className="focus_BG"></div>

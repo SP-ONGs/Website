@@ -70,11 +70,13 @@ function OngCardComponent({ ongData, currentTab, setCurrentModal, isAdmin, isCli
 	const reviewsSummary = ongData.reviewsSummary
 	const ongAverageRate = reviewsSummary.total == 0 && "--" || reviewsSummary.average
 
+	console.log("OngCard:", ongData)
+
 	return (
 		<div className={cardStyle} onClick={onViewONG}>
 			<CardImageComponent ongImageUrl={ongData.imageUrl} />
 			<CardTitleComponent ongName={ongData.name} ongAverageRate={ongAverageRate} />
-			<CardSocialMediaComponent />
+			<CardSocialMediaComponent ongSocialMedia={ongData.socialMedia} />
 			<CardTagsComponent tags={ongData.tags} />
 		</div>
 	)
@@ -122,21 +124,29 @@ function CardTitleComponent({ ongName, ongAverageRate }) {
 
 
 // Functions 4: Card social media //
-function CardSocialMediaComponent() {
+function CardSocialMediaComponent({ ongSocialMedia }) {
+	const cardStyle = ongCardStyle.socialmedia_card
+	const cardBigIconStyle = [ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")
+
+	const mediaPreviewData = {
+		["instagram"]: { style: cardStyle, image: instagramIconImage, text: "Instagram" },
+		["whatsapp"]: { style: cardStyle, image: whatsappIconImage, text: "Whatsapp" },
+		["website"]: { style: cardBigIconStyle, image: websiteIconImage, text: "Website" }
+	}
+
 	return (
 		<div className={ongCardStyle.ongCard_socialmedia_container}>
-			<div className={ongCardStyle.socialmedia_card}>
-				<img src={instagramIconImage} />
-				<h1>Instagram</h1>
-			</div>
-			<div className={ongCardStyle.socialmedia_card}>
-				<img src={whatsappIconImage} />
-				<h1>Whatsapp</h1>
-			</div>
-			<div className={[ongCardStyle.socialmedia_card, ongCardStyle.socialmedia_big_icon].join(" ")}>
-				<img src={websiteIconImage} />
-				<h1>Website</h1>
-			</div>
+			{ongSocialMedia.map((socialMediaData) => {
+				const previewData = mediaPreviewData[socialMediaData.name]
+				if (!previewData) return null
+
+				return (
+					<div key={socialMediaData.socialMediaId} className={previewData.style}>
+						<img src={previewData.image} />
+						<h1>{previewData.text}</h1>
+					</div>
+				)
+			})}
 		</div>
 	)
 }

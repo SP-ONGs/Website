@@ -96,7 +96,7 @@ function UpdateAddMediaButtonEnabled() {
 	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled)
 }
 
-export function SocialMediaInputModal({ setMediaModal, currentAddMedia, addSocialMediaFunction }) {
+export function SocialMediaInputModal({ setMediaModal, currentAddMedia, defaultText, addSocialMediaFunction }) {
 	const iconsList = {
 		["instagram"]: instagramIconImage,
 		["whatsapp"]: whatsappIconImage,
@@ -151,7 +151,7 @@ export function SocialMediaInputModal({ setMediaModal, currentAddMedia, addSocia
 					<div className={signMediaStyle.media_input_container}>
 						<h1>{titleText}</h1>
 						<div className={signMediaStyle.media_input}>
-							<input id="signONG_addMidiaInput" type="text" onChange={UpdateAddMediaButtonEnabled} />
+							<input id="signONG_addMidiaInput" type="text" defaultValue={defaultText || ""} onChange={UpdateAddMediaButtonEnabled} />
 						</div>
 					</div>
 				</div>
