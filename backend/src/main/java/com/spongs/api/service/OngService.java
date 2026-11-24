@@ -44,8 +44,23 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import java.time.Duration;
+
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+
 @Service
 public class OngService {
+	private static final String CNPJ_API_URL = "https://brasilapi.com.br/api/cnpj/v1/{cnpj}";
+	private final RestClient cnpjRestClient = createCnpjRestClient();
+
+	private static RestClient createCnpjRestClient() {
+		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+		factory.setConnectTimeout(Duration.ofSeconds(5));
+		factory.setReadTimeout(Duration.ofSeconds(5));
+		return RestClient.builder().requestFactory(factory).build();
+	}
 	private final OngRepository ongRepository;
 	private final SocialMediaRepository socialMediaRepository;
 	private final TagRepository tagRepository;
@@ -339,7 +354,52 @@ public class OngService {
 			return false;
 		}
 
-		// Colocar o codigo de logica do CNPJ aqui
-		return false;
+		// 1) Local check: the two check digits must match
+		if (!hasValidCheckDigits(cnpj)) {
+			return false;
+		}
+
+		// 2) Public API check: the company must exist and be active
+		try {
+			Map<?, ?> body = cnpjRestClient.get()
+					.uri(CNPJ_API_URL, cnpj)
+					.retrieve()
+					.body(Map.class);
+
+			if (body == null) {
+				return false;
+			}
+
+			return "ATIVA".equalsIgnoreCase(String.valueOf(body.get("descricao_situacao_cadastral")));
+		} catch (RestClientException e) {
+			// Not found, API offline, timeout or rate limit: leave it for manual review
+			return false;
+		}
+	}
+
+	private boolean hasValidCheckDigits(String cnpj) {
+		if (cnpj.length() != 14 || cnpj.chars().distinct().count() == 1) {
+			return false;
+		}
+
+		return calculateCheckDigit(cnpj, 12) == cnpj.charAt(12) - '0'
+				&& calculateCheckDigit(cnpj, 13) == cnpj.charAt(13) - '0';
+	}
+
+	private int calculateCheckDigit(String cnpj, int length) {
+		int sum = 0;
+		int weight = length - 7;
+
+		for (int i = 0; i < length; i++) {
+			sum += (cnpj.charAt(i) - '0') * weight;
+			weight--;
+
+			if (weight < 2) {
+				weight = 9;
+			}
+		}
+
+		int rest = sum % 11;
+		return rest < 2 ? 0 : 11 - rest;
 	}
 }

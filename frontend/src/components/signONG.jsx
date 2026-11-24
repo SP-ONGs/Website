@@ -138,7 +138,9 @@ function ResetErrors() {
 	const midiaContainer = document.getElementsByClassName(signStyle.midia_container)[0]
 
 	const confirmPasswordInput = document.getElementById("signONG_confirm_password")
+	const cnpjInput = document.getElementById("signONG_cnpj")
 
+	setError(cnpjInput.parentElement, false)
 	setError(nameInput.parentElement, false)
 	setError(cepInput.parentElement, false)
 	setError(imageInput.parentElement, false)
@@ -216,8 +218,14 @@ async function OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFi
 	const IMAGE_IS_VALID = imageFile !== undefined
 	setError(imageInput.parentElement, !IMAGE_IS_VALID)
 
+	// CNPJ is optional, but when filled it must have 14 digits
+	const cnpjInput = document.getElementById("signONG_cnpj")
+	const ongCnpj = cnpjInput.value.replace(/\D/g, "")
+	const CNPJ_IS_VALID = ongCnpj === "" || ongCnpj.length === 14
+	setError(cnpjInput.parentElement, !CNPJ_IS_VALID)
+
 	// Check if can sign ONG
-	const CAN_SIGN_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA && IS_SAME_PASSWORD
+	const CAN_SIGN_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA && IS_SAME_PASSWORD && CNPJ_IS_VALID
 
 	if (!CAN_SIGN_ONG) {
 		return
@@ -264,7 +272,7 @@ async function OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFi
 		"name": ongName,
 		"cep": ongCEP,
 		"houseNumber": houseNumber,
-		"cnpj": null,
+		"cnpj": ongCnpj === "" ? null : ongCnpj,
 		"socialMedia": ongSocialMedia,
 		"tagIds": ongTagsIds
 	}
@@ -690,6 +698,11 @@ function SPONGS_Brand() {
 }
 
 function SignInputsContainer() {
+	function updateCnpj() {
+		const cnpjInput = document.getElementById("signONG_cnpj")
+		cnpjInput.value = cnpjInput.value.replace(/\D/g, "").substring(0, 14)
+	}
+
 	const [hidePassword, setHidePassword] = useState(true)
 	const [hideConfirm, setHideConfirm] = useState(true)
 
@@ -716,6 +729,11 @@ function SignInputsContainer() {
 
 	return (
 		<div className={signStyle.signONG_input_container}>
+			<div className={signStyle.input_group}>
+				<label htmlFor="cnpj">CNPJ (OPCIONAL)</label>
+				<input id="signONG_cnpj" type="text" inputMode="numeric" maxLength={18} onChange={updateCnpj} onSelect={ResetErrors} />
+			</div>
+
 			<div className={signStyle.input_group}>
 				<label htmlFor="email">EMAIL</label>
 				<input id="signONG_email" type="email" onChange={UpdateSignButtonEnabled} onSelect={ResetErrors} />

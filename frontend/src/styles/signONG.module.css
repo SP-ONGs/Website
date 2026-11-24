@@ -12,7 +12,7 @@
 	top: 50%;
 
 	width: 1038px;
-	height: 490px;
+	height: 520px;
 
 	background: white;
 	border-radius: 25px;
@@ -84,12 +84,13 @@
 .divide_bar {
 	background-color: #D9D9D9;
 	border-radius: 10px;
-	height: 470px;
+	height: 500px;
 	width: 7px;
 
 	position: fixed;
-	top: 10px;
+	transform: translateY(-50%);
 	right: 427px;
+	top: 50%;
 }
 
 
@@ -480,7 +481,7 @@ input[type="file"] {
 
 /* Tags */
 .left_bottom_container {
-	height: 130px;
+	height: 160px;
 	width: 100%;
 
 	display: flex;
@@ -491,7 +492,7 @@ input[type="file"] {
 }
 
 .select_tags_container {
-	height: 100px;
+	height: 130px;
 
 	background: #ddd;
 	border-radius: 5px;
@@ -518,7 +519,7 @@ input[type="file"] {
 	top: 11px;
 
 	width: 394px;
-	height: 456px;
+	height: 486px;
 
 	display: flex;
 	flex-direction: column;
@@ -550,7 +551,7 @@ input[type="file"] {
 }
 
 .sign_text {
-	padding-top: 27px;
+	padding-top: 12px;
 
 	font-size: 28px;
 	font-weight: 500;
@@ -565,8 +566,8 @@ input[type="file"] {
 	display: flex;
 	flex-direction: column;
 
-	padding-top: 26px;
-	padding-bottom: 25px;
+	padding-top: 14px;
+	padding-bottom: 14px;
 }
 
 .input_group {
