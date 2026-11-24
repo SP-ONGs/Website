@@ -549,7 +549,7 @@ input[type="file"] {
 }
 
 .sign_text {
-	padding-top: 27px;
+	padding-top: 12px;
 
 	font-size: 28px;
 	font-weight: 500;
@@ -564,8 +564,8 @@ input[type="file"] {
 	display: flex;
 	flex-direction: column;
 
-	padding-top: 26px;
-	padding-bottom: 25px;
+	padding-top: 14px;
+	padding-bottom: 14px;
 }
 
 .input_group {
