@@ -13,6 +13,7 @@ import tagsData from "../data/tagsData.json"
 import { getDashboardOngData, updateOng } from "../controllers/ongDashboardController.js"
 import { getTagId } from "../controllers/tagController.js"
 import { getSocialMediaId } from "../controllers/socialMediaController.js"
+import { getCepData } from "../controllers/locationController.js"
 import { updateOngData } from "../controllers/ongController.js"
 
 // Components
@@ -203,6 +204,182 @@ function OngPhotoContainer({ ongData }) {
 }
 
 function OngInformationContainer({ ongData, setOngData }) {
+	const [cepIsInvalid, setCepIsInvalid] = useState(false)
+	const [currentCepData, setCepData] = useState(null)
+	const [currentHouseNumber, setHouseNumber] = useState(ongData.houseNumber || "")
+
+	let lastUpdatedCEP
+	let cepIsLoading = false
+
+	function setCepInvalid(isInvalid) {
+		const locationContainerElement = document.getElementsByClassName(ongDashboardStyle.location_container)[0]
+
+		if (isInvalid) {
+			setCepIsInvalid(true)
+			locationContainerElement.classList.add("invalid_location")
+		} else {
+			setCepIsInvalid(false)
+			locationContainerElement.classList.remove("invalid_location")
+		}
+	}
+
+	function updateCepText(cepData, houseNumber) {
+		let streetText = `${cepData.logradouro}`
+		const cityText = `, ${cepData.localidade}` //, ${cepData.uf}`
+
+		if (houseNumber) {
+			streetText += ` ${houseNumber}`
+		}
+
+		const locationTextElement = document.getElementById("ongDashboard_location_text")
+		const locationText = streetText + cityText
+
+		locationTextElement.textContent = locationText
+	}
+
+	async function updateCEP() {
+		const cepInputElement = document.getElementById("ongDashboard_cep")
+		const locationTextElement = document.getElementById("ongDashboard_location_text")
+
+		/* Update text */
+		const cep = cepInputElement.value.replace(/\D/g, "").substring(0, 8)
+		cepInputElement.value = cep
+
+		const IS_SAME_CEP = lastUpdatedCEP == cep
+		const CEP_ENOUGH_DIGITS = cep.length >= 8
+
+		if (IS_SAME_CEP) {
+			return
+		}
+		lastUpdatedCEP = cep
+
+		setCepInvalid(false)
+		setCepData(null)
+
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"cep": cep
+		}))
+
+		if (!CEP_ENOUGH_DIGITS) {
+			locationTextElement.textContent = "(Informe o CEP)"
+			return
+		}
+
+		/* Load CEP */
+		const startTime = Date.now()
+		lastUpdatedCEP = startTime
+
+		async function cepLoadingAnimation() {
+			let reticencesText = ""
+
+			for (let i = 0; i < 4; i++) {
+				if (!cepIsLoading) {
+					break
+				}
+
+				locationTextElement.textContent = "(Carregando" + reticencesText + ")"
+				reticencesText += "."
+
+				await new Promise(resolve => setTimeout(resolve, 250))
+			}
+
+			await new Promise(resolve => setTimeout(resolve, 200))
+
+			if (cepIsLoading) {
+				cepLoadingAnimation()
+			}
+		}
+
+		if (!cepIsLoading) {
+			cepIsLoading = true
+			cepLoadingAnimation()
+		}
+
+		//locationTextElement.textContent = "---"
+		const cepData = await getCepData(cep)
+
+		/* Finish CEP loading */
+		const UPDATE_CEP = lastUpdatedCEP === startTime
+
+		if (!UPDATE_CEP) {
+			return
+		}
+
+		cepIsLoading = false
+
+		const CEP_IS_VALID = cepData.localidade !== undefined
+
+		if (!CEP_IS_VALID) {
+			locationTextElement.textContent = "(CEP inválido)"
+			setCepInvalid(true)
+			return
+		}
+
+		setCepData(cepData)
+		updateCepText(cepData, currentHouseNumber)
+	}
+
+	function updateHouseNumber() {
+		const houseNumberInput = document.getElementById("ongDashboard_houseNumber")
+		const houseNumberValue = houseNumberInput.value.replace(/\D/g, "").substring(0, 8)
+
+		houseNumberInput.value = houseNumberValue
+
+		setHouseNumber(houseNumberValue)
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"houseNumber": houseNumberValue
+		}))
+
+		resetErrors()
+
+		if (currentCepData) {
+			updateCepText(currentCepData, houseNumberValue)
+		}
+	}
+
+	const [useImagePreview, setImagePreview] = useState(false)
+
+	function updateImage() {
+		const imageInputElement = document.getElementById("signOng_image_input")
+		const file = imageInputElement.files?.[0]
+
+		resetErrors()
+
+		if (!file) {
+			setImageFile(false)
+			setImagePreview()
+			return
+		}
+
+		if (file.size > 5 * 1024 * 1024) {
+			console.log("Image too big!!!")
+			return
+		}
+
+		const previewUrl = URL.createObjectURL(file)
+		const previewImage = document.getElementById("signONG_preview_image")
+
+		setImageFile(file)
+		setImagePreview(true)
+
+		previewImage.src = previewUrl
+	}
+
+	function onNameChange() {
+		const nameInput = document.getElementById("ongDashboard_name")
+
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"name": nameInput.value
+		}))
+	}
+
+	useEffect(() => {
+		updateCEP()
+	}, [ongData.cep])
+
 	return (
 		<div className={ongDashboardStyle.information_container}>
 			<h1 className={ongDashboardStyle.information_title}>NOME DA ONG</h1>
@@ -211,6 +388,7 @@ function OngInformationContainer({ ongData, setOngData }) {
 					id="ongDashboard_name"
 					type="text"
 					defaultValue={ongData.name}
+					onChange={onNameChange}
 				/>
 			</div>
 
@@ -221,6 +399,7 @@ function OngInformationContainer({ ongData, setOngData }) {
 						id="ongDashboard_cep"
 						type="text"
 						defaultValue={ongData.cep}
+						onChange={updateCEP}
 					/>
 				</div>
 				<div className={ongDashboardStyle.house_number_input}>
@@ -229,16 +408,17 @@ function OngInformationContainer({ ongData, setOngData }) {
 						id="ongDashboard_houseNumber"
 						type="text"
 						defaultValue={ongData.houseNumber}
+						onChange={updateHouseNumber}
 					/>
 				</div>
 			</div>
 
 			<div className={ongDashboardStyle.location_container}>
 				<div className={ongDashboardStyle.location_title}>
-					<img src={locationIconImage} />
+					<img src={cepIsInvalid ? invalidLocationIconImage : locationIconImage} />
 					<h1>LOCALIZAÇÃO</h1>
 				</div>
-				<h2>São Paulo, Rua Doutor Joviano Pacheco de Aguirre, 255</h2>
+				<h2 id="ongDashboard_location_text"></h2>
 			</div>
 		</div>
 	)
