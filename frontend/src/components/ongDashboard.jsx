@@ -1,6 +1,10 @@
 // --> Variables <-- //
 
+// React
 import { useState } from "react"
+
+// Utils
+import { deepEqual } from "../utils/deepEqual.js"
 
 // Data
 import tagsData from "../data/tagsData.json"
@@ -66,8 +70,14 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 		}))
 	}
 
-	function getSocialMediaDescription() {
+	function getSocialMediaDescription(socialMediaName) {
+		for (const socialMediaData of ongData.socialMedia) {
+			if (socialMediaData.name == socialMediaName) {
+				return socialMediaData.description
+			}
+		}
 
+		return ""
 	}
 
 	return (
@@ -77,7 +87,7 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 			<div className={ongDashboardStyle.ongDashboard_modal}>
 				<div className={ongDashboardStyle.modal_container}>
 					<div className={ongDashboardStyle.left_container}>
-						<OngStatusComponent />
+						<OngStatusComponent ongData={ongData} />
 						<OngPhotoContainer ongData={ongData} />
 						<OngInformationContainer ongData={ongData} setOngData={setOngData} />
 						<OngSocialMediaContainer ongData={ongData} setOngData={setOngData} setMediaModal={setMediaModal} setEditingMedia={setEditingMedia} />
@@ -89,7 +99,7 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 
 					<div className={ongDashboardStyle.right_container}>
 						<OngPreviewComponent ongData={ongData} />
-						<UpdateButtonComponent />
+						<UpdateButtonComponent ongDataReference={ongDataReference} ongData={ongData} />
 					</div>
 
 					<SPONGS_Brand />
@@ -98,11 +108,17 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 			</div>
 
 			{currentMediaModal === "options" && (
-				<SocialMediaOptions setMediaModal={setMediaModal} setAddMedia={setAddMedia} />
+				<SocialMediaOptions setMediaModal={setMediaModal} setAddMedia={setEditingMedia} />
 			)}
 
 			{currentMediaModal === "add_media" && (
-				<SocialMediaInputModal setMediaModal={setMediaModal} currentAddMedia={currentEditingMedia} addSocialMediaFunction={addSocialMedia} />
+				<SocialMediaInputModal
+					setMediaModal={setMediaModal}
+					currentAddMedia={currentEditingMedia}
+					addSocialMediaFunction={addSocialMedia}
+					defaultText={getSocialMediaDescription(currentEditingMedia)}
+					isDashboardEditing={true}
+				/>
 			)}
 		</>
 	)
@@ -137,12 +153,30 @@ function SPONGS_Brand() {
 
 
 // Functions 4: Solicitation status // 
-function OngStatusComponent() {
+function OngStatusComponent({ ongData }) {
+	if (ongData.status == "APPROVED") {
+		return (<ApprovedStatusComponent />)
+	} else {
+		return (<InReviewStatusComponent />)
+	}
+}
+
+function InReviewStatusComponent() {
 	const inReviewStyle = [ongDashboardStyle.status_container, ongDashboardStyle.in_review_status].join(" ")
 
 	return (
 		<div className={inReviewStyle}>
 			<h1><b>STATUS:</b> <i>A sua ONG está em análise para ser adicionada em nosso site.</i></h1>
+		</div>
+	)
+}
+
+function ApprovedStatusComponent() {
+	const approvedStatusStyle = [ongDashboardStyle.status_container, ongDashboardStyle.approved_status].join(" ")
+
+	return (
+		<div className={approvedStatusStyle}>
+			<h1><b>STATUS:</b> <i>A sua ONG está cadastrada e acessivel dentro do nosso site.</i></h1>
 		</div>
 	)
 }
@@ -238,11 +272,12 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const instagramStyle = [ongDashboardStyle.social_media, "instagram"].join(" ")
 
 		return (
-			<div className={instagramStyle} id="signONG_instagram" onClick={() => editSocialMedia("instagram")}>
+			<div className={instagramStyle} id="signONG_instagram">
 				<img src={instagramIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Instagram</h1>
 				<h2>@{ongSocialMedias["instagram"]}</h2>
 				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("instagram")} />
+				<button onClick={() => editSocialMedia("instagram")}></button>
 			</div>
 		)
 	}
@@ -251,12 +286,13 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const whatsappStyle = [ongDashboardStyle.social_media, "whatsapp"].join(" ")
 
 		return (
-			<div className={whatsappStyle} id="signONG_whatsapp" onClick={() => editSocialMedia("whatsapp")}>
+			<div className={whatsappStyle} id="signONG_whatsapp">
 				<div className={ongDashboardStyle.social_media_bg_fade}></div>
 				<img src={whatsappIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Whatsapp</h1>
 				<h2>{ongSocialMedias["whatsapp"]}</h2>
 				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("whatsapp")} />
+				<button onClick={() => editSocialMedia("whatsapp")}></button>
 			</div>
 		)
 	}
@@ -265,12 +301,13 @@ function OngSocialMediaContainer({ ongData, setOngData, setMediaModal, setEditin
 		const websiteStyle = [ongDashboardStyle.social_media, "website"].join(" ")
 
 		return (
-			<div className={websiteStyle} id="signONG_website" onClick={() => editSocialMedia("website")}>
+			<div className={websiteStyle} id="signONG_website">
 				<div className={ongDashboardStyle.social_media_bg_fade}></div>
 				<img src={websiteIconImage} className={ongDashboardStyle.social_media_icon} />
 				<h1>Website</h1>
 				<h2>{ongSocialMedias["website"]}</h2>
 				<img src={cancelMediaIconImage} className={removeIconStyle} onClick={() => removeSocialMedia("website")} />
+				<button onClick={() => editSocialMedia("website")}></button>
 			</div>
 		)
 	}
@@ -416,12 +453,14 @@ function OngPreviewComponent({ ongData }) {
 
 
 // Functions 9: Update button //
-function UpdateButtonComponent() {
-	const ButtonStyle = ongDashboardStyle.confirm_button
+function UpdateButtonComponent({ ongDataReference, ongData }) {
+	const buttonStyle = ongDashboardStyle.confirm_button
 	const disabledButtonStyle = [ongDashboardStyle.confirm_button, ongDashboardStyle.confirm_button_disabled].join(" ")
 
+	const IS_UPDATABLE = !deepEqual(ongDataReference, ongData)
+
 	return (
-		<button className={disabledButtonStyle} id="ongDashboard_update_button">Atualizar</button>
+		<button className={IS_UPDATABLE && buttonStyle || disabledButtonStyle} id="ongDashboard_update_button">Atualizar</button>
 	)
 }
 

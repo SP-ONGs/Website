@@ -82,13 +82,14 @@ export function SocialMediaOptions({ setMediaModal, setAddMedia }) {
 	)
 }
 
-function UpdateAddMediaButtonEnabled() {
+function UpdateAddMediaButtonEnabled(defaultText, isDashboardEditing) {
 	const addMediaButton = document.getElementById("signONG_addMidiaButton")
 	const addMediaInput = document.getElementById("signONG_addMidiaInput")
 
 	const CAN_ADD = addMediaInput.value !== ""
+	const CAN_EDIT = (!defaultText || !isDashboardEditing) || defaultText !== addMediaInput.value
 
-	if (!CAN_ADD) {
+	if (!CAN_ADD || !CAN_EDIT) {
 		addMediaButton.classList.add(signMediaStyle.add_media_button_disabled)
 		return
 	}
@@ -96,7 +97,7 @@ function UpdateAddMediaButtonEnabled() {
 	addMediaButton.classList.remove(signMediaStyle.add_media_button_disabled)
 }
 
-export function SocialMediaInputModal({ setMediaModal, currentAddMedia, defaultText, addSocialMediaFunction }) {
+export function SocialMediaInputModal({ setMediaModal, currentAddMedia, defaultText, addSocialMediaFunction, isDashboardEditing }) {
 	const iconsList = {
 		["instagram"]: instagramIconImage,
 		["whatsapp"]: whatsappIconImage,
@@ -151,14 +152,18 @@ export function SocialMediaInputModal({ setMediaModal, currentAddMedia, defaultT
 					<div className={signMediaStyle.media_input_container}>
 						<h1>{titleText}</h1>
 						<div className={signMediaStyle.media_input}>
-							<input id="signONG_addMidiaInput" type="text" defaultValue={defaultText || ""} onChange={UpdateAddMediaButtonEnabled} />
+							<input
+								id="signONG_addMidiaInput"
+								type="text"
+								defaultValue={defaultText || ""}
+								onChange={() => UpdateAddMediaButtonEnabled(defaultText, isDashboardEditing)} />
 						</div>
 					</div>
 				</div>
 
 				<div id="signONG_addMidiaButton" onClick={onAddMedia}
 					className={[signMediaStyle.add_media_button, signMediaStyle.add_media_button_disabled].join(" ")}>
-					<label>Adicionar</label>
+					<label>{isDashboardEditing && "Atualizar" || "Adicionar"}</label>
 				</div>
 			</div >
 		</>

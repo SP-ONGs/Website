@@ -70,8 +70,6 @@ function OngCardComponent({ ongData, currentTab, setCurrentModal, isAdmin, isCli
 	const reviewsSummary = ongData.reviewsSummary
 	const ongAverageRate = reviewsSummary.total == 0 && "--" || reviewsSummary.average
 
-	console.log("OngCard:", ongData)
-
 	return (
 		<div className={cardStyle} onClick={onViewONG}>
 			<CardImageComponent ongImageUrl={ongData.imageUrl} />

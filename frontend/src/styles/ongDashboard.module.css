@@ -138,6 +138,11 @@
 	border: 3px solid rgb(255, 227, 71);
 }
 
+.approved_status {
+	background: rgba(153, 243, 111, .25);
+	border: 3px solid rgb(153 243 111);
+}
+
 
 /* Ong photo */
 .information_title {
@@ -432,7 +437,6 @@
 	border-radius: 10px;
 	position: relative;
 
-	cursor: pointer;
 	user-select: none;
 }
 
@@ -482,6 +486,20 @@
 	position: absolute;
 	bottom: 7px;
 	left: 43px;
+}
+
+.social_media button {
+	width: 80%;
+	height: 100%;
+
+	position: absolute;
+	transform: translateY(-50%);
+	left: 0;
+	top: 50%;
+
+	opacity: 0;
+
+	cursor: pointer;
 }
 
 .social_media_bg_fade {
@@ -639,8 +657,7 @@
 	color: rgba(255, 255, 255, .9);
 
 	position: absolute;
-	transform: translateX(-50%);
-	left: 50%;
+	left: 0;
 	bottom: 25px;
 
 	cursor: pointer;
@@ -649,7 +666,7 @@
 }
 
 .confirm_button:hover {
-	transform: scale(1.0125) translateX(-50%);
+	transform: scale(1.0125);
 }
 
 .confirm_button_disabled {
@@ -660,5 +677,5 @@
 }
 
 .confirm_button_disabled:hover {
-	transform: scale(1) translateX(-50%);
+	transform: scale(1);
 }
