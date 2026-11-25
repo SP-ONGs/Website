@@ -17,7 +17,7 @@ import indexBarArrowLeftImage from '../../images/elements_vectors/IndexBarArrow_
 import indexBarArrowRightImage from '../../images/elements_vectors/IndexBarArrow_Right.png'
 
 // Values
-const maxIndex = 50 // TODO: Sync with ONGs data
+let maxIndex = 1
 const indexButtonsAmount = 7
 
 
@@ -27,7 +27,7 @@ const indexButtonsAmount = 7
 // Functions 1: ONGs board component //
 function ONGsBoardComponent({ currentTab, setCurrentModal, isAdmin }) {
 	const cardsAmount = 6
-	const { displayOngs: ongs } = useSyncExternalStore(addOngCard, getOngsSnapshot)
+	const { displayOngs: ongs, maxIndex: newMaxIndex } = useSyncExternalStore(addOngCard, getOngsSnapshot)
 
 	async function loadHomepageOngs() {
 		await refreshOngs()
@@ -37,13 +37,15 @@ function ONGsBoardComponent({ currentTab, setCurrentModal, isAdmin }) {
 		loadHomepageOngs()
 	}, [isAdmin])
 
+	maxIndex = newMaxIndex
+
 	return (
 		<>
 			<div className={ongBoardStyle.ongBoard_container}>
 				{Array.from({ length: cardsAmount }, (_, index) => (
 					<OngCard key={index} id={"ongCard_" + index} ongData={ongs[index]} currentTab={currentTab} setCurrentModal={setCurrentModal} isAdmin={isAdmin} />
 				))}
-				<BoardIndexBarComponent />
+				<BoardIndexBarComponent key={newMaxIndex} />
 			</div>
 		</>
 	)
@@ -80,15 +82,21 @@ function BoardIndexBarComponent() {
 			<PreviusButtonComponent setIndex={setIndex} selectedButton={selectedButton} />
 
 			<div className={ongBoardStyle.index_numbers_container}>
-				{Array.from({ length: indexButtonsAmount }, (_, i) => (
-					<IndexButtonComponent
-						key={i}
-						buttonIndex={i + 1}
-						buttonsOrder={buttonsOrder}
-						selectedButton={selectedButton}
-						setIndex={setIndex}
-					/>
-				))}
+				{Array.from({ length: indexButtonsAmount }, (_, i) => {
+					if (i >= maxIndex) {
+						return (<div key={i}></div>)
+					}
+
+					return (
+						<IndexButtonComponent
+							key={i}
+							buttonIndex={i + 1}
+							buttonsOrder={buttonsOrder}
+							selectedButton={selectedButton}
+							setIndex={setIndex}
+						/>
+					)
+				})}
 			</div>
 
 			<NextButtonComponent setIndex={setIndex} selectedButton={selectedButton} />
@@ -99,10 +107,10 @@ function BoardIndexBarComponent() {
 function getIndexState(index) {
 	const middleButtonIndex = Math.ceil(indexButtonsAmount / 2)
 
+	const IN_START = index < 4
 	const IN_LIMIT = index >= maxIndex - middleButtonIndex + 1
-	const IN_MIDDLE = index >= middleButtonIndex
 
-	return IN_LIMIT && "inLimit" || IN_MIDDLE && "inMiddle" || "inStart"
+	return IN_START && "inStart" || IN_LIMIT && "inLimit" || "inMiddle"
 }
 
 
@@ -201,7 +209,7 @@ function NextButtonComponent({ setIndex, selectedButton }) {
 	const arrowStyle = [ongBoardStyle.next_arrow, ongBoardStyle.selectable_arrow].join(" ")
 	const disabledArrowStyle = ongBoardStyle.next_arrow
 
-	const NEXT_IS_DISABLED = selectedButton == indexButtonsAmount
+	const NEXT_IS_DISABLED = selectedButton == Math.min(indexButtonsAmount, maxIndex)
 	const buttonStyle = NEXT_IS_DISABLED && disabledArrowStyle || arrowStyle
 
 	function onNextButtonClick() {

@@ -11,7 +11,8 @@ import { getTagId } from "./tagController.js"
 const loadedOngs = {}
 let ongState = {
 	inLoading: false,
-	displayOngs: []
+	displayOngs: [],
+	maxIndex: 50
 }
 
 let useFilter = false
@@ -57,7 +58,13 @@ export async function refreshOngs() {
 	const referenceOngList = useFilter && inFilterOngs || ongType === "Public" && await getLoadedPublicOngs() || await getLoadedPendingOngs()
 	const newOngList = referenceOngList.slice(firstOng, lastOng)
 
-	updateOngState({ displayOngs: newOngList })
+	let maxIndex = Math.ceil(referenceOngList.length / 6)
+
+	if (!useFilter) {
+		maxIndex = 50
+	}
+
+	updateOngState({ displayOngs: newOngList, maxIndex: maxIndex })
 }
 
 export function getOngsSnapshot() {
@@ -149,6 +156,7 @@ async function doFilter() {
 	}
 
 	inFilterOngs = newFilteredOngs
+	setCurrentIndex(1)
 }
 
 export async function updateNameFilter(name) {
