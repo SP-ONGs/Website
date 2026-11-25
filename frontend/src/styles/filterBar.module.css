@@ -4,7 +4,6 @@
 }
 
 
-/* Filter container */
 .filter_bar_container {
 	height: 35px;
 	width: 950px;
@@ -111,7 +110,6 @@
 }
 
 
-/* Filter title */
 .filter_title {
 	display: flex;
 	gap: 8px;
@@ -151,17 +149,13 @@
 	text-wrap: nowrap;
 }
 
-/* ============================================================
-   FILTER BAR — Estilos base
-   ============================================================ */
+/* base estilo */
 
 * {
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
-/* Container principal: ocupa a largura definida.
-   As setas ficam absolutas nas bordas; as tags rolam entre elas. */
 .filter_bar_container {
   height: 35px;
   width: 950px;
@@ -185,7 +179,7 @@
   gap: 10px;
 
   position: relative;
-  padding: 0 40px;           /* reserva para setas + fades */
+  padding: 0 40px;      
   box-sizing: border-box;
 
   overflow-x: auto;
@@ -197,10 +191,6 @@
 .filter_bar_scroll::-webkit-scrollbar {
   display: none;
 }
-
-/* ============================================================
-   Setas de scroll (prev / next) — fixas nas bordas
-   ============================================================ */
 
 .scroll_button {
   height: 30px;
@@ -239,10 +229,6 @@
   pointer-events: none;
 }
 
-/* ============================================================
-   Fades laterais (acompanham as setas)
-   ============================================================ */
-
 .start_solid_fade,
 .end_solid_fade,
 .start_fade,
@@ -274,10 +260,6 @@
   right: 40px;
 }
 
-/* ============================================================
-   Título "Filtrar"
-   ============================================================ */
-
 .filter_title {
   display: flex;
   gap: 8px;
@@ -298,10 +280,6 @@
   margin-right: 6px;
 }
 
-/* ============================================================
-   Tags
-   ============================================================ */
-
 .tag_container_size {
   height: 30px;
   flex-shrink: 0;
@@ -317,13 +295,8 @@
   text-wrap: nowrap;
 }
 
-/* ============================================================
-   RESPONSIVIDADE
-   ============================================================ */
+/* 1367px resp */
 
-/* ------------------------------------------------------------
-   ≤1367px — acompanha o menu lateral
-   ------------------------------------------------------------ */
 @media (max-width: 1367px) {
   .filter_bar_container {
     width: calc(100% - 24% - 3%);
@@ -351,10 +324,9 @@
   .end_fade   { right: 36px; }
 }
 
-/* ------------------------------------------------------------
-   ≤1140px — sai do absolute, alinhada à esquerda, 100%
-   (mesmo breakpoint do TabsMenu)
-   ------------------------------------------------------------ */
+
+/* 1140px */
+
 @media (max-width: 1140px) {
   .filter_bar_container {
     position: relative;
@@ -370,8 +342,6 @@
     box-sizing: border-box;
   }
 
-  /* O scroll volta a ocupar o container inteiro;
-     os paddings internos reservam espaço para as setas. */
   .filter_bar_scroll {
     padding: 0 34px;
     gap: 8px;
@@ -400,9 +370,9 @@
   .end_fade   { right: 34px; }
 }
 
-/* ------------------------------------------------------------
-   ≤992px
-   ------------------------------------------------------------ */
+
+/* 992px resp */
+
 @media (max-width: 992px) {
   .filter_bar_container { height: 34px; padding: 0 8px; }
 
@@ -426,9 +396,9 @@
   .end_fade   { right: 30px; }
 }
 
-/* ------------------------------------------------------------
-   ≤768px
-   ------------------------------------------------------------ */
+
+/* 768px */
+
 @media (max-width: 768px) {
   .filter_bar_container { height: 32px; margin-top: 8px; padding: 0 10px; }
 
@@ -454,9 +424,8 @@
   .end_fade   { right: 24px; }
 }
 
-/* ------------------------------------------------------------
-   ≤450px
-   ------------------------------------------------------------ */
+/* 450px */
+
 @media (max-width: 450px) {
   .filter_bar_container { height: 30px; margin-top: 6px; padding: 0 8px; }
 

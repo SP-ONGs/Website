@@ -26,6 +26,7 @@ body {
 	transform: translate(-50%, -50%) scale(1.05);
 
 	animation: modalOpen .175s cubic-bezier(.3, 1.5, .925, 1);
+  z-index: 1000;
 }
 
 @keyframes modalOpen {
@@ -239,4 +240,385 @@ body {
 
 	font-size: 24px;
 	font-weight: 500px;
+}
+
+/* ============================================================
+   LOGIN MODAL — Base (desktop)
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Fundo branco */
+.login_modal {
+  width: 464px;
+  height: 480px;
+  padding: 20px 35px 18px;
+
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
+
+  position: fixed;
+  transform: translate(-50%, -50%) scale(1.05);
+  top: 50%;
+  left: 50%;
+
+  animation: modalOpen .175s cubic-bezier(.3, 1.5, .925, 1);
+  z-index: 1000;
+}
+
+@keyframes modalOpen {
+  from { transform: translate(-50%, -50%) scale(.85); }
+  to   { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Botão de fechar */
+.close_button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 30px;
+  height: 30px;
+
+  border: 0;
+  background: transparent;
+  z-index: 10;
+}
+
+.close_button img,
+.close_button button {
+  position: absolute;
+  cursor: pointer;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+/* SP ONGS Logo */
+.brand {
+  height: 86px;
+  display: flex;
+  align-items: center;
+  gap: 7.5px;
+}
+
+.brand img {
+  object-fit: contain;
+  width: 86px;
+  height: 86px;
+}
+
+.brand span {
+  color: #007DBC;
+  font-size: 60px;
+  font-weight: 900;
+}
+
+/* Login texto */
+.login_modal h2 {
+  margin-top: 22px;
+  margin-bottom: 30px;
+  color: #444;
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Login inputs */
+.input_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.input_group {
+  height: 55px;
+  width: 100%;
+  position: relative;
+  background: #ddd;
+  border-radius: 6px;
+}
+
+.input_group label {
+  color: #666;
+  font-size: 13px;
+  font-weight: 300;
+  position: absolute;
+  padding-top: 5px;
+  padding-left: 10px;
+}
+
+.input_group input {
+  width: 85%;
+  height: 55%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.input_group_hideButton {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  object-fit: contain;
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  right: 15px;
+}
+
+/* Aviso de erro */
+.input_group {
+  outline: 0 solid #E32424;
+  transition: outline 0.0675s ease;
+}
+
+.error_outline {
+  outline: 2px solid #E32424;
+}
+
+/* Botão de login */
+.login_button {
+  height: 50px;
+  width: 381px;
+  border: none;
+  border-radius: 6px;
+  background: #007DBC;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.login_button:hover {
+  transform: scale(1.0125);
+}
+
+.login_button_disabled {
+  background: rgba(0, 125, 188, .6);
+  color: rgba(255, 255, 255, .6);
+  cursor: default;
+}
+
+.login_button_disabled:hover {
+  transform: scale(1);
+}
+
+/* Opção de cadastrar */
+.or {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: #444;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.signin_link {
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+  color: #36a9e1;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   ≤1367px — reduz levemente
+   ------------------------------------------------------------ */
+@media (max-width: 1367px) {
+  .login_modal {
+    width: 440px;
+    height: 460px;
+    padding: 18px 30px 16px;
+  }
+
+  .brand { height: 78px; gap: 6px; }
+  .brand img { width: 78px; height: 78px; }
+  .brand span { font-size: 54px; }
+
+  .login_modal h2 { font-size: 26px; margin-top: 20px; margin-bottom: 26px; }
+
+  .input_group { height: 52px; }
+  .input_group input { font-size: 18px; }
+
+  .login_button { width: 100%; height: 48px; font-size: 22px; }
+
+  .or { font-size: 20px; }
+  .signin_link { font-size: 22px; }
+
+  .close_button { width: 28px; height: 28px; top: 16px; right: 16px; }
+}
+
+/* ------------------------------------------------------------
+   ≤1140px
+   ------------------------------------------------------------ */
+@media (max-width: 1140px) {
+  .login_modal {
+    width: 410px;
+    height: 440px;
+    padding: 16px 26px 14px;
+  }
+
+  .brand { height: 70px; gap: 5px; }
+  .brand img { width: 70px; height: 70px; }
+  .brand span { font-size: 48px; }
+
+  .login_modal h2 { font-size: 24px; margin-top: 18px; margin-bottom: 22px; }
+
+  .input_container { gap: 8px; padding-bottom: 16px; }
+  .input_group { height: 50px; }
+  .input_group label { font-size: 12px; }
+  .input_group input { font-size: 17px; }
+  .input_group_hideButton { width: 26px; height: 26px; right: 12px; }
+
+  .login_button { height: 46px; font-size: 20px; }
+
+  .or { font-size: 18px; margin-top: 8px; }
+  .signin_link { font-size: 20px; margin-top: 4px; }
+
+  .close_button { width: 26px; height: 26px; top: 14px; right: 14px; }
+}
+
+/* ------------------------------------------------------------
+   ≤815px — MODO MOBILE: encolhe para caber na viewport
+   ------------------------------------------------------------ */
+@media (max-width: 815px) {
+  .login_modal {
+    width: 92vw;
+    max-width: 400px;
+    height: auto;
+    max-height: 92vh;
+
+    padding: 18px 24px 16px;
+    border-radius: 14px;
+
+    transform: translate(-50%, -50%) scale(1);
+    animation: modalOpenMobile 0.2s cubic-bezier(.3, 1.5, .925, 1);
+    overflow-y: auto;
+  }
+
+  @keyframes modalOpenMobile {
+    from { transform: translate(-50%, -50%) scale(.9); opacity: 0; }
+    to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  .brand { height: 64px; gap: 5px; justify-content: center; }
+  .brand img { width: 64px; height: 64px; }
+  .brand span { font-size: 42px; }
+
+  .login_modal h2 { font-size: 22px; margin-top: 16px; margin-bottom: 20px; }
+
+  .input_container { gap: 8px; padding-bottom: 14px; }
+  .input_group { height: 50px; }
+  .input_group input { font-size: 17px; }
+  .input_group_hideButton { width: 26px; height: 26px; right: 12px; }
+
+  .login_button { width: 100%; height: 46px; font-size: 20px; }
+
+  .or { font-size: 16px; margin-top: 8px; }
+  .signin_link { font-size: 18px; margin-top: 4px; }
+
+  .close_button {
+    width: 30px;
+    height: 30px;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤450px
+   ------------------------------------------------------------ */
+@media (max-width: 450px) {
+  .login_modal {
+    width: 94vw;
+    max-width: 360px;
+    padding: 16px 20px 14px;
+    border-radius: 12px;
+  }
+
+  .brand { height: 56px; gap: 4px; }
+  .brand img { width: 56px; height: 56px; }
+  .brand span { font-size: 36px; }
+
+  .login_modal h2 { font-size: 19px; margin-top: 14px; margin-bottom: 18px; }
+
+  .input_container { gap: 7px; padding-bottom: 12px; }
+  .input_group { height: 46px; }
+  .input_group label { font-size: 11px; padding-top: 4px; padding-left: 8px; }
+  .input_group input { font-size: 15px; padding-left: 8px; padding-bottom: 8px; }
+  .input_group_hideButton { width: 22px; height: 22px; right: 10px; }
+
+  .login_button { height: 42px; font-size: 17px; }
+
+  .or { font-size: 14px; margin-top: 6px; }
+  .signin_link { font-size: 16px; margin-top: 3px; }
+
+  .close_button {
+    width: 26px;
+    height: 26px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* ------------------------------------------------------------
+   ≤360px
+   ------------------------------------------------------------ */
+@media (max-width: 360px) {
+  .login_modal {
+    width: 96vw;
+    padding: 14px 16px 12px;
+    border-radius: 10px;
+  }
+
+  .brand { height: 48px; gap: 3px; }
+  .brand img { width: 48px; height: 48px; }
+  .brand span { font-size: 30px; }
+
+  .login_modal h2 { font-size: 17px; margin-top: 12px; margin-bottom: 16px; }
+
+  .input_container { gap: 6px; padding-bottom: 10px; }
+  .input_group { height: 42px; border-radius: 5px; }
+  .input_group label { font-size: 10px; }
+  .input_group input { font-size: 13px; }
+  .input_group_hideButton { width: 20px; height: 20px; right: 8px; }
+
+  .login_button { height: 38px; font-size: 15px; border-radius: 5px; }
+
+  .or { font-size: 12px; margin-top: 5px; }
+  .signin_link { font-size: 14px; margin-top: 2px; }
+
+  .close_button {
+    width: 22px;
+    height: 22px;
+    top: 8px;
+    right: 8px;
+  }
 }

@@ -24,6 +24,7 @@ body {
 	left: 50%;
 
 	animation: modalOpen .175s cubic-bezier(.3, 1.5, .925, 1);
+	z-index: 1000;
 }
 
 @keyframes modalOpen {

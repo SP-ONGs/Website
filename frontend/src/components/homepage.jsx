@@ -13,7 +13,9 @@ import WelcomeModalComponent from './welcomeModal.jsx'
 // --> Functions <-- //
 
 // Functions 1: Homepage component //
-function HomepageComponent({ currentModal, setCurrentModal }) {
+function HomepageComponent({ currentModal, setCurrentModal }) 
+
+{
 	return (
 		<>
 			<NavbarComponent />
@@ -22,6 +24,8 @@ function HomepageComponent({ currentModal, setCurrentModal }) {
 			<OngBoardComponent setCurrentModal={setCurrentModal} />
 			{currentModal === "viewONG" && (<ViewOngComponent setCurrentModal={setCurrentModal} />)}
 			{currentModal === "welcome" && (<WelcomeModalComponent setCurrentModal={setCurrentModal} />)}
+			
+
 		</>
 	)
 }

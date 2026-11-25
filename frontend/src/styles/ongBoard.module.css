@@ -23,7 +23,6 @@ body {
 	left: 291px;
 
 	gap: 13px 15px;
-	/*transition: gap 0.1s ease;*/
 }
 
 
@@ -122,8 +121,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Container principal: grid moderno com cards adaptativos.
-   No desktop fica posicionado ao lado do menu lateral. */
 .ongBoard_container {
   width: fit-content;
   height: fit-content;
@@ -140,7 +137,6 @@ body {
   left: 291px;
 }
 
-/* A paginação ocupa a linha inteira do grid */
 .index_bar_container {
   grid-column: 1 / -1;
 
@@ -155,10 +151,6 @@ body {
 
   user-select: none;
 }
-
-/* ============================================================
-   Setas
-   ============================================================ */
 
 .next_arrow {
   height: 20px;
@@ -180,9 +172,8 @@ body {
   transform: translateX(12.5%) scaleX(1.25);
 }
 
-/* ============================================================
-   Números da paginação
-   ============================================================ */
+
+   /* Números da paginação */
 
 .index_numbers_container {
   height: 100%;
@@ -275,10 +266,7 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   ≤1140px — ainda ao lado do menu lateral (26%)
-   Grid auto-adaptativo, mas AINDA com left/width do menu.
-   ------------------------------------------------------------ */
+   /* 1140px */
 @media (max-width: 1140px) {
   .ongBoard_container {
     top: 130px;
@@ -321,9 +309,9 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   ≤992px — ainda ao lado do menu lateral, cards menores
-   ------------------------------------------------------------ */
+
+   /* 992px — ainda ao lado do menu lateral, cards menores */
+
 @media (max-width: 992px) {
   .ongBoard_container {
     top: 120px;
@@ -356,9 +344,7 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   840px o menu lateral sai, foi a opção que achei nesse momento, ele vira vertical e os cards ocuoam a tela toda. 
-   ------------------------------------------------------------ */
+   /* 840px o menu lateral sai, foi a opção que achei nesse momento, ele vira vertical e os cards ocuoam a tela toda. */      
 @media (max-width: 840px) {
   .ongBoard_container {
     position: static;
@@ -409,9 +395,7 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   ≤450px — 1 coluna
-   ------------------------------------------------------------ */
+   /* 450px — 1 coluna */
 @media (max-width: 450px) {
   .ongBoard_container {
     grid-template-columns: 1fr;
@@ -448,9 +432,7 @@ body {
   }
 }
 
-/* ------------------------------------------------------------
-   ≤360px
-   ------------------------------------------------------------ */
+   /* 360px */
 @media (max-width: 360px) {
   .ongBoard_container {
     gap: 10px 0;

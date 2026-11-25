@@ -60,8 +60,6 @@
 	color: #982222;
 }
 
-
-/* On select option */
 .menu_option_container:hover,
 .selected_option {
 	background: #D9D9D9;
@@ -168,9 +166,8 @@
   }
 }
 
-/* ============================================
-   TABLET (até 992px)
-   ============================================ */
+   /* TABLET (até 992px) */
+
 @media (max-width: 702px) {
   .menu_container {
     gap: 5px;
@@ -195,9 +192,8 @@
   }
 }
 
-/* ============================================
-   MOBILE (até 768px)
-   ============================================ */
+   /* MOBILE (até 768px) */
+   
 @media (max-width: 768px) {
   .menu_container {
     gap: 4px;
@@ -227,9 +223,7 @@
   }
 }
 
-/* ============================================
-   MOBILE PEQUENO (até 450px)
-   ============================================ */
+   /* MOBILE PEQUENO (até 450px) */
 @media (max-width: 450px) {
   .menu_container {
     gap: 3px;
@@ -258,9 +252,7 @@
   }
 }
 
-/* ============================================
-   MOBILE MUITO PEQUENO (até 360px)
-   ============================================ */
+   /* MOBILE MUITO PEQUENO (até 360px) */
 @media (max-width: 360px) {
   .menu_container {
     gap: 2px;

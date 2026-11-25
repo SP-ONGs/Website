@@ -91,9 +91,9 @@
    RESPONSIVIDADE DA NAVBAR
    ============================================ */
 
-/* ============================================
-   1367px tela normal de pc aqui
-   ============================================ */
+
+   /* 1367px tela normal de pc aqui */
+  
 @media (max-width: 1367px) {
   .navbar_background {
     height: 70px;
@@ -152,9 +152,8 @@
   }
 }
 
-/* ============================================
-   TABLET PEQUENO (até 992px)
-   ============================================ */
+   /* (até 992px) */
+
 @media (max-width: 992px) {
   .navbar_background {
     height: 65px;
@@ -188,9 +187,7 @@
   }
 }
 
-/* ============================================
-   MOBILE (até 768px)
-   ============================================ */
+   /* MOBILE (até 768px) */
 @media (max-width: 768px) {
   .navbar_background {
     height: 60px;
@@ -219,7 +216,6 @@
     height: 40px;
   }
 
-  /* Barra de pesquisa ocupa o restante */
   .search_bar {
     position: relative;
     transform: none;
@@ -251,16 +247,15 @@
   }
 }
 
-/* ============================================
-   MOBILE PEQUENO (até 620px) — LOGO À DIREITA
-   ============================================ */
+   /* MOBILE PEQUENO (até 620px) — LOGO À DIREITA */
+
 @media (max-width: 620px) {
   .navbar_background {
     height: 58px;
     padding: 0 10px;
   }
 
-  /* Inverte a ordem: search bar à esquerda, logo à direita */
+  /* aq inverte a ordem: search bar à esquerda, logo à direita */
   .search_bar {
     order: 1;
     flex: 1;
@@ -327,9 +322,8 @@
   }
 }
 
-/* ============================================
-   MOBILE MUITO PEQUENO (até 360px)
-   ============================================ */
+   /* MOBILE MUITO PEQUENO (até 360px) */
+   
 @media (max-width: 360px) {
   .navbar_background {
     height: 50px;

@@ -1,6 +1,6 @@
 * {
 	margin: 0px;
-	font-family: Arial, sans-serif;
+	font-family: Arial, sans-serif;;
 }
 
 
@@ -21,6 +21,7 @@
 	transform: translate(-50%, -50%) scale(1.1);
 
 	animation: modalOpen 0.175s cubic-bezier(.3, 1.5, .925, 1);
+	z-index:1000;
 }
 
 @keyframes modalOpen {

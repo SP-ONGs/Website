@@ -18,6 +18,7 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
 
 	animation: optionsModalOpen 0.175s cubic-bezier(.3, 1.5, .925, 1);
+	z-index: 1000;
 }
 
 .sign_media_modal {
@@ -34,6 +35,7 @@
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.235);
 
 	animation: mediaModalOpen 0.175s cubic-bezier(.3, 1.5, .925, 1);
+	z-index: 1000;
 }
 
 @keyframes optionsModalOpen {
