@@ -1,7 +1,7 @@
 // --> Variables <-- //
 
 // React
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 // Utils
 import { deepEqual } from "../utils/deepEqual.js"
@@ -10,9 +10,10 @@ import { deepEqual } from "../utils/deepEqual.js"
 import tagsData from "../data/tagsData.json"
 
 // Controllers
-import { getDashboardOngData } from "../controllers/ongDashboardController.js"
+import { getDashboardOngData, updateOng } from "../controllers/ongDashboardController.js"
 import { getTagId } from "../controllers/tagController.js"
 import { getSocialMediaId } from "../controllers/socialMediaController.js"
+import { updateOngData } from "../controllers/ongController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -38,6 +39,9 @@ import instagramIconImage from "../../images/elements_vectors/InstagramIcon.png"
 import whatsappIconImage from "../../images/elements_vectors/WhatsappIcon.png"
 import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
+// Values
+let inUpdateLoading = false
+
 
 
 // --> Functions <-- //
@@ -53,6 +57,8 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 	const [currentMediaModal, setMediaModal] = useState(null)
 	const [currentEditingMedia, setEditingMedia] = useState(null)
 	const [ongData, setOngData] = useState(ongDataReference)
+
+	const [imageFile, setImageFile] = useState(undefined)
 
 	async function addSocialMedia(socialMediaName, socialMediaValue) {
 		const newSocialMediaList = ongData.socialMedia.filter(socialMediaData => socialMediaData.name !== socialMediaName)
@@ -99,7 +105,7 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 
 					<div className={ongDashboardStyle.right_container}>
 						<OngPreviewComponent ongData={ongData} />
-						<UpdateButtonComponent ongDataReference={ongDataReference} ongData={ongData} />
+						<UpdateButtonComponent ongDataReference={ongDataReference} ongData={ongData} imageFile={imageFile} setCurrentModal={setCurrentModal} />
 					</div>
 
 					<SPONGS_Brand />
@@ -201,17 +207,29 @@ function OngInformationContainer({ ongData, setOngData }) {
 		<div className={ongDashboardStyle.information_container}>
 			<h1 className={ongDashboardStyle.information_title}>NOME DA ONG</h1>
 			<div className={ongDashboardStyle.name_input}>
-				<input type="text" defaultValue={ongData.name} />
+				<input
+					id="ongDashboard_name"
+					type="text"
+					defaultValue={ongData.name}
+				/>
 			</div>
 
 			<div className={ongDashboardStyle.cep_container}>
 				<div className={ongDashboardStyle.cep_input}>
 					<h1>CEP</h1>
-					<input type="text" defaultValue={ongData.cep} />
+					<input
+						id="ongDashboard_cep"
+						type="text"
+						defaultValue={ongData.cep}
+					/>
 				</div>
 				<div className={ongDashboardStyle.house_number_input}>
 					<h1>NUMERO</h1>
-					<input type="text" defaultValue={ongData.houseNumber} />
+					<input
+						id="ongDashboard_houseNumber"
+						type="text"
+						defaultValue={ongData.houseNumber}
+					/>
 				</div>
 			</div>
 
@@ -453,14 +471,164 @@ function OngPreviewComponent({ ongData }) {
 
 
 // Functions 9: Update button //
-function UpdateButtonComponent({ ongDataReference, ongData }) {
+function UpdateButtonComponent({ ongDataReference, ongData, imageFile, setCurrentModal }) {
 	const buttonStyle = ongDashboardStyle.confirm_button
-	const disabledButtonStyle = [ongDashboardStyle.confirm_button, ongDashboardStyle.confirm_button_disabled].join(" ")
 
-	const IS_UPDATABLE = !deepEqual(ongDataReference, ongData)
+	function onUpdateClick() {
+		const IS_UPDATABLE = !inUpdateLoading && !deepEqual(ongData, ongDataReference)
+		if (IS_UPDATABLE) {
+			onUpdateONG(ongData, ongDataReference, imageFile, setCurrentModal)
+		}
+	}
+
+	useEffect(() => {
+		updateButtonEnabled(ongData, ongDataReference)
+	}, [ongData])
 
 	return (
-		<button className={IS_UPDATABLE && buttonStyle || disabledButtonStyle} id="ongDashboard_update_button">Atualizar</button>
+		<button
+			className={buttonStyle}
+			id="ongDashboard_update_button"
+			onClick={onUpdateClick}
+		>Atualizar</button>
 	)
 }
 
+function updateButtonEnabled(ongData, ongDataReference) {
+	const updateButton = document.getElementById("ongDashboard_update_button")
+	const IS_UPDATABLE = !inUpdateLoading && !deepEqual(ongData, ongDataReference)
+
+	if (!IS_UPDATABLE) {
+		updateButton.classList.add(ongDashboardStyle.confirm_button_disabled)
+		return
+	}
+
+	updateButton.classList.remove(ongDashboardStyle.confirm_button_disabled)
+}
+
+async function updateLoadingAnimation() {
+	const updateButton = document.getElementById("ongDashboard_update_button")
+	let reticencesText = ""
+
+	for (let i = 0; i < 4; i++) {
+		if (!inUpdateLoading) {
+			break
+		}
+
+		updateButton.textContent = "Carregando" + reticencesText + ""
+		reticencesText += "."
+
+		await new Promise(resolve => setTimeout(resolve, 250))
+	}
+
+	await new Promise(resolve => setTimeout(resolve, 200))
+
+	if (inUpdateLoading) {
+		updateLoadingAnimation()
+	}
+}
+
+async function onUpdateONG(ongData, ongDataReference, imageFile, setCurrentModal) {
+	if (inUpdateLoading) {
+		return
+	}
+
+	const nameInput = document.getElementById("ongDashboard_name")
+	const cepInput = document.getElementById("ongDashboard_cep")
+	const houseNumberInput = document.getElementById("ongDashboard_houseNumber")
+	const imageInput = document.getElementById("ongDashboard_image_input")
+
+	const midiaContainer = document.getElementsByClassName(ongDashboardStyle.social_media_background)[0]
+
+	// Update error outlines
+	const ongName = nameInput.value
+	const ongCep = cepInput.value
+	const houseNumber = houseNumberInput.value
+
+	const NAME_IS_VALID = ongName !== ""
+	const CEP_IS_VALID = ongCep !== undefined
+	const HOUSE_NUMBER_IS_VALID = houseNumber !== ""
+
+	resetErrors()
+
+	setError(nameInput.parentElement, !NAME_IS_VALID)
+	setError(cepInput.parentElement, !CEP_IS_VALID)
+	setError(houseNumberInput.parentElement, !HOUSE_NUMBER_IS_VALID)
+
+	const HAS_SOCIAL_MEDIA = ongData.socialMedia.length > 0
+	setError(midiaContainer, !HAS_SOCIAL_MEDIA)
+
+	// Check if can sign ONG
+	const CAN_UPDATE_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA
+
+	if (!CAN_UPDATE_ONG) {
+		return
+	}
+
+	// Convert relations IDs (tags and social media)
+	const ongSocialMedia = []
+	const ongTagsIds = []
+
+	for (const socialMediaData of ongData.socialMedia) {
+		ongSocialMedia.push({
+			"socialMediaId": socialMediaData.socialMediaId,
+			"description": socialMediaData.description
+		})
+	}
+
+	for (const tagData of ongData.tags) {
+		ongTagsIds.push(tagData.id)
+	}
+
+	// Send sign request to backend
+	const payload = {
+		"name": ongName,
+		"cep": ongCep,
+		"houseNumber": houseNumber,
+		"cnpj": ongData.cnpj,
+		"socialMedia": ongSocialMedia,
+		"tagIds": ongTagsIds
+	}
+
+	const updateButton = document.getElementById("ongDashboard_update_button")
+
+	updateButton.textContent = "Carregando"
+	inUpdateLoading = true
+
+	updateButtonEnabled(ongData, ongDataReference)
+	updateLoadingAnimation()
+
+	try {
+		await updateOng(payload, imageFile)
+
+		updateOngData(ongData)
+		setCurrentModal("")
+	} catch (e) { }
+
+	updateButton.textContent = "Atualizar"
+	inUpdateLoading = false
+
+	updateButtonEnabled(ongData, ongDataReference)
+}
+
+function setError(element, isError) {
+	if (isError) {
+		element.classList.add(ongDashboardStyle.error_outline)
+		return
+	}
+
+	element.classList.remove(ongDashboardStyle.error_outline)
+}
+
+function resetErrors() {
+	const nameInput = document.getElementById("ongDashboard_name")
+	const cepInput = document.getElementById("ongDashboard_cep")
+	const imageInput = document.getElementById("ongDashboard_image_input")
+
+	const midiaContainer = document.getElementsByClassName(ongDashboardStyle.social_media_background)[0]
+
+	setError(nameInput.parentElement, false)
+	setError(cepInput.parentElement, false)
+	setError(imageInput.parentElement, false)
+	setError(midiaContainer, false)
+}

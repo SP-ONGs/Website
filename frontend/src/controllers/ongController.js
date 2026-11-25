@@ -197,3 +197,15 @@ export function removeSolicitationOng(ongId) {
 	const newPendingOngs = loadedOngs["Pending"].filter(ongData => ongData.id !== ongId)
 	loadedOngs["Pending"] = newPendingOngs
 }
+
+export function updateOngData(ongData) {
+	if (!loadedOngs["Public"]) {
+		return
+	}
+
+	const newPublicOngs = loadedOngs["Public"].filter(publicOngData => publicOngData.id !== ongData.id)
+	newPublicOngs.push(ongData)
+
+	loadedOngs["Public"] = newPublicOngs
+	refreshOngs()
+}

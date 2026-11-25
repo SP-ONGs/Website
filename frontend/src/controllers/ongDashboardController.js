@@ -28,10 +28,12 @@ export function setUserRole(role) {
 	userRole = role
 }
 
-export function updateOng(newOngData, imageFile) {
+export async function updateOng(newOngData, imageFile) {
+	console.log("updating:", userRole, newOngData.name)
+
 	if (userRole == "ADMIN") {
-		adminAPI_updateONG(newOngData.id, newOngData, imageFile)
+		await adminAPI_updateONG(newOngData.id, newOngData, imageFile)
 	} else if (userRole == "ONG_OWNER") {
-		ongOwnerAPI_updateONG(newOngData, imageFile)
+		await ongOwnerAPI_updateONG(newOngData, imageFile)
 	}
 }

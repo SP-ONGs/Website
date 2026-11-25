@@ -225,7 +225,7 @@ async function OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFi
 	setError(cnpjInput.parentElement, !CNPJ_IS_VALID)
 
 	// Check if can sign ONG
-	const CAN_SIGN_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA && IS_SAME_PASSWORD && CNPJ_IS_VALID
+	const CAN_SIGN_ONG = NAME_IS_VALID && CEP_IS_VALID && HAS_SOCIAL_MEDIA && IS_SAME_PASSWORD && IMAGE_IS_VALID && CNPJ_IS_VALID
 
 	if (!CAN_SIGN_ONG) {
 		return
@@ -290,29 +290,22 @@ async function OnSign(setCurrentModal, ongCEP, socialMediaList, tagList, imageFi
 		await registerOng(payload, imageFile)
 
 		// Login in new ONG
-		console.log("register 1")
 		const loginReponse = await login(emailInput.value, passwordInput.value)
-		console.log("register 2")
 		const SUCCESS_LOGIN_ONG = loginReponse?.role === "ONG_OWNER"
-		console.log("register 3")
 
 		if (!SUCCESS_LOGIN_ONG) {
 			try { await logout() } catch { }
 			throw new Error("Not an ONG account")
 		}
-		console.log("register 4")
 
 		const ongData = await getMyOng()
 
-		console.log("register 5")
 		// Open ONG dashboard
 		ongDashboard_setUserRole("ONG_OWNER")
 		setDashboardOngData(ongData)
 
-		console.log("register 6")
 		setCurrentModal("ongDashboard")
 	} catch (error) {
-		console.log("register error:", error)
 		if (error.code == "EMAIL_ALREADY_EXISTS") {
 			setEmailExistsError(true)
 		}

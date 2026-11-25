@@ -679,3 +679,18 @@
 .confirm_button_disabled:hover {
 	transform: scale(1);
 }
+
+
+/* Error outline */
+.name_input,
+.cep_input,
+.house_number_input,
+.social_media_background,
+.input_group {
+	outline: 0 solid #E32424;
+	transition: outline 0.0675s ease;
+}
+
+.error_outline {
+	outline: 2px solid #E32424;
+}

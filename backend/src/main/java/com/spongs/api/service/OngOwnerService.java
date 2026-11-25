@@ -180,6 +180,7 @@ public class OngOwnerService {
 			return new OngSocialMedia(savedOng, type, entry.description().trim());
 		}).toList();
 
+		ongSocialMediaRepository.flush();
 		ongSocialMediaRepository.saveAll(newSocialMediaEntries);
 
 		// Replace tags entries
@@ -187,6 +188,7 @@ public class OngOwnerService {
 
 		var newOngTags = tags.stream().map(tag -> new OngTag(savedOng, tag)).toList();
 
+		ongTagRepository.flush();
 		ongTagRepository.saveAll(newOngTags);
 
 		return toOwnerResponse(savedOng);
