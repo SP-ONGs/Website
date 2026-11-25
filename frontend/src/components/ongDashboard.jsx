@@ -779,7 +779,7 @@ async function onUpdateONG(ongData, ongDataReference, imageFile, setCurrentModal
 	updateLoadingAnimation()
 
 	try {
-		await updateOng(payload, imageFile)
+		await updateOng(ongData.id, payload, imageFile)
 
 		updateOngData(ongData)
 		setCurrentModal("")
