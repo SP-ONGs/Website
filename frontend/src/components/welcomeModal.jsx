@@ -11,7 +11,7 @@ import fatecImage from "../../images/FATEC_Icon.png"
 import cpsImage from "../../images/CPS_Icon.png"
 import fatecZonaLesteImage from "../../images/FATEC_ZonaLeste_Icon.png"
 
-import welcomeBackgroundImage from "../../images/spongs_welcome.png"
+import welcomeBackgroundImage from "../../images/imagemwelcome.jpeg"
 import closeIconImage from "../../images/elements_vectors/WelcomeCloseButton.png"
 
 
