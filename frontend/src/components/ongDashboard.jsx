@@ -162,10 +162,10 @@ function SPONGS_Brand() {
 
 // Functions 4: Solicitation status // 
 function OngStatusComponent({ ongData }) {
-	if (ongData.status == "APPROVED") {
-		return (<ApprovedStatusComponent />)
-	} else {
+	if (ongData.status == "PENDING_REVIEW") {
 		return (<InReviewStatusComponent />)
+	} else {
+		return (<ApprovedStatusComponent />)
 	}
 }
 

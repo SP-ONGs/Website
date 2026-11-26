@@ -216,6 +216,12 @@ function LoginButton({ setCurrentModal }) {
 
 			const ongData = await getMyOng()
 
+			const IS_DELETED = ongData.status == "REJECTED" || ongData.status == "ADMIN_REMOVED" || ongData.status == "REMOVAL_REQUESTED"
+
+			if (IS_DELETED) {
+				throw Error("Is a deleted ONG")
+			}
+
 			ongDashboard_setUserRole("ONG_OWNER")
 			setDashboardOngData(ongData)
 
