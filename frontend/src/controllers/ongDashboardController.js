@@ -1,8 +1,8 @@
 // --> Variables <-- //
 
 // API
-import { updateOng as adminAPI_updateONG } from "../api/adminOng.js"
-import { updateMyOng as ongOwnerAPI_updateONG } from "../api/ongOwner.js"
+import { updateOng as adminAPI_updateONG, removeOng as adminAPI_deleteONG } from "../api/adminOng.js"
+import { updateMyOng as ongOwnerAPI_updateONG, requestMyOngRemoval as ongOwnerAPI_deleteONG } from "../api/ongOwner.js"
 
 // Values
 let currentOngData
@@ -33,5 +33,13 @@ export async function updateOng(ongId, updateOngPayload, imageFile) {
 		await adminAPI_updateONG(ongId, updateOngPayload, imageFile)
 	} else if (userRole == "ONG_OWNER") {
 		await ongOwnerAPI_updateONG(updateOngPayload, imageFile)
+	}
+}
+
+export async function deleteOng(ongId) {
+	if (userRole == "ADMIN") {
+		await adminAPI_deleteONG(ongId)
+	} else if (userRole == "ONG_OWNER") {
+		await ongOwnerAPI_deleteONG()
 	}
 }

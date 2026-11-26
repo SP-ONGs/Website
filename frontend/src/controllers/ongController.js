@@ -217,3 +217,10 @@ export function updateOngData(ongData) {
 	loadedOngs["Public"] = newPublicOngs
 	refreshOngs()
 }
+
+export function deleteOngData(ongId) {
+	const newPublicOngs = loadedOngs["Public"].filter(ongData => ongData.id !== ongId)
+	loadedOngs["Public"] = newPublicOngs
+
+	refreshOngs()
+}

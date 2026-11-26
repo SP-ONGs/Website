@@ -10,11 +10,11 @@ import { deepEqual } from "../utils/deepEqual.js"
 import tagsData from "../data/tagsData.json"
 
 // Controllers
-import { getDashboardOngData, updateOng } from "../controllers/ongDashboardController.js"
+import { getDashboardOngData, updateOng, deleteOng } from "../controllers/ongDashboardController.js"
 import { getTagId } from "../controllers/tagController.js"
 import { getSocialMediaId } from "../controllers/socialMediaController.js"
 import { getCepData } from "../controllers/locationController.js"
-import { updateOngData } from "../controllers/ongController.js"
+import { updateOngData, deleteOngData } from "../controllers/ongController.js"
 
 // Components
 import { SocialMediaOptions, SocialMediaInputModal } from "./addSocialMedia.jsx"
@@ -42,6 +42,7 @@ import websiteIconImage from "../../images/elements_vectors/WebsiteIcon.png"
 
 // Values
 let inUpdateLoading = false
+let inDeleteLoading = false
 
 
 
@@ -99,7 +100,7 @@ export default function OngDashboardComponent({ setCurrentModal }) {
 						<OngInformationContainer ongData={ongData} setOngData={setOngData} />
 						<OngSocialMediaContainer ongData={ongData} setOngData={setOngData} setMediaModal={setMediaModal} setEditingMedia={setEditingMedia} />
 						<OngTagsComponent ongData={ongData} setOngData={setOngData} />
-						<DeleteButtonComponent />
+						<DeleteButtonComponent ongData={ongData} setCurrentModal={setCurrentModal} />
 					</div>
 
 					<div className={ongDashboardStyle.divider_bar}></div>
@@ -238,6 +239,8 @@ function OngInformationContainer({ ongData, setOngData }) {
 	}
 
 	async function updateCEP() {
+		resetErrors()
+
 		const cepInputElement = document.getElementById("ongDashboard_cep")
 		const locationTextElement = document.getElementById("ongDashboard_location_text")
 
@@ -624,10 +627,64 @@ function TagContainer({ tagName, description, image, isSelected, ongData, setOng
 
 
 // Functions 7: Delete ONG //
-function DeleteButtonComponent() {
+function DeleteButtonComponent({ ongData, setCurrentModal }) {
+	function onDeleteClick() {
+		onDeleteOng(ongData, setCurrentModal)
+	}
+
 	return (
-		<button className={ongDashboardStyle.delete_button}>Excluir ONG</button>
+		<button
+			id="ongDashboard_delete_button"
+			className={ongDashboardStyle.delete_button}
+			onClick={onDeleteClick}
+		>Excluir ONG</button>
 	)
+}
+
+async function onDeleteOng(ongData, setCurrentModal) {
+	if (inDeleteLoading) {
+		return
+	}
+
+	inDeleteLoading = true
+
+	const deleteButton = document.getElementById("ongDashboard_delete_button")
+
+	deleteButton.textContent = "Deletando"
+	deleteLoadingAnimation()
+
+	deleteButton.classList.add(ongDashboardStyle.delete_button_disabled)
+
+	try {
+		await deleteOng(ongData.id)
+
+		deleteOngData(ongData.id)
+		setCurrentModal("")
+	} catch (e) { }
+
+	inDeleteLoading = false
+}
+
+async function deleteLoadingAnimation() {
+	const deleteButton = document.getElementById("ongDashboard_delete_button")
+	let reticencesText = ""
+
+	for (let i = 0; i < 4; i++) {
+		if (!inDeleteLoading) {
+			break
+		}
+
+		deleteButton.textContent = "Deletando" + reticencesText + ""
+		reticencesText += "."
+
+		await new Promise(resolve => setTimeout(resolve, 250))
+	}
+
+	await new Promise(resolve => setTimeout(resolve, 200))
+
+	if (inUpdateLoading) {
+		updateLoadingAnimation()
+	}
 }
 
 
@@ -803,12 +860,14 @@ function setError(element, isError) {
 function resetErrors() {
 	const nameInput = document.getElementById("ongDashboard_name")
 	const cepInput = document.getElementById("ongDashboard_cep")
+	const houseNumberInput = document.getElementById("ongDashboard_houseNumber")
 	const imageInput = document.getElementById("ongDashboard_image_input")
 
 	const midiaContainer = document.getElementsByClassName(ongDashboardStyle.social_media_background)[0]
 
 	setError(nameInput.parentElement, false)
 	setError(cepInput.parentElement, false)
+	setError(houseNumberInput.parentElement, false)
 	setError(imageInput.parentElement, false)
 	setError(midiaContainer, false)
 }

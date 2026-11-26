@@ -325,7 +325,7 @@
 }
 
 .location_container h2 {
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: lighter;
 
 	position: absolute;
@@ -601,6 +601,23 @@
 	bottom: 0;
 
 	cursor: pointer;
+
+	transition: transform 0.2s ease;
+}
+
+.delete_button:hover {
+	transform: scale(1.0125);
+}
+
+.delete_button_disabled {
+	background: rgb(255, 91, 94, .6);
+	color: rgba(255, 255, 255, .6);
+
+	cursor: default;
+}
+
+.delete_button_disabled:hover {
+	transform: scale(1);
 }
 
 
