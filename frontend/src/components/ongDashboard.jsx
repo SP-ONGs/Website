@@ -573,25 +573,17 @@ function TagContainer({ tagName, description, image, isSelected, ongData, setOng
 	}
 
 	async function addTag() {
-		const newTagList = ongData.tags
-
-		if (newTagList.length >= 3) {
-			return
-		}
-
+		const newTagList = ongData.tags.slice()
 		const tagId = await getTagId(tagName)
-		const CAN_UPDATE_TAG = !ongData.tags.some(tagData => tagData.description == tagName)
 
-		if (CAN_UPDATE_TAG) {
-			newTagList.push({
-				"id": tagId,
-				"description": tagName
-			})
-			setOngData(previusOngData => ({
-				...previusOngData,
-				"tags": newTagList
-			}))
-		}
+		newTagList.push({
+			"id": tagId,
+			"description": tagName
+		})
+		setOngData(previusOngData => ({
+			...previusOngData,
+			"tags": newTagList
+		}))
 	}
 
 	function removeTag() {
@@ -603,20 +595,31 @@ function TagContainer({ tagName, description, image, isSelected, ongData, setOng
 		}))
 	}
 
+	function canAddTag() {
+		if (ongData.tags.length >= 3) {
+			return false
+		}
+
+		const CAN_ADD_TAG = !ongData.tags.some(tagData => tagData.description == tagName)
+		return CAN_ADD_TAG
+	}
+
 	function onToggleTag() {
-		const ADD_TAG = !tagSelected
-
-		setTagSelected(!tagSelected)
-
-		if (ADD_TAG) {
-			addTag()
-		} else {
+		console.log("clicked:", tagName)
+		if (tagSelected) {
+			setTagSelected(false)
 			removeTag()
+			return
+		}
+
+		if (canAddTag()) {
+			setTagSelected(true)
+			addTag()
 		}
 	}
 
 	return (
-		<button className={tagContainerStyle} id={"ongDashboard_tag_" + tagName} onClick={() => onToggleTag(tagName)}>
+		<button className={tagContainerStyle} id={"ongDashboard_tag_" + tagName} onClick={onToggleTag}>
 			<img src={image} />
 			<div className={tagDividerStyle}></div>
 			<label>{description}</label>

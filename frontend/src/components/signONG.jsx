@@ -644,10 +644,33 @@ function AddTagContainer({ tagList, setTagList }) {
 		}))
 	}
 
-	function toggleTag(tagName) {
-		const newValue = !tagList[tagName]
+	function getTagsActive() {
+		let tagsAmount = 0
 
-		setTagValue(tagName, newValue)
+		for (const [_, tagActive] of Object.entries(tagList)) {
+			if (tagActive) {
+				tagsAmount += 1
+			}
+		}
+
+		return tagsAmount
+	}
+
+
+	function toggleTag(tagName) {
+		const IS_ACTIVE = tagList[tagName]
+
+		if (IS_ACTIVE) {
+			setTagValue(tagName, false)
+			return
+		}
+
+		const IN_LIMIT = getTagsActive() >= 3
+		console.log(tagName, "getTagsActive():", getTagsActive())
+
+		if (!IN_LIMIT) {
+			setTagValue(tagName, true)
+		}
 	}
 
 	return (
